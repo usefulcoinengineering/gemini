@@ -31,13 +31,13 @@ class Deal:
     def setvalue(self, price): self.__price = price
 
 # Define purchase quantity.
-size = '0.0001'
+size = '0.01'
 
 # Define pair.
-pair = 'BTCUSD'
+pair = 'ETHUSD'
 
 # Define desired price depreciation.
-drop = '0.001'
+drop = '0.01'
 
 # Instantiate high/deal objects.
 high = High(0)
@@ -119,7 +119,7 @@ if last.compare(0) == 1 :
     }
     headers = authenticator.authenticate(payload)
 
-    request = resourcelocator.restsandbox + endpoint
+    request = resourcelocator.restgenuine + endpoint
     response = requests.post(request, data = None, headers = headers)
     logger.info(response.json())
 
@@ -142,6 +142,6 @@ if last.compare(0) == 1 :
     }
     headers = authenticator.authenticate(payload)
 
-    request = resourcelocator.restsandbox + endpoint
+    request = resourcelocator.restgenuine + endpoint
     response = requests.post(request, data = None, headers = headers)
     logger.info(response.json())

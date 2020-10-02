@@ -36,7 +36,7 @@ if __name__ == "__main__":
     def on_message(ws, message): print(message)
 
     # Define pair.
-    pair = 'BTCUSD'
+    pair = 'ETHUSD'
 
     # Define filter.
     filtering = ''
