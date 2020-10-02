@@ -13,8 +13,16 @@ from libraries.messenger import smsalert as smsalert
 import libraries.authenticator as authenticator
 import libraries.resourcelocator as resourcelocator
 
-# Define session high class.
+# Define high class.
+# Purpose: Stores the highest trading price reached during the websocket connection session.
 class High:
+    def __init__(self, price): self.__price = price
+    def getvalue(self): return self.__price
+    def setvalue(self, price): self.__price = price
+
+# Define deal class.
+# Purpose: Stores the deal (last) price reached during the websocket connection session.
+class Deal:
     def __init__(self, price): self.__price = price
     def getvalue(self): return self.__price
     def setvalue(self, price): self.__price = price
@@ -25,14 +33,15 @@ pair = 'BTCUSD'
 # Define desired price depreciation.
 drop = '0.001'
 
-# Instantiate session high object.
+# Instantiate high/deal objects.
 high = High(0)
+deal = Deal(0)
 
 # Define websocet functions.
 def on_close(ws): logger.info(f'{ws} connection closed.')
 def on_open(ws): logger.info(f'{ws} connection opened.')
 def on_error(ws, error): print(error)
-def on_message(ws, message, drop=drop, pair=pair, high=high):
+def on_message(ws, message, drop=drop, pair=pair, high=high, deal=deal):
     dictionary = json.loads( message )
     percentoff = Decimal( drop )
     sessionmax = Decimal( high.getvalue() )
@@ -55,13 +64,16 @@ def on_message(ws, message, drop=drop, pair=pair, high=high):
                 # Display impact of event information received.
                 logger.info( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {last} presently : [Message ID: {dictionary["socket_sequence"]}].' )
 
-                # Define bargain (deal) price.
-                deal = Decimal( sessionmax * ( 1 - percentoff ) )
+                # Define bargain (sale) price.
+                sale = Decimal( sessionmax * ( 1 - percentoff ) )
 
                 # Exit loop if there's a sale.
-                if deal.compare(last) == 1 :
-                    logger.info( f'{pair} price [{last:.2f}] is a deal [{deal:.2f}].' )
+                if sale.compare(last) == 1 :
+                    logger.info( f'{pair} [now {last:.2f}] just went on sale [dropped below {sale:.2f}].' )
                     smsalert( f'There was a {percentoff*100}% drop in the price of the {pair} pair on Gemini.' )
+
+                    # Update deal price.
+                    deal.setvalue(last)
                     ws.close()
 
 # Construct payload.
@@ -76,3 +88,7 @@ auth = authenticator.authenticate(payload)
 # Establish websocket connection.
 ws = websocket.WebSocketApp(request, on_open = on_open, on_message = on_message, on_error = on_error, on_close = on_close)
 ws.run_forever(sslopt={'cert_reqs': ssl.CERT_NONE})
+
+last = Decimal( deal.getvalue() )
+if last.compare(0) == 1 :
+    logger.info(f'bid {last} on {pair}.')
