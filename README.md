@@ -1,8 +1,9 @@
 Run the following commands to setup:
 
-1. cd gemini
-2. cp examples/example-credentials.py libraries/credentials.py
-3. pip3 install websocket-client
+1. git clone https://github.com/munair/gemini.git
+2. cd gemini
+3. cp examples/example-credentials.py libraries/credentials.py
+4. pip3 install websocket-client
 
 Notes:
 
