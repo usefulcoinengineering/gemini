@@ -15,7 +15,7 @@ from libraries.fillvalidator import confirmexecution
 # Define pair and price drop desired.
 # Price depreciation defined in decimals (0.1 is 10%).
 pair = 'ETHUSD'
-drop = '0.0001'
+drop = '0.000'
 
 # Open websocket connection.
 # Wait for the price to drop.
