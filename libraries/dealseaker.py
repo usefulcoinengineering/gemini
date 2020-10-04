@@ -40,16 +40,16 @@ def decimaldrop(
     deal = Deal(0)
 
     # Define websocet functions.
-    def on_close(ws): logger.info(f'{ws} connection closed.')
-    def on_open(ws): logger.info(f'{ws} connection opened.')
-    def on_error(ws, error): logger.info(error)
+    def on_close(ws): logger.debug(f'{ws} connection closed.')
+    def on_open(ws): logger.debug(f'{ws} connection opened.')
+    def on_error(ws, error): logger.debug(error)
     def on_message(ws, message, drop=drop, pair=pair, high=high, deal=deal):
         dictionary = json.loads( message )
         percentoff = Decimal( drop )
         sessionmax = Decimal( high.getvalue() )
 
         # Process "type": "heartbeat" messages.
-        if 'heartbeat' in dictionary['type']: logger.info(f'\r.')
+        if 'heartbeat' in dictionary['type']: logger.debug(f'\r.')
 
         # Process "type": "update" messages with events only.
         if 'update' in dictionary['type']:
@@ -67,14 +67,14 @@ def decimaldrop(
                     move = 100 * ( sessionmax - last ) / sessionmax
 
                     # Display impact of event information received.
-                    logger.info( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {last} presently : [Message ID: {dictionary["socket_sequence"]}].' )
+                    logger.debug( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {last} presently : [Message ID: {dictionary["socket_sequence"]}].' )
 
                     # Define bargain (sale) price.
                     sale = Decimal( sessionmax * ( 1 - percentoff ) )
 
                     # Exit loop if there's a sale.
                     if sale.compare(last) == 1 :
-                        logger.info( f'{pair} [now {last:.2f}] just went on sale [dropped below {sale:.2f}].' )
+                        logger.debug( f'{pair} [now {last:.2f}] just went on sale [dropped below {sale:.2f}].' )
                         smsalert( f'There was a {percentoff*100}% drop in the price of the {pair} pair on Gemini.' )
 
                         # Update deal price.

@@ -33,7 +33,7 @@ if last:
     post = makeliquidity( pair, size, str(last) )
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
-    logger.info ( dump )
+    logger.debug ( dump )
 
     # Determine if the order was filled.
     load = json.loads( dump )
@@ -45,4 +45,4 @@ if last:
         post = limitstop( pair, size, str(trip), str(stop) )
         post = post.json()
         dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
-        logger.info ( dump )
+        logger.debug ( dump )

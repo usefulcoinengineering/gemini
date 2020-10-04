@@ -33,10 +33,10 @@ if __name__ == "__main__":
     from authenticator import authenticate
 
     # Define functions
-    def on_close(ws): logger.info(f'{ws} connection closed.')
-    def on_open(ws): logger.info(f'{ws} connection opened.')
-    def on_error(ws, error): logger.info(error)
-    def on_message(ws, message): logger.info(message)
+    def on_close(ws): logger.debug(f'{ws} connection closed.')
+    def on_open(ws): logger.debug(f'{ws} connection opened.')
+    def on_error(ws, error): logger.debug(error)
+    def on_message(ws, message): logger.debug(message)
 
     # Define pair.
     pair = 'ETHUSD'

@@ -19,13 +19,16 @@ import libraries.resourcelocator as resourcelocator
 def confirmexecution(
         orderid: str
     ) -> None:
+    # Declare function.
+    logger.info(f'Confirming exection of the order identified by the Gemini assigned number: {orderid}')
 
     # Define websocet functions.
-    def on_close(ws): logger.info(f'{ws} connection closed.')
-    def on_open(ws): logger.info(f'{ws} connection opened.')
-    def on_error(ws, error): logger.info(error)
+    def on_close(ws): logger.debug(f'{ws} connection closed.')
+    def on_open(ws): logger.debug(f'{ws} connection opened.')
+    def on_error(ws, error): logger.debug(error)
     def on_message(ws, message, orderid=orderid):
         dictionary = json.loads( message )
+        logger.info( dictionary )
 
         # Process "type": "fill" messages with events only.
         if 'fill' in dictionary['type']:
