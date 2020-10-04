@@ -48,6 +48,9 @@ def decimaldrop(
         percentoff = Decimal( drop )
         sessionmax = Decimal( high.getvalue() )
 
+        # Process "type": "heartbeat" messages.
+        if 'heartbeat' in dictionary['type']: logger.info(f'\r.')
+
         # Process "type": "update" messages with events only.
         if 'update' in dictionary['type']:
             if dictionary['events'] != []:
