@@ -47,7 +47,7 @@ def confirmexecution(
     header = authenticator.authenticate(payload)
 
     # Establish websocket connection.
-    ws = websocket.WebSocketApp(str( resourcelocator.sockgenuine + endpoint ),
+    ws = websocket.WebSocketApp(str( resourcelocator.sockserver + endpoint ),
                                 on_open = on_open,
                                 on_message = on_message,
                                 on_error = on_error,

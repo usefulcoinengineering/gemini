@@ -47,7 +47,7 @@ if __name__ == "__main__":
     if usefilter: filtering = 'trades=true'
 
     # Construct payload.
-    request = resourcelocator.sockgenuine + '/v1/marketdata/' + pair + '?' + filtering
+    request = resourcelocator.sockserver + '/v1/marketdata/' + pair + '?' + filtering
     nonce = int(time.time()*1000)
     payload = {'request': request,'nonce': nonce}
     authenticate(payload)

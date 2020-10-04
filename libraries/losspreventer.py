@@ -37,7 +37,7 @@ def limitstop(
     }
     headers = authenticator.authenticate(payload)
 
-    request = resourcelocator.restgenuine + endpoint
+    request = resourcelocator.restserver + endpoint
     response = requests.post(request, data = None, headers = headers['restheader'])
 
     return response

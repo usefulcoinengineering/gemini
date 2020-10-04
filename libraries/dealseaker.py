@@ -79,7 +79,7 @@ def decimaldrop(
                         ws.close()
 
     # Construct payload.
-    request = resourcelocator.sockgenuine + '/v1/marketdata/' + pair
+    request = resourcelocator.sockserver + '/v1/marketdata/' + pair
     nonce = int(time.time()*1000)
     payload = {
         'request': request,
