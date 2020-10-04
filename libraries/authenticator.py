@@ -13,14 +13,17 @@ def authenticate(payload):
     encodedpayload = json.dumps(payload).encode()
     b64 = base64.b64encode(encodedpayload)
     signature = hmac.new(credentials.secret.encode(), b64, hashlib.sha384).hexdigest()
-    headers = { 'Content-Type': "text/plain",
-                        'Content-Length': "0",
-                        'X-GEMINI-APIKEY': credentials.key,
-                        'X-GEMINI-PAYLOAD': b64,
-                        'X-GEMINI-SIGNATURE': signature,
-                        'Cache-Control': "no-cache" }
+    apihead = { 'Content-Type': "text/plain",
+                'Content-Length': "0",
+                'X-GEMINI-APIKEY': credentials.key,
+                'X-GEMINI-PAYLOAD': b64,
+                'X-GEMINI-SIGNATURE': signature,
+                'Cache-Control': "no-cache" }
+    wsshead = { 'X-GEMINI-PAYLOAD': b64.decode(),
+                'X-GEMINI-APIKEY': credentials.key,
+                'X-GEMINI-SIGNATURE': signature }
 
-    return headers
+    return { 'sockheader': wsshead, 'restheader': apihead }
 
 if __name__ == "__main__":
     import ssl
@@ -32,11 +35,11 @@ if __name__ == "__main__":
     # Define functions
     def on_close(ws): logger.info(f'{ws} connection closed.')
     def on_open(ws): logger.info(f'{ws} connection opened.')
-    def on_error(ws, error): print(error)
-    def on_message(ws, message): print(message)
+    def on_error(ws, error): logger.info(error)
+    def on_message(ws, message): logger.info(message)
 
     # Define pair.
-    pair = 'BTCUSD'
+    pair = 'ETHUSD'
 
     # Define filter.
     filtering = ''
