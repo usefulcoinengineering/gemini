@@ -16,3 +16,20 @@ Notes:
 ```bash
 sudo apt install python3-pip
 ```
+
+Amazon Support:
+
+1. To get SNS support, open up IAM and add a new user that has privileges to send messages.
+2. Copy the credentials to the EC2 instance (or MacBook Pro) used for trading:
+
+```bash
+mkdir ~/.aws
+cat > ~/.aws/config << EOF
+[default]
+region=us-east-1
+EOF
+cat > ~/.aws/credentials << EOF
+[default]
+aws_access_key_id = AKIARB33NP5HGWSP145K
+aws_secret_access_key = c/MVoL9wOiKnt4fyPhKRWOt@hqqKhfvLcon!oZJ/
+```
