@@ -14,7 +14,7 @@ from libraries.fillvalidator import confirmexecution
 
 # Define pair and price drop desired.
 # Price depreciation defined in decimals (0.1 is 10%).
-pair = 'BTCUSD'
+pair = 'ETHUSD'
 drop = '0.000'
 
 # Open websocket connection.
@@ -23,7 +23,7 @@ last = decimaldrop( pair, drop )
 if last:
 
     # Set bid size.
-    size = '1'
+    size = '0.001'
 
     # Define trigger and stop loss prices. Redefine last for submission.
     last = Decimal( last * Decimal( 0.999 ) ).quantize( Decimal('1.00') )

@@ -7,9 +7,9 @@ socksandbox = 'wss://api.sandbox.gemini.com'
 sockgenuine = 'wss://api.gemini.com'
 
 # Production Servers:
-# sockserver = sockgenuine
-# restserver = restgenuine
+sockserver = sockgenuine
+restserver = restgenuine
 
 # Sandbox Servers
-sockserver = socksandbox
-restserver = restsandbox
+# sockserver = socksandbox
+# restserver = restsandbox
