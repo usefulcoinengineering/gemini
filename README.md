@@ -5,6 +5,7 @@ git clone https://github.com/munair/gemini.git
 cd gemini
 cp examples/example-credentials.py libraries/credentials.py
 pip3 install websocket-client
+pip3 install boto3
 ```
 
 Notes:
