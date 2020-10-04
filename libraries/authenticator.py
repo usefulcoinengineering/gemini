@@ -10,9 +10,17 @@ import time
 import libraries.credentials as credentials
 
 def authenticate(payload):
-    encoded_payload = json.dumps(payload).encode()
-    b64 = base64.b64encode(encoded_payload)
+    encodedpayload = json.dumps(payload).encode()
+    b64 = base64.b64encode(encodedpayload)
     signature = hmac.new(credentials.secret.encode(), b64, hashlib.sha384).hexdigest()
+    headers = { 'Content-Type': "text/plain",
+                        'Content-Length': "0",
+                        'X-GEMINI-APIKEY': credentials.key,
+                        'X-GEMINI-PAYLOAD': b64,
+                        'X-GEMINI-SIGNATURE': signature,
+                        'Cache-Control': "no-cache" }
+
+    return headers
 
 if __name__ == "__main__":
     import ssl
@@ -36,10 +44,10 @@ if __name__ == "__main__":
     if usefilter: filtering = 'trades=true'
 
     # Construct payload.
-    request = resourcelocator.sockgenuine + 'v1/marketdata/' + pair + '?' + filtering
+    request = resourcelocator.sockgenuine + '/v1/marketdata/' + pair + '?' + filtering
     nonce = int(time.time()*1000)
     payload = {'request': request,'nonce': nonce}
-    auth = authenticate(payload)
+    authenticate(payload)
 
     # Establish websocket connection.
     ws = websocket.WebSocketApp(request, on_message=on_message)
