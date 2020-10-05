@@ -19,7 +19,7 @@ drop = '0.000'
 
 # Open websocket connection.
 # Wait for the price to drop.
-logger.info(f'waiting for {pair} to drop {drop*100}% in price.')
+logger.info(f'waiting for {pair} to drop {Decimal(drop)*100}% in price.')
 last = decimaldrop( pair, drop )
 if last:
 
