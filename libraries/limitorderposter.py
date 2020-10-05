@@ -41,6 +41,29 @@ def makeliquidity(
 
     return response
 
-if __name__ == "__main__":
-    from libraries.bidposter import makeliquidity
-    makeliquidity( 'BTCUSD', '1', '1' )
+def takeliquidity(
+        pair: str,
+        size: str,
+        last: str
+    ) -> None:
+
+    # Construct buy order payload.
+    # Use 'options': ['maker-or-cancel'] for post only orders.
+    endpoint = '/v1/order/new'
+    t = datetime.datetime.now()
+    payload = {
+        'request': endpoint,
+        'nonce': str(int(time.mktime(t.timetuple())*1000)),
+        'symbol': pair,
+        'amount': size,
+        'price': str(last),
+        'side': 'sell',
+        'type': 'exchange limit',
+        'options': ['maker-or-cancel']
+    }
+    headers = authenticator.authenticate(payload)
+
+    request = resourcelocator.restserver + endpoint
+    response = requests.post(request, data = None, headers = headers['restheader'])
+
+    return response
