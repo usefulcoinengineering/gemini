@@ -24,12 +24,12 @@ last = decimaldrop( pair, drop )
 if last:
 
     # Set bid size.
-    size = '0.001'
+    size = '0.0001'
 
     # Define trigger and stop loss prices. Redefine last for submission.
-    last = Decimal( last * Decimal( 0.999 ) ).quantize( Decimal('1.00') )
-    trip = Decimal( last * Decimal( 0.999 ) ).quantize( Decimal('1.00') )
-    stop = Decimal( trip * Decimal( 0.999 ) ).quantize( Decimal('1.00') )
+    last = Decimal( last * Decimal( 0.9999 ) ).quantize( Decimal('1.00') )
+    trip = Decimal( last * Decimal( 0.9999 ) ).quantize( Decimal('1.00') )
+    stop = Decimal( trip * Decimal( 0.9999 ) ).quantize( Decimal('1.00') )
 
     # Submit limit order.
     logger.info(f'submitting {pair} maker / post order [limit price: {last}].')
