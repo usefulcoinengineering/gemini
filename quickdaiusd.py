@@ -22,7 +22,7 @@ from libraries.fillvalidator import confirmexecution
 
 
 # Set bid size ['0.001' is the minimum for ETHUSD].
-# Define pair and price drop desired.
+# Define pair and price drop desired (at least 2X fees).
 # Price depreciation defined in decimals (0.1 is 10%).
 pair = 'DAIUSD'
 drop = '0.004772229977922'
@@ -100,7 +100,7 @@ if deal:
         cost = Decimal( size ) * sale
         gain = Decimal( size ) * fees - cost
         logger.debug ( f'absolute gain: {gain} {pair[3:]}' )
-        logger.debug ( f'relative gain: {gain}: {Decimal(gain/cost).quantize( Decimal('1.00') )}%' )
+        logger.debug ( f'relative gain: {gain}: {Decimal(gain/cost).quantize( Decimal("1.00") )}%' )
 
     else:
         logger.debug ( "ask not submitted because the bid was not filled." )

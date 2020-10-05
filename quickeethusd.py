@@ -100,7 +100,7 @@ if deal:
         cost = Decimal( size ) * sale
         gain = Decimal( size ) * fees - cost
         logger.debug ( f'absolute gain: {gain} {pair[3:]}' )
-        logger.debug ( f'relative gain: {gain}: {Decimal(gain/cost).quantize( Decimal('1.00') )}%' )
+        logger.debug ( f'relative gain: {gain}: {Decimal(gain/cost).quantize( Decimal("1.00") )}%' )
 
     else:
         logger.debug ( 'ask not submitted because the bid was not filled.' )
