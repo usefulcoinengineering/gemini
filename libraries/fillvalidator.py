@@ -27,8 +27,10 @@ def confirmexecution(
     def disconnect(status):
         logger.info('The order was {status}.')
         ws.close()
-        if status == 'filled': return True
-            else return False
+        if status == 'filled':
+            return True
+        else:
+            return False
 
     # Define websocet functions.
     def on_close(ws): logger.debug(f'{ws} connection closed.')
