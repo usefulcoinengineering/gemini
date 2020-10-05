@@ -47,7 +47,7 @@ def confirmexecution(
                     ws.close()
                     logger.debug( exitstatus )
                     smsalert ( exitstatus )
-                    poststatus.setvalue( exitstatus )
+                    poststatus.setvalue( True )
 
     # Construct payload.
     endpoint = '/v1/order/events'

@@ -49,9 +49,9 @@ if last:
     poststatus = Poststatus(False)
 
     # Determine if the order was filled.
-    fill = confirmexecution( orderid = post['order_id'], poststatus = poststatus )
-    logger.info(f'fill = {poststatus}')
-    if fill:
+    confirmexecution( orderid = post['order_id'], poststatus = poststatus )
+    logger.info(f'status of post = {poststatus.getvalue()}')
+    if poststatus.getvalue():
 
         # Submit stop loss order.
         logger.info(f'submitting {pair} stop loss order [limit price: {stop}] triggered at {trip}.')
@@ -62,4 +62,4 @@ if last:
 
     else:
         logger.debug ( "nothing to lose because the original position was not established." )
-        logger.debug ( "there's nothing at risk here buddy." )
+        logger.debug ( "there's nothing at risk here buddy. the post was not filled." )
