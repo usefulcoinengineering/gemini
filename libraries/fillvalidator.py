@@ -17,7 +17,8 @@ import libraries.authenticator as authenticator
 import libraries.resourcelocator as resourcelocator
 
 def confirmexecution(
-        orderid: str
+        orderid = orderid,
+        poststatus = poststatus
     ) -> None:
 
     # Introduce function.
@@ -46,7 +47,7 @@ def confirmexecution(
                     ws.close()
                     logger.debug( exitstatus )
                     smsalert ( exitstatus )
-                    return exitstatus
+                    poststatus.setvalue( exitstatus )
 
     # Construct payload.
     endpoint = '/v1/order/events'
