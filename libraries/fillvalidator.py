@@ -23,15 +23,6 @@ def confirmexecution(
     # Introduce function.
     logger.debug(f'Confirming exection of the order identified by the Gemini assigned number: {orderid}')
 
-    # Define disconnection rountine.
-    def disconnect(status):
-        logger.debug(f'The order was {status}.')
-        ws.close()
-        if status == 'filled':
-            return True
-        else:
-            return False
-
     # Define websocet functions.
     def on_close(ws): logger.debug(f'{ws} connection closed.')
     def on_open(ws): logger.debug(f'{ws} connection opened.')
@@ -44,12 +35,16 @@ def confirmexecution(
             for listitem in dictionary:
                 if listitem['order_id'] == orderid:
                     # Exit upon receiving order cancellation message.
-                    if listitem['is_cancelled']: disconnect( 'cancelled' )
-                    if listitem['type'] == 'cancelled': disconnect( f'cancelled [reason:{listitem["reason"]}]' )
-                    if listitem['type'] == 'rejected': disconnect( 'rejected' )
+                    if listitem['is_cancelled']:
+                        logger.debug(f'Order {orderid} was cancelled.' ); return False
+                    if listitem['type'] == 'cancelled':
+                        logger.debug(f'Order {orderid} was cancelled [reason:{listitem["reason"]}].' ); return False
+                    if listitem['type'] == 'rejected':
+                        logger.debug(f'Order {orderid} was rejected.' ); return False
                     if listitem['type'] == 'fill':
                         # Make sure that the order was completely filled.
-                        if listitem['remaining_amount'] == '0': disconnect( 'filled' )
+                        if listitem['remaining_amount'] == '0':
+                            logger.debug(f'Order {orderid} was filled.' ); return True
 
     # Construct payload.
     endpoint = '/v1/order/events'
