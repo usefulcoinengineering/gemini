@@ -29,7 +29,7 @@ def confirmexecution(
     def on_error(ws, error): logger.debug(error)
     def on_message(ws, message, orderid=orderid):
         dictionary = json.loads( message )
-        logger.info( dictionary )
+        # Remove comment to debug with: logger.info( dictionary )
 
         if isinstance(dictionary, list):
             for listitem in dictionary:
