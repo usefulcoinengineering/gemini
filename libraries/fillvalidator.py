@@ -45,7 +45,7 @@ def confirmexecution(
                 if listitem['order_id'] == orderid:
                     # Exit upon receiving order cancellation message.
                     if listitem['is_cancelled']: disconnect( 'cancelled' )
-                    if listitem['type'] == 'cancelled': disconnect( 'cancelled' )
+                    if listitem['type'] == 'cancelled': disconnect( f'cancelled [reason: "{listitem['reason']}"]' )
                     if listitem['type'] == 'rejected': disconnect( 'rejected' )
                     if listitem['type'] == 'fill':
                         # Make sure that the order was completely filled.
