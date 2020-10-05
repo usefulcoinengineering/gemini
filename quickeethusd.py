@@ -3,8 +3,8 @@
 
 # Strategy Outline:
 #  1. Urgently need ETH but waiting to realize the Gemini transactin fee.
-#  2. Monitor price fluctuations for a 10 basis point price drop.
-#  3. Submit a limit bid order 10 basis points below the discount price.
+#  2. Monitor price fluctuations for a 20 basis point price drop.
+#  3. Submit a limit bid order 20 basis points below the discount price.
 #
 # Execution:
 #   - Copy this file from the strategies directory to the level below. Run with python3.
@@ -25,8 +25,8 @@ from libraries.fillvalidator import confirmexecution
 # Define pair and price drop desired.
 # Price depreciation defined in decimals (0.1 is 10%).
 pair = 'ETHUSD'
-drop = '0.001'
-size = '0.001'
+drop = '0.002'
+size = '1.000'
 
 # Get the latest trading price.
 response = requests.get( "https://api.gemini.com/v1/pubticker/" + pair )
@@ -96,5 +96,11 @@ if deal:
         # Determine if the order was filled.
         confirmexecution( orderid = post['order_id'], poststatus = poststatus )
 
+        # Calculate gain/loss.
+        cost = Decimal( size ) * sale
+        gain = Decimal( size ) * fees - cost
+        logger.debug ( f'absolute gain: {gain} {pair[3:]}' )
+        logger.debug ( f'relative gain: {gain}: {Decimal(gain/cost).quantize( Decimal('1.00') )}%' )
+
     else:
-        logger.debug ( "ask not submitted because the bid was not filled." )
+        logger.debug ( 'ask not submitted because the bid was not filled.' )
