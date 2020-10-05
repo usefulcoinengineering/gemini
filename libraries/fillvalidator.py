@@ -36,15 +36,15 @@ def confirmexecution(
                 if listitem['order_id'] == orderid:
                     # Exit upon receiving order cancellation message.
                     if listitem['is_cancelled']:
-                        logger.debug(f'Order {orderid} was cancelled.' ); return False
+                        logger.debug(f'Order {orderid} was cancelled.' ); ws.close(); return False
                     if listitem['type'] == 'cancelled':
-                        logger.debug(f'Order {orderid} was cancelled [reason:{listitem["reason"]}].' ); return False
+                        logger.debug(f'Order {orderid} was cancelled [reason:{listitem["reason"]}].' ); ws.close(); return False
                     if listitem['type'] == 'rejected':
-                        logger.debug(f'Order {orderid} was rejected.' ); return False
+                        logger.debug(f'Order {orderid} was rejected.' ); ws.close(); return False
                     if listitem['type'] == 'fill':
                         # Make sure that the order was completely filled.
                         if listitem['remaining_amount'] == '0':
-                            smsalert(f'Order {orderid} was filled.' ); return True
+                            smsalert(f'Order {orderid} was filled.' ); ws.close(); return True
 
     # Construct payload.
     endpoint = '/v1/order/events'
