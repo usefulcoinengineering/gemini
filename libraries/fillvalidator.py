@@ -44,7 +44,7 @@ def confirmexecution(
                     if listitem['type'] == 'fill':
                         # Make sure that the order was completely filled.
                         if listitem['remaining_amount'] == '0':
-                            logger.debug(f'Order {orderid} was filled.' ); return True
+                            smsalert(f'Order {orderid} was filled.' ); return True
 
     # Construct payload.
     endpoint = '/v1/order/events'
