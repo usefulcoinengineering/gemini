@@ -17,8 +17,8 @@ import libraries.authenticator as authenticator
 import libraries.resourcelocator as resourcelocator
 
 def confirmexecution(
-        orderid = orderid,
-        poststatus = poststatus
+        orderid: str,
+        poststatus: object
     ) -> None:
 
     # Introduce function.
