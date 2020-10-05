@@ -66,7 +66,3 @@ def confirmexecution(
                                 on_close = on_close,
                                 header = header['sockheader'])
     ws.run_forever(sslopt={'cert_reqs': ssl.CERT_NONE})
-
-if __name__ == "__main__":
-    from fillvalidator import confirmexecution
-    fill = confirmexecution( "14154213385" )
