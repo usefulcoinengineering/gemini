@@ -25,7 +25,7 @@ from libraries.fillvalidator import confirmexecution
 # Define pair and price drop desired.
 # Price depreciation defined in decimals (0.1 is 10%).
 pair = 'DAIUSD'
-drop = '0.002386114988961'
+drop = '0.004772229977922'
 size = '15000'
 
 # Get the latest trading price.
@@ -95,6 +95,12 @@ if deal:
 
         # Determine if the order was filled.
         confirmexecution( orderid = post['order_id'], poststatus = poststatus )
+
+        # Calculate gain/loss.
+        cost = Decimal( size ) * sale
+        gain = Decimal( size ) * fees - cost
+        logger.debug ( f'absolute gain: {gain} {pair[3:]}' )
+        logger.debug ( f'relative gain: {gain}: {Decimal(gain/cost).quantize( Decimal('1.00') )}%' )
 
     else:
         logger.debug ( "ask not submitted because the bid was not filled." )

@@ -22,7 +22,7 @@ from libraries.fillvalidator import confirmexecution
 
 
 # Set bid size ['0.001' is the minimum for ETHUSD].
-# Define pair and price drop desired.
+# Define pair and price drop desired (at least 2X fees).
 # Price depreciation defined in decimals (0.1 is 10%).
 pair = 'ETHUSD'
 drop = '0.002'
