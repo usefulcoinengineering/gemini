@@ -40,14 +40,16 @@ def confirmexecution(
         dictionary = json.loads( message )
         logger.info( dictionary )
 
-        if dictionary['order_id'] == orderid:
-            # Exit upon receiving order cancellation message.
-            if dictionary['is_cancelled']: disconnect( 'cancelled' )
-            if dictionary['type'] == 'cancelled': disconnect( 'cancelled' )
-            if dictionary['type'] == 'rejected': disconnect( 'rejected' )
-            if dictionary['type'] == 'fill':
-                # Make sure that the order was completely filled.
-                if dictionary['remaining_amount'] == '0': disconnect( 'filled' )
+        if isinstance(dictionary, list):
+            for listitem in dictionary:
+                if listitem['order_id'] == orderid:
+                    # Exit upon receiving order cancellation message.
+                    if listitem['is_cancelled']: disconnect( 'cancelled' )
+                    if listitem['type'] == 'cancelled': disconnect( 'cancelled' )
+                    if listitem['type'] == 'rejected': disconnect( 'rejected' )
+                    if listitem['type'] == 'fill':
+                        # Make sure that the order was completely filled.
+                        if listitem['remaining_amount'] == '0': disconnect( 'filled' )
 
     # Construct payload.
     endpoint = '/v1/order/events'
