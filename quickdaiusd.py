@@ -67,7 +67,7 @@ if deal:
     fees = Decimal( deal * ( 1 + Decimal( drop ) ) ).quantize( Decimal('1.00000') )
 
     # Submit limit bid order.
-    logger.info(f'submitting {pair} maker / post order [limit price: {sale}].')
+    logger.info(f'submitting {pair} limit bid order [limit price: {sale}].')
     post = makeliquidity( pair, size, str(sale) )
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )

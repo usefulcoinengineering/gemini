@@ -70,7 +70,7 @@ if deal:
     stop = Decimal( deal * Decimal( 0.97 ) ).quantize( Decimal('1.00') )
 
     # Submit limit order.
-    logger.info(f'submitting {pair} maker / post order [limit price: {sale}].')
+    logger.info(f'submitting {pair} limit bid order [limit price: {sale}].')
     post = makeliquidity( pair, size, str(sale) )
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
