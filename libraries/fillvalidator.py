@@ -25,7 +25,7 @@ def confirmexecution(
 
     # Define disconnection rountine.
     def disconnect(status):
-        logger.info('The order was {status}.')
+        logger.info(f'The order was {status}.')
         ws.close()
         if status == 'filled':
             return True
