@@ -93,5 +93,8 @@ if deal:
         dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
         logger.debug ( dump )
 
+        # Determine if the order was filled.
+        confirmexecution( orderid = post['order_id'], poststatus = poststatus )
+
     else:
         logger.debug ( "ask not submitted because the bid was not filled." )
