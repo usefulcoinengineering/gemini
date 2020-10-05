@@ -22,7 +22,7 @@ def confirmexecution(
     ) -> None:
 
     # Introduce function.
-    logger.debug(f'Confirming exection of the order identified by the Gemini assigned number: {orderid}')
+    logger.debug(f'Confirming execution of the order identified by the Gemini assigned number: {orderid}')
 
     # Define websocet functions.
     def on_close(ws): logger.debug(f'{ws} connection closed.')
