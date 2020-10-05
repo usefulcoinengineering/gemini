@@ -25,7 +25,7 @@ def confirmexecution(
 
     # Define websocet functions.
     def on_close(ws): logger.debug(f'{ws} connection closed.')
-    def on_open(ws): logger.debug(f'{ws} connection opened.')
+    def on_open(ws, exitstatus=exitstatus): logger.debug(f'{ws} connection opened.'); return exitstatus
     def on_error(ws, error): logger.debug(error)
     def on_message(ws, message, orderid=orderid):
         dictionary = json.loads( message )
@@ -43,10 +43,9 @@ def confirmexecution(
                         # Make sure that the order was completely filled.
                         if listitem['remaining_amount'] == '0': exitstatus = f'Order {orderid} was filled.'
                 if exitstatus:
-                    ws.close()
                     logger.debug( exitstatus )
-                    smsalert ( exitstatus)
-                    if exitstatus == f'Order {orderid} was filled.': return True
+                    smsalert ( exitstatus )
+                    ws.close( exitstatus )
 
     # Construct payload.
     endpoint = '/v1/order/events'
