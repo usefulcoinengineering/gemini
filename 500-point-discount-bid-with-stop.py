@@ -40,15 +40,4 @@ if last:
 
     # Determine if the order was filled.
     fill = confirmexecution( post['order_id'] )
-    if fill:
-
-        # Submit stop loss order.
-        logger.info(f'submitting {pair} stop loss order [limit price: {stop}] triggered at {trip}.')
-        post = limitstop( pair, size, str(trip), str(stop) )
-        post = post.json()
-        dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
-        logger.debug ( dump )
-
-    else:
-        logger.debug ( "nothing to lose because the original position was not established." )
-        logger.debug ( "there's nothing at risk here buddy." )
+    logger.info(f'fill = {fill}')
