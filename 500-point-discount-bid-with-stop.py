@@ -19,6 +19,7 @@ drop = '0.000'
 
 # Open websocket connection.
 # Wait for the price to drop.
+logger.info(f'waiting for {pair} to drop {drop*100:.2f}% in price.')
 last = decimaldrop( pair, drop )
 if last:
 
@@ -30,6 +31,8 @@ if last:
     trip = Decimal( last * Decimal( 0.999 ) ).quantize( Decimal('1.00') )
     stop = Decimal( trip * Decimal( 0.999 ) ).quantize( Decimal('1.00') )
 
+    # Submit limit order.
+    logger.info(f'submitting {pair} maker / post order [limit price: {last:.2f}].')
     post = makeliquidity( pair, size, str(last) )
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
@@ -40,11 +43,12 @@ if last:
     if fill:
 
         # Submit stop loss order.
+        logger.info(f'submitting {pair} stop loss order [limit price: {stop:.2f}] triggered at {trip:.2f}.')
         post = limitstop( pair, size, str(trip), str(stop) )
         post = post.json()
         dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
         logger.debug ( dump )
 
     else:
-        logger.debug ( "Nothing to lose because the original position was not established." )
-        logger.debug ( "There's nothing at risk here buddy." )
+        logger.debug ( "nothing to lose because the original position was not established." )
+        logger.debug ( "there's nothing at risk here buddy." )
