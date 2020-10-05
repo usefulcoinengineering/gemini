@@ -44,6 +44,7 @@ if last:
         post = post.json()
         dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
         logger.debug ( dump )
-        
+
     else:
-        logger.debug ( "Nothing to lose. There's nothing at risk here buddy." )
+        logger.debug ( "Nothing to lose because the original position was not established." )
+        logger.debug ( "There's nothing at risk here buddy." )
