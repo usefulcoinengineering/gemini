@@ -19,8 +19,16 @@ import libraries.resourcelocator as resourcelocator
 def confirmexecution(
         orderid: str
     ) -> None:
-    # Declare function.
+
+    # Introduce function.
     logger.info(f'Confirming exection of the order identified by the Gemini assigned number: {orderid}')
+
+    # Define disconnection rountine.
+    def disconnect(status):
+        logger.info('The order was {status}.')
+        ws.close()
+        if status == 'filled': return True
+            else return False
 
     # Define websocet functions.
     def on_close(ws): logger.debug(f'{ws} connection closed.')
@@ -30,15 +38,14 @@ def confirmexecution(
         dictionary = json.loads( message )
         logger.info( dictionary )
 
-        # Process "type": "fill" messages with events only.
-        if 'fill' in dictionary['type']:
-            if dictionary['order_id'] == orderid:
-                unfilled = dictionary['remaining_amount']
-
+        if dictionary['order_id'] == orderid:
+            # Exit upon receiving order cancellation message.
+            if dictionary['is_cancelled']: disconnect( 'cancelled' )
+            if dictionary['type'] == 'cancelled': disconnect( 'cancelled' )
+            if dictionary['type'] == 'rejected': disconnect( 'rejected' )
+            if dictionary['type'] == 'fill':
                 # Make sure that the order was completely filled.
-                if unfilled == 0:
-                    ws.close()
-                    return True
+                if dictionary['remaining_amount'] == '0': disconnect( 'filled' )
 
     # Construct payload.
     endpoint = '/v1/order/events'
