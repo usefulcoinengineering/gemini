@@ -24,7 +24,9 @@ def confirmexecution(
     logger.debug(f'Confirming exection of the order identified by the Gemini assigned number: {orderid}')
 
     # Define websocet functions.
-    def on_close(ws, exitstatus=exitstatus): logger.debug(f'{ws} connection closed.'); return exitstatus
+    def on_close(ws, exitstatus=exitstatus):
+        logger.debug(f'{ws} connection closed.')
+        return exitstatus
     def on_open(ws): logger.debug(f'{ws} connection opened.')
     def on_error(ws, error): logger.debug(error)
     def on_message(ws, message, orderid=orderid):
