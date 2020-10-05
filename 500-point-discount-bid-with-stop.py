@@ -36,9 +36,7 @@ if last:
     logger.debug ( dump )
 
     # Determine if the order was filled.
-    load = json.loads( dump )
-    swap = load['order_id']
-    fill = confirmexecution( swap )
+    fill = confirmexecution( post['order_id'] )
     if fill:
 
         # Submit stop loss order.
