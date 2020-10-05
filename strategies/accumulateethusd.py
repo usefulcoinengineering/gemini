@@ -96,6 +96,9 @@ if deal:
         dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
         logger.debug ( dump )
 
+        # Determine if the order was filled.
+        confirmexecution( orderid = post['order_id'], poststatus = poststatus )
+
     else:
         logger.debug ( "nothing to lose because the original position was not established." )
         logger.debug ( "there's nothing at risk here buddy. the post was not filled." )
