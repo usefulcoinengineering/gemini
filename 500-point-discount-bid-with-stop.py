@@ -24,7 +24,8 @@ last = decimaldrop( pair, drop )
 if last:
 
     # Set bid size.
-    size = '0.0001'
+    # '0.001' is the minimum for ETHUSD.
+    size = '0.001'
 
     # Define trigger and stop loss prices. Redefine last for submission.
     last = Decimal( last * Decimal( 0.9999 ) ).quantize( Decimal('1.00') )
