@@ -38,9 +38,18 @@ if last:
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( dump )
 
+    # Define poststatus class.
+    # Purpose: Stores the state of the orderid parameter upon exiting the websocket connection session.
+    class Poststatus:
+        def __init__(self, state): self.__state = state
+        def getvalue(self): return self.__state
+        def setvalue(self, state): self.__state = state
+
+    poststatus = Poststatus(False)
+
     # Determine if the order was filled.
-    fill = confirmexecution( post['order_id'] )
-    logger.info(f'fill = {fill}')
+    fill = confirmexecution( orderid = post['order_id'], poststatus = poststatus )
+    logger.info(f'fill = {poststatus}')
     if fill:
 
         # Submit stop loss order.
