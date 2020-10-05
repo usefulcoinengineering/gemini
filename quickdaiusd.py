@@ -30,14 +30,14 @@ size = '15000'
 
 # Get the latest trading price.
 response = requests.get( "https://api.gemini.com/v1/pubticker/" + pair )
-last = Decimal( response.json()['last'] ).quantize( Decimal('1.00') )
+last = Decimal( response.json()['last'] ).quantize( Decimal('1.00000') )
 
 # Determine deal pricing.
-deal = Decimal( last * ( 1 - Decimal( drop ) ) ).quantize( Decimal('1.00') )
+deal = Decimal( last * ( 1 - Decimal( drop ) ) ).quantize( Decimal('1.00000') )
 
 # Calculate a competitive ask (sale) price and potential losses.
-sale = Decimal( deal * ( 1 - Decimal( drop ) ) ).quantize( Decimal('1.00') )
-fees = Decimal( deal * ( 1 + Decimal( drop ) ) ).quantize( Decimal('1.00') )
+sale = Decimal( deal * ( 1 - Decimal( drop ) ) ).quantize( Decimal('1.00000') )
+fees = Decimal( deal * ( 1 + Decimal( drop ) ) ).quantize( Decimal('1.00000') )
 cost = Decimal( size ) * sale
 gain = Decimal( size ) * fees - cost
 
@@ -45,7 +45,7 @@ gain = Decimal( size ) * fees - cost
 print (f'\n\n{pair[:3]} last sold for {last} {pair[3:]}.')
 print (f'this code will wait for {pair[:3]} to drop {Decimal(drop)*100}% in price to ~{deal} {pair[3:]}.')
 print (f'it will then try to buy {size} {pair[:3]} for {Decimal(cost).quantize( Decimal("1.00") )} {pair[3:]}.')
-print (f'in other word it will submit a limit bid for {pair[:3]} at {sale} {pair[3:]} per {pair[:3]}.')
+print (f'in other words it will submit a limit bid for {pair[:3]} at {sale} {pair[3:]} per {pair[:3]}.')
 print (f'if the bid is successful and the order fills, it will then submit a limit ask order.')
 print (f'BE CAREFUL! YOU COULD LOSE THE TOTAL VALUE OF THE ORDER IF THE PRICE NEVER BOUNCES BACK UP.')
 print (f'the limit ask order is trying to sell {size} {pair[:3]} at {fees} {pair[3:]} per {pair[:3]}.')
@@ -63,8 +63,8 @@ deal = decimaldrop( pair, drop )
 if deal:
 
     # Define trigger and stop loss prices. Redefine deal for submission.
-    sale = Decimal( deal * ( 1 - Decimal( drop ) ) ).quantize( Decimal('1.00') )
-    fees = Decimal( deal * ( 1 + Decimal( drop ) ) ).quantize( Decimal('1.00') )
+    sale = Decimal( deal * ( 1 - Decimal( drop ) ) ).quantize( Decimal('1.00000') )
+    fees = Decimal( deal * ( 1 + Decimal( drop ) ) ).quantize( Decimal('1.00000') )
 
     # Submit limit bid order.
     logger.info(f'submitting {pair} maker / post order [limit price: {sale}].')
