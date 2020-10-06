@@ -30,7 +30,7 @@ drop = '0.002'
 
 # Open websocket connection.
 # Wait for the price to drop.
-logger.info(f'waiting for {pair} to drop {Decimal(drop)*100}% in price.')
+logger.info(f'waiting for {pair} to drop {Decimal(drop)*100}% in price to buy {cash} {pair[3:]} worth..')
 deal = pricedrop( pair, drop )
 if deal:
 
