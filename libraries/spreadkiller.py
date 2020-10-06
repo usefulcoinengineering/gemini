@@ -25,7 +25,7 @@ def bidorder(
     market = Decimal( response.json()['ask'] )
     zeros = str( Decimal( 0 ).quantize( market ) )
     tick = Decimal( zeros[:1] + '1' )
-    bid = market - tick
+    bid = str( market - tick )
 
     logger.debug(f'endpoint: {endpoint}')
     logger.debug(f'market: {market}')
