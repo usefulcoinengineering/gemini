@@ -18,11 +18,9 @@ from libraries.spreadkiller import bidding
 from libraries.fillvalidator import confirmexecution
 
 
-# Set bid size ['0.001' is the minimum for ETHUSD].
-# Define pair and price drop desired (at least 2X fees).
-# Price depreciation defined in decimals (0.1 is 10%).
+# Set bid size ['0.1' is the minimum for DAIUSD].
 pair = 'DAIUSD'
-size = '1'
+size = '0.1'
 
 # Submit limit bid order.
 logger.info(f'submitting {pair} aggressive limit bid order.')
