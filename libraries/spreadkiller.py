@@ -72,6 +72,9 @@ def quotabid(
     quantity = notional / Decimal(bid)
     size = str( quantity.quantize( Decimal('1.00') ) )
 
+    logger.debug(f'quantity: {quantity}')
+    logger.debug(f'size: {size}')
+
     # Construct buy order payload.
     # Use 'options': ['maker-or-cancel'] for post only orders.
     endpoint = '/v1/order/new'
