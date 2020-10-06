@@ -23,7 +23,7 @@ pair = 'DAIUSD'
 size = '0.1'
 
 # Submit limit bid order.
-logger.info(f'submitting {pair} aggressive limit bid order.')
+logger.debug(f'submitting {pair} aggressive limit bid order.')
 post = askorder( pair, size )
 post = post.json()
 dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
