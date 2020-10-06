@@ -70,7 +70,7 @@ def quotabid(
 
     # Determin bid size.
     quantity = notional / Decimal(bid)
-    size = quantity.quantize( Decimal('1.00') )
+    size = str( quantity.quantize( Decimal('1.00') ) )
 
     # Construct buy order payload.
     # Use 'options': ['maker-or-cancel'] for post only orders.
