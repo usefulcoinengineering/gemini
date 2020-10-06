@@ -2,8 +2,8 @@
 
 
 # Strategy Outline:
-#  1. Urgently need DAI.
-#  2. Submit a bid one tick below the best ask.
+#  1. Urgently need to sell DAI.
+#  2. Submit an ask one tick above the best bid.
 #
 # Execution:
 #   - Copy this file from the strategies directory to the level below. Run with python3.
