@@ -17,6 +17,14 @@ Notes:
 sudo apt install python3-pip
 ```
 
+Logfiles:
+
+To make it easier to read the logfiles:
+
+```bash
+sudo timedatectl set-timezone America/Chicago
+```
+
 Amazon Support:
 
 1. To get SNS support, open up IAM and add a new user that has privileges to send messages.
