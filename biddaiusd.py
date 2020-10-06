@@ -14,7 +14,7 @@ import requests
 from decimal import Decimal
 
 from libraries.logger import logger
-from libraries.spreadkiller import bidding
+from libraries.spreadkiller import bidorder
 from libraries.fillvalidator import confirmexecution
 
 
