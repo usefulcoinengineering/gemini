@@ -62,6 +62,7 @@ def confirmexecution(
     header = authenticator.authenticate(payload)
 
     # Establish websocket connection.
+    logger.debug( f'Establishing websocket connection to confirm the execution of order number {orderid}.' )
     ws = websocket.WebSocketApp(str( resourcelocator.sockserver + endpoint ),
                                 on_open = on_open,
                                 on_message = on_message,
