@@ -71,7 +71,7 @@ def askorder(
         'symbol': pair,
         'amount': size,
         'price': ask,
-        'side': 'buy',
+        'side': 'sell',
         'type': 'exchange limit',
         'options': ['maker-or-cancel']
     }
