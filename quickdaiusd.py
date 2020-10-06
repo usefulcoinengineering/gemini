@@ -72,35 +72,3 @@ if deal:
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( dump )
-
-    # Define poststatus class.
-    # Purpose: Stores the state of the orderid parameter upon exiting the websocket connection session.
-    class Poststatus:
-        def __init__(self, state): self.__state = state
-        def getvalue(self): return self.__state
-        def setvalue(self, state): self.__state = state
-
-    poststatus = Poststatus(False)
-
-    # Determine if the order was filled.
-    confirmexecution( orderid = post['order_id'], poststatus = poststatus )
-    if poststatus.getvalue():
-
-        # Submit limit ask order.
-        logger.info(f'submitting {pair} limit ask order [limit price: {fees}].')
-        post = takeliquidity( pair, size, str(fees) )
-        post = post.json()
-        dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
-        logger.debug ( dump )
-
-        # Determine if the order was filled.
-        confirmexecution( orderid = post['order_id'], poststatus = poststatus )
-
-        # Calculate gain/loss.
-        cost = Decimal( size ) * sale
-        gain = Decimal( size ) * fees - cost
-        logger.debug ( f'absolute gain: {gain} {pair[3:]}' )
-        logger.debug ( f'relative gain: {gain}: {Decimal(gain/cost).quantize( Decimal("1.00") )}%' )
-
-    else:
-        logger.debug ( "ask not submitted because the bid was not filled." )
