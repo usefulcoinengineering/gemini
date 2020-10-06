@@ -68,14 +68,14 @@ def pricedrop(
                     move = 100 * ( sessionmax - last ) / sessionmax
 
                     # Display impact of event information received.
-                    logger.debug( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {last} presently : [Message ID: {dictionary["socket_sequence"]}].' )
+                    logger.info( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {last} presently : [Message ID: {dictionary["socket_sequence"]}].' )
 
                     # Define bargain (sale) price.
                     sale = Decimal( sessionmax * ( 1 - percentoff ) )
 
                     # Exit loop if there's a sale.
                     if sale.compare(last) == 1 :
-                        logger.debug( f'{pair} [now {last:.2f}] just went on sale [dropped below {sale:.2f}].' )
+                        logger.info( f'{pair} [now {last:.2f}] just went on sale [dropped below {sale:.2f}].' )
                         smsalert( f'There was a {percentoff*100}% drop in the price of the {pair} pair on Gemini.' )
 
                         # Update deal price.
