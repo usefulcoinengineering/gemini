@@ -32,6 +32,9 @@ def confirmexecution(
         dictionary = json.loads( message )
         # Remove comment to debug with: logger.info( dictionary )
 
+        # Log heartbeat.
+        if dictionary['type'] == 'heartbeat': logger.info( dictionary )
+
         if isinstance(dictionary, list):
             for listitem in dictionary:
                 exitstatus = False
