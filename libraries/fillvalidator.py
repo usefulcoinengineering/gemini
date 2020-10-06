@@ -35,22 +35,29 @@ def confirmexecution(
         # Log heartbeat.
         if dictionary['type'] == 'heartbeat': logger.debug( dictionary )
 
+        exitstatus = False
         if isinstance(dictionary, list):
-            for listitem in dictionary:
-                exitstatus = False
-                if listitem['order_id'] == orderid:
-                    # Exit upon receiving order cancellation message.
-                    if listitem['is_cancelled']: exitstatus = f'Order {orderid} was cancelled.'
-                    if listitem['type'] == 'cancelled': exitstatus = f'Order {orderid} was cancelled [reason:{listitem["reason"]}].'
-                    if listitem['type'] == 'rejected': exitstatus = f'Order {orderid} was rejected.'
-                    if listitem['type'] == 'fill':
-                        # Make sure that the order was completely filled.
-                        if listitem['remaining_amount'] == '0': exitstatus = f'Order {orderid} was filled.'
-                if exitstatus:
-                    ws.close()
-                    logger.debug( exitstatus )
-                    smsalert ( exitstatus )
-                    poststatus.setvalue( True )
+
+            # Check if this is an 'initial' message from Gemini.
+            if any(listitem['type'] == 'initial' for listitem in dictionary):
+                if not any(listitem['order_id'] == orderid for listitem in dictionary):
+                    exitstatus = f'Order {orderid} not active.'
+
+            else:
+                for listitem in dictionary:
+                    if listitem['order_id'] == orderid:
+                        # Exit upon receiving order cancellation message.
+                        if listitem['is_cancelled']: exitstatus = f'Order {orderid} was cancelled.'
+                        if listitem['type'] == 'cancelled': exitstatus = f'Order {orderid} was cancelled [reason:{listitem["reason"]}].'
+                        if listitem['type'] == 'rejected': exitstatus = f'Order {orderid} was rejected.'
+                        if listitem['type'] == 'fill':
+                            # Make sure that the order was completely filled.
+                            if listitem['remaining_amount'] == '0': exitstatus = f'Order {orderid} was filled.'
+        if exitstatus:
+            ws.close()
+            logger.debug( exitstatus )
+            smsalert ( exitstatus )
+            poststatus.setvalue( True )
 
     # Construct payload.
     endpoint = '/v1/order/events'
