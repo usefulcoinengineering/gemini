@@ -30,10 +30,10 @@ def confirmexecution(
     def on_error(ws, error): logger.debug(error)
     def on_message(ws, message, orderid=orderid):
         dictionary = json.loads( message )
-        # Remove comment to debug with: logger.info( dictionary )
+        # Remove comment to debug with:
+        logger.info( dictionary )
 
-        # Log heartbeat.
-        if dictionary['type'] == 'heartbeat': logger.debug( dictionary )
+        # Remove comment to log heartbeat: if dictionary['type'] == 'heartbeat': logger.debug( dictionary )
 
         exitstatus = False
         if isinstance(dictionary, list):
