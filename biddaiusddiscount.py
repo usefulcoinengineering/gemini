@@ -15,11 +15,7 @@ import requests
 from decimal import Decimal
 
 from libraries.logger import logger
-<<<<<<< HEAD
 from libraries.spreadkiller import quotabid
-=======
-from libraries.spreadkiller import bidorder
->>>>>>> 39cd6867f508afc7b5c41aa2440eef4ba169b0a2
 from libraries.fillvalidator import confirmexecution
 
 
@@ -39,11 +35,7 @@ if deal:
 
     # Submit limit bid order.
     logger.debug(f'submitting {pair} aggressive limit bid order.')
-<<<<<<< HEAD
     post = quotabid( pair, cash )
-=======
-    post = bidorder( pair, size )
->>>>>>> 39cd6867f508afc7b5c41aa2440eef4ba169b0a2
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( dump )
