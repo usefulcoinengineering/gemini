@@ -15,7 +15,7 @@ import requests
 from decimal import Decimal
 
 from libraries.logger import logger
-from libraries.dealseaker import decimaldrop
+from libraries.dealseaker import pricedrop
 from libraries.limitorderposter import makeliquidity
 from libraries.limitorderposter import takeliquidity
 from libraries.fillvalidator import confirmexecution
@@ -59,7 +59,7 @@ if verification != 'Y': exit(1)
 # Open websocket connection.
 # Wait for the price to drop.
 logger.info(f'waiting for {pair} to drop {Decimal(drop)*100}% in price.')
-deal = decimaldrop( pair, drop )
+deal = pricedrop( pair, drop )
 if deal:
 
     # Define trigger and stop loss prices. Redefine deal for submission.

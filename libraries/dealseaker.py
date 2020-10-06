@@ -16,7 +16,7 @@ from libraries.messenger import smsalert as smsalert
 import libraries.authenticator as authenticator
 import libraries.resourcelocator as resourcelocator
 
-def decimaldrop(
+def pricedrop(
         pair: str,
         drop: str
     ) -> None:
