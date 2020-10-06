@@ -27,11 +27,11 @@ def biding(
     tick = Decimal( zeros[:1] + '1' )
     bid = market - tick
 
-    logger.debug(f'endpoint: {endpoint}'')
-    logger.debug(f'market: {market}'')
-    logger.debug(f'zeros: {zeros}'')
-    logger.debug(f'tick: {tick}'')
-    logger.debug(f'bid: {bid}'')
+    logger.debug(f'endpoint: {endpoint}')
+    logger.debug(f'market: {market}')
+    logger.debug(f'zeros: {zeros}')
+    logger.debug(f'tick: {tick}')
+    logger.debug(f'bid: {bid}')
 
     # Construct buy order payload.
     # Use 'options': ['maker-or-cancel'] for post only orders.
