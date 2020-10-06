@@ -47,6 +47,7 @@ def decimaldrop(
         dictionary = json.loads( message )
         percentoff = Decimal( drop )
         sessionmax = Decimal( high.getvalue() )
+        logger.debug(dictionary)
 
         # Process "type": "heartbeat" messages.
         if dictionary['type'] == 'heartbeat': logger.debug(f'sequence: {dictionary["sequence"]}')
