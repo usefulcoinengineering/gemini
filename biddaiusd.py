@@ -24,7 +24,7 @@ size = '0.1'
 
 # Submit limit bid order.
 logger.info(f'submitting {pair} aggressive limit bid order.')
-post = bidding( pair, size )
+post = bidorder( pair, size )
 post = post.json()
 dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
 logger.debug ( dump )

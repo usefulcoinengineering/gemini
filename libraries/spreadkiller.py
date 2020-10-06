@@ -14,7 +14,7 @@ from libraries.logger import logger as logger
 import libraries.authenticator as authenticator
 import libraries.resourcelocator as resourcelocator
 
-def biding(
+def bidorder(
         pair: str,
         size: str,
     ) -> None:
