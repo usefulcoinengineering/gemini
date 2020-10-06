@@ -49,7 +49,7 @@ def decimaldrop(
         sessionmax = Decimal( high.getvalue() )
 
         # Process "type": "heartbeat" messages.
-        if 'heartbeat' in dictionary['type']: logger.debug(f'\r.')
+        if 'heartbeat' in dictionary['type']: logger.debug(f'sequence: {dictionary["sequence"]}')
 
         # Process "type": "update" messages with events only.
         if 'update' in dictionary['type']:
