@@ -58,7 +58,7 @@ def quotabid(
     # Fees are calculated on the notional value of each trade (price × size).
     # Meaning (for API transactions): size * price * 1.001 = cash
     fraction = 0.001
-    notional = Decimal(cash) / ( 1 + fraction )
+    notional = Decimal(cash) / Decimal( 1 + fraction )
 
     # Get the lowest ask in the orderbook.
     endpoint = '/v1/pubticker/' + pair
