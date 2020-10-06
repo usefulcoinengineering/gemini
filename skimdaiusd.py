@@ -25,7 +25,7 @@ from libraries.fillvalidator import confirmexecution
 # Define pair and price drop desired (at least 2X fees).
 # Price depreciation defined in decimals (0.1 is 10%).
 pair = 'DAIUSD'
-drop = '0.000'
+drop = '0.002'
 size = '15000'
 
 # Get the latest trading price.
