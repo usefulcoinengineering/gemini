@@ -24,7 +24,7 @@ def bidorder(
     response = requests.get( resourcelocator.restserver + endpoint )
     market = Decimal( response.json()['ask'] )
     zeros = str( Decimal( 0 ).quantize( market ) )
-    tick = str(zeros[:1]) + '1'
+    tick = zeros[:1]
     bid = str( market - Decimal( tick ) )
 
     logger.debug(f'endpoint: {endpoint}')
