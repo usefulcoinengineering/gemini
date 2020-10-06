@@ -31,7 +31,7 @@ def confirmexecution(
     def on_message(ws, message, orderid=orderid):
         dictionary = json.loads( message )
         # Remove comment to debug with:
-        logger.info( dictionary )
+        logger.debug( dictionary )
 
         # Remove comment to log heartbeat: if dictionary['type'] == 'heartbeat': logger.debug( dictionary )
 
@@ -55,7 +55,7 @@ def confirmexecution(
                             if listitem['remaining_amount'] == '0': exitstatus = f'Order {orderid} was filled.'
         if exitstatus:
             ws.close()
-            logger.debug( exitstatus )
+            logger.info ( exitstatus )
             smsalert ( exitstatus )
             poststatus.setvalue( True )
 
