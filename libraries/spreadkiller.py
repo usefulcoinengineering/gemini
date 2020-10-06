@@ -23,9 +23,9 @@ def bidorder(
     endpoint = '/v1/pubticker/' + pair
     response = requests.get( resourcelocator.restserver + endpoint )
     market = Decimal( response.json()['ask'] )
-    zeros = str( Decimal( 0 ).quantize( market ) ) + '1'
-    tick = Decimal( zeros ) * 10
-    bid = str( market - Decimal( tick ) )
+    zeros = str( Decimal( 0 ).quantize( market ) )
+    tick = Decimal( zeros  + '1' ) * 10
+    bid = str( market - Decimal( tick ).quantize( market ) )
 
     logger.debug(f'endpoint: {endpoint}')
     logger.debug(f'market: {market}')
