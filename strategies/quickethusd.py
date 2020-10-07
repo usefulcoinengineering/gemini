@@ -16,8 +16,8 @@ from decimal import Decimal
 
 from libraries.logger import logger
 from libraries.dealseaker import pricedrop
-from libraries.limitorderposter import makeliquidity
-from libraries.limitorderposter import takeliquidity
+from libraries.limitorderposter import bidorder
+from libraries.limitorderposter import askorder
 from libraries.fillvalidator import confirmexecution
 
 
@@ -68,7 +68,7 @@ if deal:
 
     # Submit limit bid order.
     logger.info(f'submitting {pair} limit bid order [limit price: {sale}].')
-    post = makeliquidity( pair, size, str(sale) )
+    post = bidorder( pair, size, str(sale) )
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( dump )
@@ -88,7 +88,7 @@ if deal:
 
         # Submit limit ask order.
         logger.info(f'submitting {pair} limit ask order [limit price: {fees}].')
-        post = takeliquidity( pair, size, str(fees) )
+        post = askorder( pair, size, str(fees) )
         post = post.json()
         dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
         logger.debug ( dump )

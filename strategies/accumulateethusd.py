@@ -18,7 +18,7 @@ from decimal import Decimal
 from libraries.logger import logger
 from libraries.dealseaker import pricedrop
 from libraries.losspreventer import limitstop
-from libraries.limitorderposter import makeliquidity
+from libraries.limitorderposter import bidorder
 from libraries.fillvalidator import confirmexecution
 
 
@@ -71,7 +71,7 @@ if deal:
 
     # Submit limit order.
     logger.info(f'submitting {pair} limit bid order [limit price: {sale}].')
-    post = makeliquidity( pair, size, str(sale) )
+    post = bidorder( pair, size, str(sale) )
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( dump )

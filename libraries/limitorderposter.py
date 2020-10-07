@@ -14,7 +14,7 @@ from libraries.logger import logger as logger
 import libraries.authenticator as authenticator
 import libraries.resourcelocator as resourcelocator
 
-def makeliquidity(
+def bidorder(
         pair: str,
         size: str,
         last: str
@@ -41,7 +41,7 @@ def makeliquidity(
 
     return response
 
-def takeliquidity(
+def askorder(
         pair: str,
         size: str,
         last: str
