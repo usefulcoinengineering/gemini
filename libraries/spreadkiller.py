@@ -68,7 +68,7 @@ def quotabid(
     tick = Decimal( zeros  + '1' ) * 10
     bid = str( market - Decimal( tick ).quantize( market ) )
 
-    # Determin bid size.
+    # Determine bid size.
     quantity = notional / Decimal(bid)
     size = str( quantity.quantize( Decimal('1.000') ) )
     logger.debug(f'size: {size}')
