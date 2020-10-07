@@ -28,7 +28,7 @@ cash = '0.25'
 cost = '1.00760'
 
 # Submit limit bid order.
-logger.debug(f'submitting {pair} limit bid order: {cost} bid on a {budget} budget.')
+logger.debug(f'submitting {pair} limit bid order: {cost} bid on a {cost} budget.')
 post = quotabid( pair, cash, cost )
 post = post.json()
 dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
