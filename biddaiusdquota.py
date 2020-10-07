@@ -24,8 +24,8 @@ from libraries.fillvalidator import confirmexecution
 # Configure price drop desired in decimal terms.
 # For example, 20 basis points is '0.002'. This covers Gemini API trading fees round trip!
 pair = 'DAIUSD'
-cash = '500'
-cost = '1.01748'
+cash = '15000'
+cost = '1.008'
 
 # Submit limit bid order.
 logger.debug(f'submitting {pair} limit bid order: {cost} bid on a {cost} budget.')
