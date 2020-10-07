@@ -25,7 +25,7 @@ from libraries.fillvalidator import confirmexecution
 # For example, 20 basis points is '0.002'. This covers Gemini API trading fees round trip!
 pair = 'DAIUSD'
 cash = '0.25'
-cost = '1.00760'
+cost = '1.01381'
 
 # Submit limit bid order.
 logger.debug(f'submitting {pair} limit bid order: {cost} bid on a {cost} budget.')
