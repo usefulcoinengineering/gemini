@@ -16,8 +16,8 @@ from decimal import Decimal
 
 from libraries.logger import logger
 from libraries.dealseaker import pricedrop
-from libraries.limitorderposter import bidorder
-from libraries.limitorderposter import askorder
+from libraries.liquiditymaker import bidorder
+from libraries.liquiditymaker import askorder
 from libraries.fillvalidator import confirmexecution
 
 
