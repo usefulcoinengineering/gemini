@@ -16,7 +16,3 @@ def smsalert( message ):
     responseout = json.dumps( snsresponse, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( f'Response to SNS Request:\n{responseout}' )
     # Log SMS execution details
-
-if __name__ == "__main__":
-    from messenger import smsalert
-    smsalert( 'SMS testing. Please ignore.' )
