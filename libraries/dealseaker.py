@@ -47,14 +47,14 @@ def pricedrop(
         dictionary = json.loads( message )
         percentoff = Decimal( drop )
         sessionmax = Decimal( high.getvalue() )
-        logger.debug(dictionary)
+        # Unncomment this statement to debug messages: logger.debug(dictionary)
 
         # Process "type": "heartbeat" messages.
         if dictionary['type'] == 'heartbeat':
             logger.debug( heartbeat )
             beatback = { 'type': 'pong' }
             ws.send( json.dumps(beatback) )
-            logger.debug( beatback.json() )            
+            logger.debug( beatback.json() )
 
         # Process "type": "update" messages with events only.
         if 'update' in dictionary['type']:
