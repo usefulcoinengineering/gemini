@@ -26,8 +26,8 @@ from libraries.fillvalidator import confirmexecution
 # Define pair and price drop desired.
 # Price depreciation defined in decimals (0.1 is 10%).
 pair = 'ETHUSD'
-drop = '0.1'
-size = '0.5'
+drop = '0.0'
+size = '0.001'
 
 # Get the latest trading price.
 response = requests.get( "https://api.gemini.com/v1/pubticker/" + pair )

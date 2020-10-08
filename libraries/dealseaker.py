@@ -50,7 +50,11 @@ def pricedrop(
         logger.debug(dictionary)
 
         # Process "type": "heartbeat" messages.
-        if dictionary['type'] == 'heartbeat': logger.debug(f'sequence: {dictionary["sequence"]}')
+        if dictionary['type'] == 'heartbeat':
+            logger.debug( heartbeat )
+            beatback = { 'type': 'pong' }
+            ws.send( json.dumps(beatback) )
+            logger.debug( beatback.json() )            
 
         # Process "type": "update" messages with events only.
         if 'update' in dictionary['type']:
