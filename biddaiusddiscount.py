@@ -15,7 +15,7 @@ import requests
 from decimal import Decimal
 
 from libraries.logger import logger
-from libraries.dealseaker import pricedrop
+from libraries.dealseaker import askfall
 from libraries.spreadkiller import quotabid
 from libraries.fillvalidator import confirmexecution
 
@@ -29,9 +29,9 @@ cash = '0.25'
 drop = '0.001'
 
 # Open websocket connection.
-# Wait for the price to drop.
+# Wait for asks to fall in price.
 logger.info(f'waiting for {pair} to drop {Decimal(drop)*100}% in price to buy {cash} {pair[3:]} worth..')
-deal = pricedrop( pair, drop )
+deal = askfall( pair, drop )
 if deal:
 
     # Submit limit bid order.
