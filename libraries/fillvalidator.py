@@ -34,6 +34,12 @@ def confirmexecution(
 
         # Remove comment to log heartbeat: if dictionary['type'] == 'heartbeat': logger.debug( dictionary )
 
+        # Process "type": "heartbeat" messages.
+        if dictionary['type'] == 'heartbeat': logger.debug( heartbeat )
+            # beatback = { 'type': 'pong' }
+            # ws.send( json.dumps(beatback) )
+            # logger.debug( beatback.json() )
+
         exitstatus = False
         if isinstance(dictionary, list):
 
