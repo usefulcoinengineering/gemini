@@ -47,7 +47,7 @@ loss = Decimal( size ) * stop - cost
 print (f'\n\n{pair[:3]} last sold for {last} {pair[3:]}.')
 print (f'this code will wait for {pair[:3]} to drop {Decimal(drop)*100}% in price to ~{deal} {pair[3:]}.')
 print (f'it will then try to buy {size} {pair[:3]} for {Decimal(cost).quantize( Decimal("1.00") )} {pair[3:]}.')
-print (f'in other word it will submit a limit bid for {pair[:3]} at {sale} {pair[3:]} per {pair[:3]}.')
+print (f'in other words it will submit a limit bid for {pair[:3]} at {sale} {pair[3:]} per {pair[:3]}.')
 print (f'if the bid is successful and the order fills, it will then submit a stop loss order.')
 print (f'the stop loss is not a market stop. BE CAREFUL! MAKES SURE IT IS NOT TOO CLOSE.')
 print (f'it is a stop limit ask trying to sell {size} {pair[:3]} at {stop} {pair[3:]} per {pair[:3]}.')
