@@ -3,11 +3,11 @@
 
 # Strategy Outline:
 #  1. Waiting for a rise in the price of YFI.
-#  2. Submit a bid one tick below the best ask.
-#  3. The bid size is limited by a USD (quote currency) budget.
+#  2. Submit an ask one tick above the best bid.
+#  3. The ask size is limited by a USD (quote currency) budget.
 #
 # Execution:
-#   - Copy this file from the strategies directory to the level below. Run with python3.
+#   - Copy this file from the strategies directory to the level above. Run with python3.
 
 import json
 import requests
@@ -15,8 +15,8 @@ import requests
 from decimal import Decimal
 
 from libraries.logger import logger
-from libraries.dealseeker import askfall
-from libraries.spreadkiller import quotabid
+from libraries.rentseeker import bidrise
+from libraries.spreadkiller import quotaask
 from libraries.fillvalidator import confirmexecution
 
 
@@ -29,14 +29,14 @@ cash = '0.25'
 rise = '0.001'
 
 # Open websocket connection.
-# Wait for asks to fall in price.
+# Wait for bids to rise in price.
 logger.info(f'waiting for {pair} to rise {Decimal(rise)*100}% in price to buy {cash} {pair[3:]} worth..')
-deal = askfall( pair, rise )
+deal = bidrise( pair, rise )
 if deal:
 
-    # Submit limit bid order.
-    logger.debug(f'submitting {pair} aggressive limit bid order.')
-    post = quotabid( pair, cash )
+    # Submit limit ask order.
+    logger.debug(f'submitting {pair} aggressive limit ask order.')
+    post = quotaask( pair, cash )
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( dump )
