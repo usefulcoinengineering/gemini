@@ -2,7 +2,7 @@
 
 
 # Strategy Outline:
-#  1. Waiting for a drop in the price of YFI.
+#  1. Waiting for a rise in the price of YFI.
 #  2. Submit a bid one tick below the best ask.
 #  3. The bid size is limited by a USD (quote currency) budget.
 #
@@ -22,16 +22,16 @@ from libraries.fillvalidator import confirmexecution
 
 # Set quote currency (USD in this case) budget.
 # This amount should exceed 20 cents ['0.00001' is the minimum for YFIUSD].
-# Configure price drop desired in decimal terms.
+# Configure price rise desired in decimal terms.
 # For example, 20 basis points is '0.002'. This covers Gemini API trading fees round trip!
 pair = 'YFIUSD'
 cash = '0.25'
-drop = '0.001'
+rise = '0.001'
 
 # Open websocket connection.
 # Wait for asks to fall in price.
-logger.info(f'waiting for {pair} to drop {Decimal(drop)*100}% in price to buy {cash} {pair[3:]} worth..')
-deal = askfall( pair, drop )
+logger.info(f'waiting for {pair} to rise {Decimal(rise)*100}% in price to buy {cash} {pair[3:]} worth..')
+deal = askfall( pair, rise )
 if deal:
 
     # Submit limit bid order.
