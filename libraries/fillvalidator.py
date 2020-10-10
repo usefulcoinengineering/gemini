@@ -46,18 +46,22 @@ def confirmexecution(
             # Check if this is an 'initial' message from Gemini.
             if any(listitem['type'] == 'initial' for listitem in dictionary):
                 if not any(listitem['order_id'] == orderid for listitem in dictionary):
-                    exitstatus = f'Order {orderid} not active.'
+                    jsonoutput = json.dumps( dictionary, sort_keys=True, indent=4, separators=(',', ': ') )
+                    exitstatus = f'Order not active - \n{jsonoutput}'
 
             else:
                 for listitem in dictionary:
+                    size = listitem['original_amount']
+                    rate = listitem['price']
+                    deal = f'Order {orderid} for {size} at {rate} was '
                     if listitem['order_id'] == orderid:
                         # Exit upon receiving order cancellation message.
-                        if listitem['is_cancelled']: exitstatus = f'Order {orderid} was cancelled.'
-                        if listitem['type'] == 'cancelled': exitstatus = f'Order {orderid} was cancelled [reason:{listitem["reason"]}].'
-                        if listitem['type'] == 'rejected': exitstatus = f'Order {orderid} was rejected.'
+                        if listitem['is_cancelled']: exitstatus = f'{deal} cancelled.'
+                        if listitem['type'] == 'cancelled': exitstatus = f'{deal} cancelled [reason:{listitem["reason"]}].'
+                        if listitem['type'] == 'rejected': exitstatus = f'{deal} was rejected.'
                         if listitem['type'] == 'fill':
                             # Make sure that the order was completely filled.
-                            if listitem['remaining_amount'] == '0': exitstatus = f'Order {orderid} was filled.'
+                            if listitem['remaining_amount'] == '0': exitstatus = f'{deal} was filled.'
         if exitstatus:
             ws.close()
             logger.info ( exitstatus )
