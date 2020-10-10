@@ -32,14 +32,14 @@ def askfall (
         ) -> None:
 
     # Define high class.
-    # Purpose: Stores the highest trading price reached during the websocket connection session.
+    # Purpose: Stores the highest ask offer reached during the websocket connection session.
     class High:
         def __init__(self, price): self.__price = price
         def getvalue(self): return self.__price
         def setvalue(self, price): self.__price = price
 
     # Define deal class.
-    # Purpose: Stores the deal (last) price reached during the websocket connection session.
+    # Purpose: Stores the (i)deal (last) ask offered during the websocket connection session.
     class Deal:
         def __init__(self, price): self.__price = price
         def getvalue(self): return self.__price
@@ -62,7 +62,7 @@ def askfall (
     authenticator.authenticate(payload)
 
     # Establish websocket connection.
-    ws = create_connection(request)
+    ws = create_connection( request )
     ws.send( subscriptionrequest )
     while True:
         newmessage = ws.recv()
@@ -77,11 +77,12 @@ def askfall (
             if dictionary['changes'] != []:
                 changes = dictionary['changes']
 
-                # Rank bids and determine the highest bid in the orderbook from dYdX update response.
+                # Rank asks and determine the lowest ask among the changes in the Gemini L2 update response.
                 askranking = [ Decimal(change[1]) for change in changes if change[0] == 'sell' ]
                 if askranking != []:
                     minimumask = min(askranking)
 
+                    # Determine if the ask is a new session high. If so, update "high".
                     if minimumask.compare( Decimal(sessionmax) ) == 1 :
                             sessionmax = minimumask
                             high.setvalue(minimumask)
@@ -95,7 +96,8 @@ def askfall (
                     # Define bargain (sale) price.
                     sale = Decimal( sessionmax * ( 1 - percentoff ) )
 
-                    # Exit loop if there's a sale.
+                    # Exit loop and set "deal"...
+                    # Only if there's a sale (bargain) offer.
                     if sale.compare( minimumask ) == 1 :
                         logger.info( f'{pair} [now {minimumask:.2f}] just went on sale [dropped below {sale:.2f}].' )
                         smsalert( f'There was a {percentoff*100}% drop in the price of the {pair} pair on Gemini.' )
