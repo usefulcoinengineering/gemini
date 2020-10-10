@@ -74,6 +74,12 @@ def bidrise (
                 if bidranking != []:
                     maximumbid = max(bidranking)
 
+                    # Define investment.
+                    # Use first maximum.
+                    if investment == 0:
+                        investment = maximumbid
+                        cost.setvalue( maximumbid )
+
                     # Calculate movement away from cost [if any].
                     move = 100 * ( maximumbid - investment ) / investment
 
