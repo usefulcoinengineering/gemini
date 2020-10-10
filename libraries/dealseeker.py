@@ -70,7 +70,7 @@ def askfall (
         percentoff = Decimal( drop )
         sessionmax = Decimal( high.getvalue() )
 
-        # Unncomment this statement to debug messages: logger.debug(dictionary)
+        # Uncomment this statement to debug messages: logger.debug(dictionary)
 
         # Process "type": "update" messages with events only.
         if 'l2_updates' in dictionary['type']:
@@ -136,7 +136,7 @@ def pricedrop(
     high = High(0)
     deal = Deal(0)
 
-    # Define websocet functions.
+    # Define websocket functions.
     def on_close(ws): logger.debug(f'{ws} connection closed.')
     def on_open(ws): logger.debug(f'{ws} connection opened.')
     def on_error(ws, error): logger.debug(error)
@@ -144,7 +144,7 @@ def pricedrop(
         dictionary = json.loads( message )
         percentoff = Decimal( drop )
         sessionmax = Decimal( high.getvalue() )
-        # Unncomment this statement to debug messages:
+        # Uncomment this statement to debug messages:
         logger.debug(dictionary)
 
         # Process "type": "update" messages with events only.
