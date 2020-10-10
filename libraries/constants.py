@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 
 
+# Note:
+#
+# The source of these constants can be located here:
+#  - https://docs.gemini.com/rest-api/#symbols-and-minimums
+#
+# Unfortunately, they don't always match up with the Gemini web interface and API.
+# The following were manually updated:
+#  - YFI TICK : 0.01
+
 apitransactionfee = '0.001'
 
 ticksizes = [
@@ -98,7 +107,7 @@ ticksizes = [
  },
  {
    'currency': 'YFI',
-   'tick': '0.00000001'
+   'tick': '0.01'
  },
  {
    'currency': 'AAVE',
