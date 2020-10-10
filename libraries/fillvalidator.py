@@ -57,7 +57,7 @@ def confirmexecution(
                     cost = Decimal( size ) * Decimal( rate )
                     bit0 = f'{pair} order {orderid} valued at '
                     bit1 = f'{cost.quantize( Decimal(rate) )} {pair[3:].upper()} '
-                    bit2 = f'[{size}{pair[:3].upper()} at {rate} {pair[3:].upper()}] was '
+                    bit2 = f'[{size} {pair[:3].upper()} at {rate} {pair[3:].upper()}] was '
                     text = f'{bit0}{bit1}{bit2}'
                     if listitem['order_id'] == orderid:
                         # Exit upon receiving order cancellation message.
