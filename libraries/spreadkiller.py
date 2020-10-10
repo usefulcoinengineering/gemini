@@ -20,13 +20,27 @@ def bidorder(
         size: str,
     ) -> None:
 
+    # Determine tick size.
+    list = constants.ticksizes
+    item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
+    tick = Decimal( item[0] )
+
+    # Determine minimum order size (let's call it a tock).
+    list = constants.minimumorders
+    item = [ item['minimumorder'] for item in list if item['currency'] == pair[:3] ]
+    tock = Decimal( item[0] )
+
     # Get the lowest ask in the orderbook.
     endpoint = '/v1/pubticker/' + pair
     response = requests.get( resourcelocator.restserver + endpoint )
-    market = Decimal( response.json()['ask'] )
-    zeros = str( Decimal( 0 ).quantize( market ) )
-    tick = Decimal( zeros  + '1' ) * 10
-    bid = str( market - Decimal( tick ).quantize( market ) )
+    askprice = Decimal( response.json()['ask'] )
+    bidprice = str( Decimal( askprice - tick ).quantize( askprice ) )
+    quantity = str( Decimal( size ) ).quantize( tock ) )
+
+    # Update logs.
+    logger.debug(f'askprice: {askprice}')
+    logger.debug(f'bidprice: {bidprice}')
+    logger.debug(f'quantity: {quantity}')
 
     # Construct buy order payload.
     # Use 'options': ['maker-or-cancel'] for post only orders.
@@ -36,8 +50,8 @@ def bidorder(
         'request': endpoint,
         'nonce': str(int(time.mktime(t.timetuple())*1000)),
         'symbol': pair,
-        'amount': size,
-        'price': bid,
+        'amount': quantity,
+        'price': bidprice,
         'side': 'buy',
         'type': 'exchange limit',
         'options': ['maker-or-cancel']
