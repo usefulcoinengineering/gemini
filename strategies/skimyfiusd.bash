@@ -7,6 +7,6 @@
 
 # LONG on YFI and accumulating YFI:
 while [[ True ]]; do
-  python3 ../bidyfiusddiscount.py
-  python3 ../askyfiusddiscount.py
+  python3 ../bidyfiusddiscount.py || break
+  python3 ../askyfiusddiscount.py || break
 done

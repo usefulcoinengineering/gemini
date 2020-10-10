@@ -36,7 +36,7 @@ def confirmexecution(
 
         # Check if this is an 'initial' message from Gemini.
         # It is actually the second message. The subscription acknowledgement is first.
-        if dictionary == []: exitstatus = f'Order {orderid} not active.\n{poststatus}'
+        if dictionary == []: exitstatus = f'Order {orderid} not active.'
 
         # Remove comment to log heartbeat: if dictionary['type'] == 'heartbeat': logger.debug( dictionary )
 
