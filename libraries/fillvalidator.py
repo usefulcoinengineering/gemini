@@ -52,8 +52,10 @@ def confirmexecution(
             else:
                 for listitem in dictionary:
                     size = listitem['original_amount']
+                    pair = listitem['symbol']
                     rate = listitem['price']
-                    deal = f'Order {orderid} for {size} at {rate} was '
+                    cost = Decimal( size ) * Decimal( rate )
+                    deal = f'{pair} order {orderid} [valued {cost} {pair[3:]}] for {size} at {rate} was '
                     if listitem['order_id'] == orderid:
                         # Exit upon receiving order cancellation message.
                         if listitem['is_cancelled']: exitstatus = f'{deal} cancelled.'
