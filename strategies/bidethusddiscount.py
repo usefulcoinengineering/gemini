@@ -15,7 +15,7 @@ import requests
 from decimal import Decimal
 
 from libraries.logger import logger
-from libraries.dealseaker import pricedrop
+from libraries.dealseeker import pricedrop
 from libraries.spreadkiller import quotabid
 from libraries.fillvalidator import confirmexecution
 
