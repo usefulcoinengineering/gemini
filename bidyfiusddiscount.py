@@ -25,8 +25,8 @@ from libraries.fillvalidator import confirmexecution
 # Configure price drop desired in decimal terms.
 # For example, 20 basis points is '0.002'. This covers Gemini API trading fees round trip!
 pair = 'YFIUSD'
-cash = '0.25'
-drop = '0.01'
+cash = '1.376'
+drop = '0.005'
 
 # Open websocket connection.
 # Wait for asks to fall in price.
