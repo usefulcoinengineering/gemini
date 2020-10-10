@@ -79,30 +79,31 @@ def askfall (
 
                 # Rank bids and determine the highest bid in the orderbook from dYdX update response.
                 askranking = [ Decimal(change[1]) for change in changes if change[0] == 'sell' ]
-                minimumask = min(askranking)
+                if askranking != []:
+                    minimumask = min(askranking)
 
-                if minimumask.compare( Decimal(sessionmax) ) == 1 :
-                        sessionmax = minimumask
-                        high.setvalue(minimumask)
+                    if minimumask.compare( Decimal(sessionmax) ) == 1 :
+                            sessionmax = minimumask
+                            high.setvalue(minimumask)
 
-                # Calculate movement away from high [if any].
-                move = 100 * ( sessionmax - minimumask ) / sessionmax
+                    # Calculate movement away from high [if any].
+                    move = 100 * ( sessionmax - minimumask ) / sessionmax
 
-                # Display impact of event information received.
-                logger.info( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {minimumask} presently.' )
+                    # Display impact of event information received.
+                    logger.info( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {minimumask} presently.' )
 
-                # Define bargain (sale) price.
-                sale = Decimal( sessionmax * ( 1 - percentoff ) )
+                    # Define bargain (sale) price.
+                    sale = Decimal( sessionmax * ( 1 - percentoff ) )
 
-                # Exit loop if there's a sale.
-                if sale.compare( minimumask ) == 1 :
-                    logger.info( f'{pair} [now {minimumask:.2f}] just went on sale [dropped below {sale:.2f}].' )
-                    smsalert( f'There was a {percentoff*100}% drop in the price of the {pair} pair on Gemini.' )
+                    # Exit loop if there's a sale.
+                    if sale.compare( minimumask ) == 1 :
+                        logger.info( f'{pair} [now {minimumask:.2f}] just went on sale [dropped below {sale:.2f}].' )
+                        smsalert( f'There was a {percentoff*100}% drop in the price of the {pair} pair on Gemini.' )
 
-                    # Update deal price.
-                    deal.setvalue(minimumask)
-                    ws.close()
-                    break
+                        # Update deal price.
+                        deal.setvalue(minimumask)
+                        ws.close()
+                        break
 
     # Return value on discount only.
     last = Decimal( deal.getvalue() )
