@@ -52,18 +52,21 @@ def confirmexecution(
             else:
                 for listitem in dictionary:
                     size = listitem['original_amount']
-                    pair = listitem['symbol']
+                    pair = listitem['symbol'].upper()
                     rate = listitem['price']
                     cost = Decimal( size ) * Decimal( rate )
-                    deal = f'{pair} order {orderid} [valued {cost} {pair[3:]}] for {size} at {rate} was '
+                    bit0 = f'{pair} order {orderid} valued at '
+                    bit1 = f'{cost.quantize( Decimal(rate) )} {pair[3:].upper()} '
+                    bit2 = f'[{size}{pair[:3].upper()} at {rate} {pair[3:].upper()}] was '
+                    text = f'{bit0}{bit1}{bit2}'
                     if listitem['order_id'] == orderid:
                         # Exit upon receiving order cancellation message.
-                        if listitem['is_cancelled']: exitstatus = f'{deal} cancelled.'
-                        if listitem['type'] == 'cancelled': exitstatus = f'{deal} cancelled [reason:{listitem["reason"]}].'
-                        if listitem['type'] == 'rejected': exitstatus = f'{deal} was rejected.'
+                        if listitem['is_cancelled']: exitstatus = f'{text} cancelled.'
+                        if listitem['type'] == 'cancelled': exitstatus = f'{text} cancelled [reason:{listitem["reason"]}].'
+                        if listitem['type'] == 'rejected': exitstatus = f'{text} was rejected.'
                         if listitem['type'] == 'fill':
                             # Make sure that the order was completely filled.
-                            if listitem['remaining_amount'] == '0': exitstatus = f'{deal} was filled.'
+                            if listitem['remaining_amount'] == '0': exitstatus = f'{text} was filled.'
         if exitstatus:
             ws.close()
             logger.info ( exitstatus )
