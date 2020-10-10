@@ -70,7 +70,7 @@ def quotabid(
 
     # Determine bid size.
     quantity = notional / Decimal(bid)
-    size = str( quantity.quantize( Decimal('1.000') ) )
+    size = str( quantity.quantize( Decimal('1.00000') ) )
     logger.debug(f'size: {size}')
 
     # Construct buy order payload.
