@@ -84,7 +84,7 @@ def bidrise (
                     move = 100 * ( maximumbid - investment ) / investment
 
                     # Display impact of event information received.
-                    logger.info( f'{pair} is {maximumbid} presently: a {move:.2f}% away from {investment}.' )
+                    logger.info( f'{pair} is {maximumbid} presently: {move:.2f}% away from {investment}.' )
 
                     # Define bargain (sale) price.
                     sale = Decimal( investment * ( 1 + grossmargin ) )
