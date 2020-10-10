@@ -38,14 +38,6 @@ def confirmexecution(
         # It is actually the second message. The subscription acknowledgement is first.
         if dictionary == []: exitstatus = f'Order {orderid} not active.'
 
-        # Remove comment to log heartbeat: if dictionary['type'] == 'heartbeat': logger.debug( dictionary )
-
-        # Process "type": "heartbeat" messages.
-        logger.debug( dictionary )
-            # beatback = { 'type': 'pong' }
-            # ws.send( json.dumps(beatback) )
-            # logger.debug( beatback.json() )
-
         if isinstance(dictionary, list):
             for listitem in dictionary:
                 size = listitem['original_amount']
