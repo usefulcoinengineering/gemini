@@ -24,13 +24,19 @@ def confirmexecution(
     # Introduce function.
     logger.debug(f'Confirming execution of the order identified by the Gemini assigned number: {orderid}')
 
-    # Define websocet functions.
+    # Define websocket functions.
     def on_close(ws): logger.debug(f'{ws} connection closed.')
     def on_open(ws): logger.debug(f'{ws} connection opened.')
     def on_error(ws, error): logger.debug(error)
     def on_message(ws, message, orderid=orderid):
         dictionary = json.loads( message )
+        exitstatus = False
+
         # Remove comment to debug with: logger.debug( dictionary )
+
+        # Check if this is an 'initial' message from Gemini.
+        # It is actually the second message. The subscription acknowledgement is first.
+        if dictionary == []: exitstatus = f'Order {orderid} not active.\n{poststatus}'
 
         # Remove comment to log heartbeat: if dictionary['type'] == 'heartbeat': logger.debug( dictionary )
 
@@ -40,33 +46,24 @@ def confirmexecution(
             # ws.send( json.dumps(beatback) )
             # logger.debug( beatback.json() )
 
-        exitstatus = False
         if isinstance(dictionary, list):
-
-            # Check if this is an 'initial' message from Gemini.
-            if any(listitem['type'] == 'initial' for listitem in dictionary):
-                if not any(listitem['order_id'] == orderid for listitem in dictionary):
-                    jsonoutput = json.dumps( dictionary, sort_keys=True, indent=4, separators=(',', ': ') )
-                    exitstatus = f'Order not active - \n{jsonoutput}'
-
-            else:
-                for listitem in dictionary:
-                    size = listitem['original_amount']
-                    pair = listitem['symbol'].upper()
-                    rate = listitem['price']
-                    cost = Decimal( size ) * Decimal( rate )
-                    bit0 = f'{pair} order {orderid} valued at '
-                    bit1 = f'{cost.quantize( Decimal(rate) )} {pair[3:].upper()} '
-                    bit2 = f'[{size} {pair[:3].upper()} at {rate} {pair[3:].upper()}] was '
-                    text = f'{bit0}{bit1}{bit2}'
-                    if listitem['order_id'] == orderid:
-                        # Exit upon receiving order cancellation message.
-                        if listitem['is_cancelled']: exitstatus = f'{text} cancelled.'
-                        if listitem['type'] == 'cancelled': exitstatus = f'{text} cancelled [reason:{listitem["reason"]}].'
-                        if listitem['type'] == 'rejected': exitstatus = f'{text} was rejected.'
-                        if listitem['type'] == 'fill':
-                            # Make sure that the order was completely filled.
-                            if listitem['remaining_amount'] == '0': exitstatus = f'{text} was filled.'
+            for listitem in dictionary:
+                size = listitem['original_amount']
+                pair = listitem['symbol'].upper()
+                rate = listitem['price']
+                cost = Decimal( size ) * Decimal( rate )
+                bit0 = f'{pair} order {orderid} valued at '
+                bit1 = f'{cost.quantize( Decimal(rate) )} {pair[3:].upper()} '
+                bit2 = f'[{size} {pair[:3].upper()} at {rate} {pair[3:].upper()}] was '
+                text = f'{bit0}{bit1}{bit2}'
+                if listitem['order_id'] == orderid:
+                    # Exit upon receiving order cancellation message.
+                    if listitem['is_cancelled']: exitstatus = f'{text} cancelled.'
+                    if listitem['type'] == 'cancelled': exitstatus = f'{text} cancelled [reason:{listitem["reason"]}].'
+                    if listitem['type'] == 'rejected': exitstatus = f'{text} was rejected.'
+                    if listitem['type'] == 'fill':
+                        # Make sure that the order was completely filled.
+                        if listitem['remaining_amount'] == '0': exitstatus = f'{text} was filled.'
         if exitstatus:
             ws.close()
             logger.info ( exitstatus )
