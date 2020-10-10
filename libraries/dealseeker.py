@@ -66,7 +66,7 @@ def askfall (
     ws.send( subscriptionrequest )
     while True:
         newmessage = ws.recv()
-        dictionary = json.loads( message )
+        dictionary = json.loads( newmessage )
         percentoff = Decimal( drop )
         sessionmax = Decimal( high.getvalue() )
 
