@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
 
 
+# Warning:
+#
+# This version of dealseeker is using synchronous communications. This may not be ideal.
+# If the messages are processed faster than they are received, this code is good. If not,
+# you are going to lose money.
+#
+# According to https://pypi.org/project/websocket_client/ [Short-lived one-off send-receive]:
+# This is if you want to communicate a short message and disconnect immediately when done.
+
+
 import requests
 import ssl
 import json
-import websocket
 import datetime
 import time
-import _thread as thread
 
 from decimal import Decimal
+from websocket import create_connection
 
 from libraries.logger import logger as logger
 from libraries.messenger import smsalert as smsalert
@@ -43,15 +52,20 @@ def askfall (
     # Construct subscription request.
     subscriptionrequest = f'{{"type": "subscribe","subscriptions":[{{"name":"l2","symbols":["{pair}"]}}]}}'
 
-    # Define websocet functions.
-    def on_open( ws, subscriptionrequest = subscriptionrequest ):
-        def run(*args):
-            ws.send( subscriptionrequest )
-        thread.start_new_thread(run, ())
-        logger.debug(f'{ws} connection opened.')
-    def on_close(ws): logger.debug(f'{ws} connection closed.')
-    def on_error(ws, error): logger.debug(error)
-    def on_message(ws, message, drop = drop, pair = pair, high = high, deal = deal):
+    # Construct payload.
+    request = resourcelocator.sockserver + '/v2/marketdata'
+    nonce = int(time.time()*1000)
+    payload = {
+        'request': request,
+        'nonce': nonce
+    }
+    authenticator.authenticate(payload)
+
+    # Establish websocket connection.
+    ws = create_connection(request)
+    ws.send( subscriptionrequest )
+    while True:
+        newmessage = ws.recv()
         dictionary = json.loads( message )
         percentoff = Decimal( drop )
         sessionmax = Decimal( high.getvalue() )
@@ -88,21 +102,7 @@ def askfall (
                     # Update deal price.
                     deal.setvalue(minimumask)
                     ws.close()
-
-    # Construct payload.
-    request = resourcelocator.sockserver + '/v2/marketdata'
-    nonce = int(time.time()*1000)
-    payload = {
-        'request': request,
-        'nonce': nonce
-    }
-    authenticator.authenticate(payload)
-
-    # Establish websocket connection.
-    websocket.enableTrace(True)
-    ws = websocket.WebSocketApp(request, on_open = on_open, on_message = on_message, on_error = on_error, on_close = on_close)
-    ws.on_open = on_open
-    ws.run_forever(sslopt={'cert_reqs': ssl.CERT_NONE})
+                    break
 
     # Return value on discount only.
     last = Decimal( deal.getvalue() )
