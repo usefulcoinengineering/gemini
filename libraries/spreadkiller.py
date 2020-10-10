@@ -76,7 +76,7 @@ def quotabid(
     endpoint = '/v1/pubticker/' + pair
     response = requests.get( resourcelocator.restserver + endpoint )
     askprice = Decimal( response.json()['ask'] )
-    bidprice = str( askprice - tick )
+    bidprice = str( Decimal( askprice - tick ).quantize( askprice ) )
     quantity = str( Decimal( notional / Decimal(bidprice) ).quantize( tock ) )
 
     # Update logs.
