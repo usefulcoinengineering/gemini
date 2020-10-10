@@ -89,7 +89,7 @@ def bidrise (
                     # Define bargain (sale) price.
                     sale = Decimal( investment * ( 1 + grossmargin ) )
 
-                    # Exit loop if profitabl.
+                    # Exit loop if profitable. Return maximum bid.
                     if maximumbid.compare( sale ) == 1 :
                         text = f'{pair} rose {grossmargin*100}% in price. '
                         text = text + f'It is now {maximumbid:.2f} on Gemini. '
@@ -97,10 +97,9 @@ def bidrise (
                         logger.info( text )
                         smsalert( text )
                         ws.close()
+                        cost.setvalue( maximumbid )
                         break
 
-    # Return value on discount only.
-    last = Decimal( deal.getvalue() )
-    if last.compare(0) == 1 :
-        return last
-    else: return False
+    # Return value when profitable only.
+    if cost.getvalue() == 0 : return False
+    else: return cost.getvalue()
