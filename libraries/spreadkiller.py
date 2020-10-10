@@ -80,6 +80,7 @@ def quotabid(
     quantity = str( Decimal( notional / Decimal(bidprice) ).quantize( tock ) )
 
     # Update logs.
+    logger.debug(f'askprice: {askprice}')
     logger.debug(f'bidprice: {bidprice}')
     logger.debug(f'quantity: {quantity}')
 
