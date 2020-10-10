@@ -11,6 +11,7 @@ from decimal import Decimal
 
 from libraries.logger import logger as logger
 
+import libraries.constants as constants
 import libraries.authenticator as authenticator
 import libraries.resourcelocator as resourcelocator
 
@@ -57,21 +58,30 @@ def quotabid(
     # Refer to https://docs.gemini.com/rest-api/#basis-point.
     # Fees are calculated on the notional value of each trade (price × size).
     # Meaning (for API transactions): size * price * 1.001 = cash
-    fraction = 0.001
+    fraction = Decimal( constants.apitransactionfee )
     notional = Decimal(cash) / Decimal( 1 + fraction )
 
+    # Determine tick size.
+    list = constants.ticksizes
+    item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
+    tick = Decimal( item[0] )
+
+    # Determine minimum order size (let's call it a tock).
+    list = constants.minimumorders
+    item = [ item['minimumorder'] for item in list if item['currency'] == pair[:3] ]
+    tock = Decimal( item[0] )
+
     # Get the lowest ask in the orderbook.
+    # Then determine the bid order size.
     endpoint = '/v1/pubticker/' + pair
     response = requests.get( resourcelocator.restserver + endpoint )
-    market = Decimal( response.json()['ask'] )
-    zeros = str( Decimal( 0 ).quantize( market ) )
-    tick = Decimal( zeros  + '1' ) * 10
-    bid = str( market - Decimal( tick ).quantize( market ) )
+    askprice = Decimal( response.json()['ask'] )
+    bidprice = str( askprice - tick )
+    quantity = str( Decimal( notional / Decimal(bidprice) ).quantize( tock ) ) )
 
-    # Determine bid size.
-    quantity = notional / Decimal(bid)
-    size = str( quantity.quantize( Decimal('1.00000') ) )
-    logger.debug(f'size: {size}')
+    # Update logs.
+    logger.debug(f'bidprice: {bidprice}')
+    logger.debug(f'quantity: {quantity}')
 
     # Construct buy order payload.
     # Use 'options': ['maker-or-cancel'] for post only orders.
@@ -81,8 +91,8 @@ def quotabid(
         'request': endpoint,
         'nonce': str(int(time.mktime(t.timetuple())*1000)),
         'symbol': pair,
-        'amount': size,
-        'price': bid,
+        'amount': quantity,
+        'price': bidprice,
         'side': 'buy',
         'type': 'exchange limit',
         'options': ['maker-or-cancel']
