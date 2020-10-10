@@ -11,6 +11,7 @@ from decimal import Decimal
 
 from libraries.logger import logger as logger
 
+import libraries.constants as constants
 import libraries.authenticator as authenticator
 import libraries.resourcelocator as resourcelocator
 
@@ -51,14 +52,21 @@ def quotabid(
     # Refer to https://docs.gemini.com/rest-api/#basis-point.
     # Fees are calculated on the notional value of each trade (price × size).
     # Meaning (for API transactions): size * price * 1.001 = cash
-    fraction = 0.001
+    fraction = Decimal( constants.apitransactionfee )
     notional = Decimal(cash) / Decimal( 1 + fraction )
 
+    # Determine minimum order size (let's call it a tock).
+    list = constants.minimumorders
+    item = [ item['minimumorder'] for item in list if item['currency'] == pair[:3] ]
+    tock = Decimal( item[0] )
+
     # Determine bid size.
-    quantity = notional / Decimal(cost)
-    size = str( quantity.quantize( Decimal('1.000') ) )
-    logger.debug(f'size: {size}')
-    logger.debug(f'cost: {cost}')
+    quantity = str( Decimal( notional / Decimal(cost) ).quantize( tock ) )
+    bidprice = str(cost)
+
+    # Update logs.
+    logger.debug(f'bidprice: {bidprice}')
+    logger.debug(f'quantity: {quantity}')
 
     # Construct buy order payload.
     # Use 'options': ['maker-or-cancel'] for post only orders.
@@ -68,8 +76,8 @@ def quotabid(
         'request': endpoint,
         'nonce': str(int(time.mktime(t.timetuple())*1000)),
         'symbol': pair,
-        'amount': size,
-        'price': str(cost),
+        'amount': quantity,
+        'price': bidprice,
         'side': 'buy',
         'type': 'exchange limit',
         'options': ['maker-or-cancel']
