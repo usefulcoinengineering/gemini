@@ -77,7 +77,7 @@ def quotabid(
     response = requests.get( resourcelocator.restserver + endpoint )
     askprice = Decimal( response.json()['ask'] )
     bidprice = str( askprice - tick )
-    quantity = str( Decimal( notional / Decimal(bidprice) ).quantize( tock ) ) )
+    quantity = str( Decimal( notional / Decimal(bidprice) ).quantize( tock ) )
 
     # Update logs.
     logger.debug(f'bidprice: {bidprice}')
