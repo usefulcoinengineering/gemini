@@ -7,6 +7,6 @@
 
 # LONG on YFI and accumulating YFI:
 while [[ True ]]; do
-  python3 ../bidyfiusddiscount.py || break
-  python3 ../askyfiusddiscount.py || break
+  python3 ../discountquotabid.py YFIUSD 137.60 0.001 || break
+  python3 ../discountquotaask.py YFIUSD 137.60 0.020 || break
 done
