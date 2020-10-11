@@ -9,6 +9,7 @@
 # Execution:
 #   - Copy this file from the strategies directory to the level below. Run with python3.
 
+import sys
 import json
 import requests
 
@@ -52,3 +53,6 @@ if deal:
 
     # Determine if the order was filled.
     confirmexecution( orderid = post['order_id'], poststatus = poststatus )
+
+    # Let the shell know we successfully made it this far!
+    sys.exit(0)
