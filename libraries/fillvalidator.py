@@ -52,10 +52,10 @@ def confirmexecution(
                     # Exit upon receiving order cancellation message.
                     if listitem['is_cancelled']: exitstatus = f'{text} cancelled.'
                     if listitem['type'] == 'cancelled': exitstatus = f'{text} cancelled [reason:{listitem["reason"]}].'
-                    if listitem['type'] == 'rejected': exitstatus = f'{text} was rejected.'
+                    if listitem['type'] == 'rejected': exitstatus = f'{text} rejected.'
                     if listitem['type'] == 'fill':
                         # Make sure that the order was completely filled.
-                        if listitem['remaining_amount'] == '0': exitstatus = f'{text} was filled.'
+                        if listitem['remaining_amount'] == '0': exitstatus = f'{text} filled.'
         if exitstatus:
             ws.close()
             logger.info ( exitstatus )
