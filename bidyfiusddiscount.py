@@ -29,6 +29,12 @@ pair = 'YFIUSD'
 cash = '137.6'
 drop = '0.005'
 
+# Overide defaults with command line parameters.
+if len(sys.argv) == 4:
+    pair = sys.argv[1]
+    cash = sys.argv[2]
+    rise = sys.argv[3]
+
 # Open websocket connection.
 # Wait for asks to fall in price.
 logger.info(f'waiting for {pair} to drop {Decimal(drop)*100}% in price to buy {cash} {pair[3:]} worth..')
