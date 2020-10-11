@@ -33,7 +33,7 @@ drop = '0.005'
 if len(sys.argv) == 4:
     pair = sys.argv[1]
     cash = sys.argv[2]
-    rise = sys.argv[3]
+    drop = sys.argv[3]
 
 # Open websocket connection.
 # Wait for asks to fall in price.
