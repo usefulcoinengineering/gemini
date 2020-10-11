@@ -25,7 +25,7 @@ from libraries.fillvalidator import confirmexecution
 # Configure price rise desired in decimal terms.
 # For example, 20 basis points is '0.002'. This covers Gemini API trading fees round trip!
 pair = 'YFIUSD'
-cash = '13.76'
+cash = '137.6'
 rise = '0.005'
 
 # Open websocket connection.
