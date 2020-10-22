@@ -7,7 +7,7 @@
 #  3. The ask size is limited by a USD (quote currency) budget.
 #
 # Execution:
-#   - Copy this file from the strategies directory to the level above. Run with python3.
+#   - Use the wrapper BASH script in the "strategies" directory.
 
 import sys
 import json
