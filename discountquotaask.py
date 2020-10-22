@@ -59,7 +59,8 @@ if deal:
 
     # Determine if the order was filled.
     confirmexecution( orderid = post['order_id'], poststatus = poststatus )
+    if 'filled' in poststatus.getvalue(): poststatus = True
 
     # Let the shell know we successfully made it this far!
-    if 'filled' in poststatus.getvalue(): sys.exit(0)
+    if poststatus: sys.exit(0)
     else: sys.exit(1)
