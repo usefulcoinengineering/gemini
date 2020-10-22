@@ -29,7 +29,7 @@ pair = 'YFIUSD'
 cash = '137.6'
 drop = '0.005'
 
-# Overide defaults with command line parameters.
+# Override defaults with command line parameters from BASH wrapper.
 if len(sys.argv) == 4:
     pair = sys.argv[1]
     cash = sys.argv[2]
