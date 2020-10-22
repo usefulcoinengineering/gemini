@@ -49,7 +49,7 @@ class Poststatus:
 poststatus = Poststatus('')
 
 # Determine if the order was filled.
-confirmexecution( orderid = post['order_id'], poststatus = poststatus )
+confirmexecution( orderid = dump['order_id'], poststatus = poststatus )
 if 'filled' in poststatus.getvalue(): poststatus = True
 
 # Let the shell know we successfully made it this far!
