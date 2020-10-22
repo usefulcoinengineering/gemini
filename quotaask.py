@@ -30,7 +30,7 @@ cost = '1.00913'
 if len(sys.argv) == 4:
     pair = sys.argv[1]
     cash = sys.argv[2]
-    drop = sys.argv[3]
+    cost = sys.argv[3]
 
 # Submit limit ask order.
 logger.debug(f'submitting {pair} limit ask order: {cost} ask on a {cost} budget.')
