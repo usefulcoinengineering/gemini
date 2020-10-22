@@ -19,8 +19,9 @@ from libraries.liquiditymaker import quotabid
 from libraries.fillvalidator import confirmexecution
 
 
-# Set your price reservation.
+# Set the pair.
 # Set quote currency (USD in this case) budget.
+# Set your price reservation.
 pair = 'DAIUSD'
 cash = '100'
 cost = '1.00913'
