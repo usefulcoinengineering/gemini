@@ -55,10 +55,11 @@ if deal:
         def getvalue(self): return self.__state
         def setvalue(self, state): self.__state = state
 
-    poststatus = Poststatus(False)
+    poststatus = Poststatus('')
 
     # Determine if the order was filled.
     confirmexecution( orderid = post['order_id'], poststatus = poststatus )
 
     # Let the shell know we successfully made it this far!
-    sys.exit(0)
+    if 'filled' in poststatus.getvalue(): sys.exit(0)
+    else: sys.exit(1)

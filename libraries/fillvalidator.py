@@ -30,7 +30,7 @@ def confirmexecution(
     def on_error(ws, error): logger.debug(error)
     def on_message(ws, message, orderid=orderid):
         dictionary = json.loads( message )
-        exitstatus = False
+        exitstatus = ''
 
         # Remove comment to debug with: logger.debug( dictionary )
 
@@ -60,7 +60,7 @@ def confirmexecution(
             ws.close()
             logger.info ( exitstatus )
             smsalert ( exitstatus )
-            poststatus.setvalue( True )
+            poststatus.setvalue( exitstatus )
 
     # Construct payload.
     endpoint = '/v1/order/events'
