@@ -38,20 +38,3 @@ post = quotabid( pair, cash, cost )
 post = post.json()
 dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
 logger.debug ( dump )
-
-# Define poststatus class.
-# Purpose: Stores the state of the orderid parameter upon exiting the websocket connection session.
-class Poststatus:
-    def __init__(self, state): self.__state = state
-    def getvalue(self): return self.__state
-    def setvalue(self, state): self.__state = state
-
-poststatus = Poststatus('')
-
-# Determine if the order was filled.
-confirmexecution( orderid = dump['order_id'], poststatus = poststatus )
-if 'filled' in poststatus.getvalue(): poststatus = True
-
-# Let the shell know we successfully made it this far!
-if poststatus: sys.exit(0)
-else: sys.exit(1)
