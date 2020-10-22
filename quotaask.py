@@ -15,7 +15,7 @@ import requests
 from decimal import Decimal
 
 from libraries.logger import logger
-from libraries.liquiditymaker import quotabid
+from libraries.liquiditymaker import quotaask
 from libraries.fillvalidator import confirmexecution
 
 
