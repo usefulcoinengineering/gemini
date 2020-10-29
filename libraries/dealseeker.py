@@ -70,7 +70,8 @@ def askfall (
         percentoff = Decimal( drop )
         sessionmax = Decimal( high.getvalue() )
 
-        # Uncomment this statement to debug messages: logger.debug(dictionary)
+        # Uncomment this statement to debug messages:
+        logger.debug(dictionary)
 
         # Process "type": "update" messages with events only.
         if 'l2_updates' in dictionary['type']:
