@@ -82,7 +82,7 @@ def askfall (
                     deviatedby = minimum - sessionavg
                     if len(dataset) != 1:
                         if deviatedby.compare( 3 * statistics.stdev(dataset) ) == 1:
-                            logger.info( f'{move:.2f}% off highs [mean: {sessionavg:.2f}] : {pair} is {minimum} presently. Aberration... Dumping!' )
+                            logger.info( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {minimum} presently. Aberration... The mean is: {sessionavg:.2f}. Dumping!' )
                             dataset.pop()
                             continue
 
