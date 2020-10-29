@@ -17,7 +17,7 @@ from decimal import Decimal
 
 from libraries.logger import logger
 from libraries.dealseeker import askfall
-from libraries.spreadkiller import quotabid
+from libraries.liquiditymaker import quotabid
 from libraries.fillvalidator import confirmexecution
 
 
