@@ -77,9 +77,10 @@ def askfall (
                     # If it deviated by more than one standard deviation, then do nothing further.
                     # Continue at the start of the loop.
                     deviatedby = minimum - sessionavg
-                    if deviatedby.compare( statistics.stdev(dataset) ) == 1:
-                        logger.info( f'{minimum:.2f} aberrant wrt mean [{sessionavg}] : {pair} is {minimum} presently.' )
-                        continue
+                    if len(dataset) != 1:
+                        if deviatedby.compare( statistics.stdev(dataset) ) == 1:
+                            logger.info( f'{minimum:.2f} aberrant wrt mean [{sessionavg}] : {pair} is {minimum} presently.' )
+                            continue
 
                     # Calculate movement away from high [if any].
                     move = 100 * ( sessionmax - minimum ) / sessionmax
