@@ -80,6 +80,7 @@ def askfall (
                     if len(dataset) != 1:
                         if deviatedby.compare( 2 * statistics.stdev(dataset) ) == 1:
                             logger.info( f'{minimum:.2f} aberrant wrt mean [{sessionavg}] : {pair} is {minimum} presently.' )
+                            dataset.pop()
                             continue
 
                     # Calculate movement away from high [if any].
