@@ -74,11 +74,11 @@ def askfall (
                     sessionavg = Decimal( statistics.mean(dataset) )
 
                     # Determine how much the minimum deviates away from the session average.
-                    # If it deviated by more than one standard deviation, then do nothing further.
+                    # If it deviated by more than two standard deviations, then do nothing further.
                     # Continue at the start of the loop.
                     deviatedby = minimum - sessionavg
                     if len(dataset) != 1:
-                        if deviatedby.compare( statistics.stdev(dataset) ) == 1:
+                        if deviatedby.compare( 2 * statistics.stdev(dataset) ) == 1:
                             logger.info( f'{minimum:.2f} aberrant wrt mean [{sessionavg}] : {pair} is {minimum} presently.' )
                             continue
 
