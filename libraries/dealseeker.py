@@ -38,13 +38,6 @@ def askfall (
         def getvalue(self): return self.__price
         def setvalue(self, price): self.__price = price
 
-    # Define Roll count class.
-    # Purpose: Stores the tally of Highs during the websocket connection session.
-    class Roll:
-        def __init__(self, count): self.__count = count
-        def getvalue(self): return self.__count
-        def setvalue(self, count): self.__count = count
-
     # Define deal class.
     # Purpose: Stores the (i)deal (last) ask offered during the websocket connection session.
     class Deal:
@@ -52,10 +45,9 @@ def askfall (
         def getvalue(self): return self.__price
         def setvalue(self, price): self.__price = price
 
-    # Instantiate high/deal/roll objects.
+    # Instantiate high/deal objects.
     high = High(0)
     deal = Deal(0)
-    roll = Roll(0)
 
     # Construct subscription request.
     subscriptionrequest = f'{{"type": "subscribe","subscriptions":[{{"name":"l2","symbols":["{pair}"]}}]}}'
@@ -76,7 +68,7 @@ def askfall (
         newmessage = ws.recv()
         dictionary = json.loads( newmessage )
         percentoff = Decimal( drop )
-        averagemax = Decimal( high.getvalue() )
+        sessionmax = Decimal( high.getvalue() )
 
         # Uncomment this statement to debug messages: logger.debug(dictionary)
 
@@ -90,29 +82,19 @@ def askfall (
                 if askranking != []:
                     minimumask = min(askranking)
 
-                    # Determine if the ask is a new session high.
-                    if minimumask.compare( Decimal(averagemax) ) == 1 :
-
-                            # If so, set the initial high (when roll's value is zero).
-                            if not roll.getvalue(): initialmax = minimumask
-
-                            # Also, update "high" (average high).
-                            sessionsum = ( averagemax * Decimal( roll.getvalue() ) + minimumask )
-                            averagemax = sessionsum  / ( Decimal( roll.getvalue() ) + 1 )
-
-                            # Finally, update objects.
-                            high.setvalue( minimumask )
-                            roll.setvalue( roll.getvalue() + 1 )
-
+                    # Determine if the ask is a new session high. If so, update "high".
+                    if minimumask.compare( Decimal(sessionmax) ) == 1 :
+                            sessionmax = minimumask
+                            high.setvalue(minimumask)
 
                     # Calculate movement away from high [if any].
-                    move = 100 * ( averagemax - minimumask ) / averagemax
+                    move = 100 * ( sessionmax - minimumask ) / sessionmax
 
                     # Display impact of event information received.
-                    logger.info( f'{move:.2f}% off average highs [{averagemax}] : {pair} is {minimumask} presently.' )
+                    logger.info( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {minimumask} presently.' )
 
                     # Define bargain (sale) price.
-                    sale = min( Decimal( averagemax * ( 1 - percentoff ) ), Decimal( initialmax * ( 1 - percentoff ) ) )
+                    sale = Decimal( sessionmax * ( 1 - percentoff ) )
 
                     # Exit loop and set "deal"...
                     # Only if there's a sale (bargain) offer.
@@ -161,7 +143,7 @@ def pricedrop(
     def on_message(ws, message, drop=drop, pair=pair, high=high, deal=deal):
         dictionary = json.loads( message )
         percentoff = Decimal( drop )
-        averagemax = Decimal( high.getvalue() )
+        sessionmax = Decimal( high.getvalue() )
         # Uncomment this statement to debug messages:
         logger.debug(dictionary)
 
@@ -173,18 +155,18 @@ def pricedrop(
                 # Process "type": "trade" events for latest price.
                 for event in events:
                     if event['type'] == 'trade' : last = Decimal( event["price"] )
-                    if last.compare( Decimal(averagemax) ) == 1 :
-                        averagemax = last
+                    if last.compare( Decimal(sessionmax) ) == 1 :
+                        sessionmax = last
                         high.setvalue(last)
 
                     # Calculate movement away from high [if any].
-                    move = 100 * ( averagemax - last ) / averagemax
+                    move = 100 * ( sessionmax - last ) / sessionmax
 
                     # Display impact of event information received.
-                    logger.info( f'{move:.2f}% off highs [{averagemax}] : {pair} is {last} presently : [Message ID: {dictionary["socket_sequence"]}].' )
+                    logger.info( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {last} presently : [Message ID: {dictionary["socket_sequence"]}].' )
 
                     # Define bargain (sale) price.
-                    sale = Decimal( averagemax * ( 1 - percentoff ) )
+                    sale = Decimal( sessionmax * ( 1 - percentoff ) )
 
                     # Exit loop if there's a sale.
                     if sale.compare(last) == 1 :
