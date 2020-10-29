@@ -103,7 +103,7 @@ def askfall (
 
     # Return value on discount only.
     if minimum.compare(0) == 1 :
-        return last
+        return minimum
     else: return False
 
 def pricedrop(
