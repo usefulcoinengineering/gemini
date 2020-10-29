@@ -70,7 +70,7 @@ def askfall (
                     dataset.append(minimum)
 
                     # Define session maximum and average values.
-                    sessionmax = Decimal( statistics.max(dataset) )
+                    sessionmax = Decimal( max(dataset) )
                     sessionavg = Decimal( statistics.mean(dataset) )
 
                     # Determine how much the minimum deviates away from the session average.
@@ -101,8 +101,7 @@ def askfall (
                         break
 
     # Return value on discount only.
-    last = Decimal( deal.getvalue() )
-    if last.compare(0) == 1 :
+    if minimum.compare(0) == 1 :
         return last
     else: return False
 
