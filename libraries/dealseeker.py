@@ -73,18 +73,18 @@ def askfall (
                     sessionmax = Decimal( max(dataset) )
                     sessionavg = Decimal( statistics.mean(dataset) )
 
+                    # Calculate movement away from high [if any].
+                    move = 100 * ( sessionmax - minimum ) / sessionmax
+
                     # Determine how much the minimum deviates away from the session average.
                     # If it deviated by more than three standard deviations, then do nothing further.
                     # Continue at the start of the loop.
                     deviatedby = minimum - sessionavg
                     if len(dataset) != 1:
                         if deviatedby.compare( 3 * statistics.stdev(dataset) ) == 1:
-                            logger.info( f'{minimum:.2f} dumped [mean: {sessionavg}] : {pair} is {minimum} presently.' )
+                            logger.info( f'{move:.2f}% off highs [mean: {sessionavg:.2f}] : {pair} is {minimum} presently. Aberration... Dumping!' )
                             dataset.pop()
                             continue
-
-                    # Calculate movement away from high [if any].
-                    move = 100 * ( sessionmax - minimum ) / sessionmax
 
                     # Display impact of event information received.
                     logger.info( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {minimum} presently.' )
