@@ -11,6 +11,7 @@
 # This is if you want to communicate a short message and disconnect immediately when done.
 
 
+import statistics
 import requests
 import ssl
 import json
@@ -31,23 +32,9 @@ def askfall (
         drop: str
         ) -> None:
 
-    # Define high class.
-    # Purpose: Stores the highest ask offer reached during the websocket connection session.
-    class High:
-        def __init__(self, price): self.__price = price
-        def getvalue(self): return self.__price
-        def setvalue(self, price): self.__price = price
-
-    # Define deal class.
-    # Purpose: Stores the (i)deal (last) ask offered during the websocket connection session.
-    class Deal:
-        def __init__(self, price): self.__price = price
-        def getvalue(self): return self.__price
-        def setvalue(self, price): self.__price = price
-
-    # Instantiate high/deal objects.
-    high = High(0)
-    deal = Deal(0)
+    # Define dataset class.
+    # Purpose: Stores the offers received during the websocket connection session.
+    dataset = []
 
     # Construct subscription request.
     subscriptionrequest = f'{{"type": "subscribe","subscriptions":[{{"name":"l2","symbols":["{pair}"]}}]}}'
@@ -68,7 +55,6 @@ def askfall (
         newmessage = ws.recv()
         dictionary = json.loads( newmessage )
         percentoff = Decimal( drop )
-        sessionmax = Decimal( high.getvalue() )
 
         # Uncomment this statement to debug messages: logger.debug(dictionary)
 
@@ -80,30 +66,37 @@ def askfall (
                 # Rank asks and determine the lowest ask among the changes in the Gemini L2 update response.
                 askranking = [ Decimal(change[1]) for change in changes if change[0] == 'sell' ]
                 if askranking != []:
-                    minimumask = min(askranking)
+                    minimum = min(askranking)
+                    dataset.append(minimum)
 
-                    # Determine if the ask is a new session high. If so, update "high".
-                    if minimumask.compare( Decimal(sessionmax) ) == 1 :
-                            sessionmax = minimumask
-                            high.setvalue(minimumask)
+                    # Define session maximum and average values.
+                    sessionmax = Decimal( statistics.max(dataset) )
+                    sessionavg = Decimal( statistics.mean(dataset) )
+
+                    # Determine how much the minimum deviates away from the session average.
+                    # If it deviated by more than one standard deviation, then do nothing further.
+                    # Continue at the start of the loop.
+                    deviatedby = minimum - sessionavg
+                    if deviatedby.compare( statistics.stdev(dataset) ) == 1:
+                        logger.info( f'{minimum:.2f} aberrant wrt mean [{sessionavg}] : {pair} is {minimum} presently.' )
+                        continue
 
                     # Calculate movement away from high [if any].
-                    move = 100 * ( sessionmax - minimumask ) / sessionmax
+                    move = 100 * ( sessionmax - minimum ) / sessionmax
 
                     # Display impact of event information received.
-                    logger.info( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {minimumask} presently.' )
+                    logger.info( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {minimum} presently.' )
 
                     # Define bargain (sale) price.
                     sale = Decimal( sessionmax * ( 1 - percentoff ) )
 
                     # Exit loop and set "deal"...
                     # Only if there's a sale (bargain) offer.
-                    if sale.compare( minimumask ) == 1 :
-                        logger.info( f'{pair} [now {minimumask:.2f}] just went on sale [dropped below {sale:.2f}].' )
+                    if sale.compare( minimum ) == 1 :
+                        logger.info( f'{pair} [now {minimum:.2f}] just went on sale [dropped below {sale:.2f}].' )
                         smsalert( f'There was a {percentoff*100}% drop in the price of the {pair} pair on Gemini.' )
 
                         # Update deal price.
-                        deal.setvalue(minimumask)
                         ws.close()
                         break
 
