@@ -41,9 +41,9 @@ def askfall (
     # Define Roll count class.
     # Purpose: Stores the tally of Highs during the websocket connection session.
     class Roll:
-        def __init__(self, price): self.__price = count
-        def getvalue(self): return self.__price
-        def setvalue(self, price): self.__price = count
+        def __init__(self, price): self.__count = count
+        def getvalue(self): return self.__count
+        def setvalue(self, price): self.__count = count
 
     # Define deal class.
     # Purpose: Stores the (i)deal (last) ask offered during the websocket connection session.
