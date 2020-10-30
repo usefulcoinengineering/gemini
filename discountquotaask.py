@@ -43,7 +43,7 @@ if deal:
 
     # Submit limit ask order.
     logger.debug(f'submitting {pair} aggressive limit ask order.')
-    post = quotaask( pair, cash )
+    post = quotaask( pair, cash, deal )
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( dump )
