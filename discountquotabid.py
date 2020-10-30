@@ -17,7 +17,7 @@ from decimal import Decimal
 
 from libraries.logger import logger
 from libraries.dealseeker import askfall
-from libraries.liquiditymaker import quotabid
+from libraries.frontrunner import quotabid
 from libraries.fillvalidator import confirmexecution
 
 
@@ -43,7 +43,7 @@ if deal:
 
     # Submit limit bid order.
     logger.debug(f'submitting {pair} aggressive limit bid order.')
-    post = quotabid( pair, cash, deal )
+    post = quotabid( pair, cash )
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( dump )
