@@ -3,7 +3,8 @@
 
 # Strategy Outline:
 #  1. Waiting for a rise in the price of YFI.
-#  2. Frontrun: Submit an ask one tick below the best ask.
+#  2. Submit an ask one tick above the best bid (using spreadkiller library).
+#  3. The ask size is limited by a USD (quote currency) budget.
 #
 # Execution:
 #   - Use the wrapper BASH script in the "strategies" directory.
@@ -16,7 +17,7 @@ from decimal import Decimal
 
 from libraries.logger import logger
 from libraries.rentseeker import bidrise
-from libraries.frontrunner import askorder
+from libraries.spreadkiller import quotaask
 from libraries.fillvalidator import confirmexecution
 
 
@@ -25,24 +26,24 @@ from libraries.fillvalidator import confirmexecution
 # Configure price rise desired in decimal terms.
 # For example, 20 basis points is '0.002'. This covers Gemini API trading fees round trip!
 pair = 'YFIUSD'
-size = '0.07765'
+cash = '137.6'
 rise = '0.005'
 
 # Override defaults with command line parameters.
 if len(sys.argv) == 4:
     pair = sys.argv[1]
-    size = sys.argv[2]
+    cash = sys.argv[2]
     rise = sys.argv[3]
 
 # Open websocket connection.
 # Wait for bids to rise in price.
-logger.info(f'waiting for {pair} to rise {Decimal(rise)*100}% in price to sell {size} {pair[3:]} worth..')
+logger.info(f'waiting for {pair} to rise {Decimal(rise)*100}% in price to sell {cash} {pair[3:]} worth..')
 deal = bidrise( pair, rise )
 if deal:
 
     # Submit limit ask order.
     logger.debug(f'submitting {pair} frontrunning limit ask order.')
-    post = askorder( pair, size )
+    post = quotaask( pair, cash )
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( dump )

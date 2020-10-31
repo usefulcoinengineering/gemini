@@ -3,7 +3,7 @@
 
 # Strategy Outline:
 #  1. Waiting for a drop in the price of YFI.
-#  2. Submit a bid one tick below the best ask.
+#  2. Submit a bid one tick above the best bid (using frontrunner library).
 #  3. The bid size is limited by a USD (quote currency) budget.
 #
 # Execution:
