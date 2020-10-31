@@ -41,7 +41,7 @@ deal = bidrise( pair, rise )
 if deal:
 
     # Submit limit ask order.
-    logger.debug(f'submitting {pair} aggressive limit ask order.')
+    logger.debug(f'submitting {pair} frontrunning limit ask order.')
     post = askorder( pair, size )
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
