@@ -95,16 +95,16 @@ def askfall (
                     # Exit loop and set "deal"...
                     # Only if there's a sale (bargain) offer.
                     if sale.compare( minimum ) == 1 :
-                        logger.info( f'{pair} [now {minimum:.2f}] just went on sale [dropped below {sale:.2f}].' )
-                        smsalert( f'There was a {percentoff*100}% drop in the price of the {pair} pair on Gemini.' )
-
-                        # Update deal price.
+                        text = f'{pair} fell {percentoff*100}% in price. '
+                        text = text + f'It is now {minimum:.2f} on Gemini. '
+                        text = text + f'{sale:.2f} is a deal.'
+                        logger.info( text )
+                        smsalert( text )
                         ws.close()
                         break
 
     # Return value on discount only.
-    if minimum.compare(0) == 1 :
-        return minimum
+    if minimum.compare(0) == 1 : return minimum
     else: return False
 
 def pricedrop(
