@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# script name: discountethusdbin.bash
+# script name: ethusdquotabid.bash
 # script author: munair simpson
 # script created: 20201022
 # script purpose: bid on ETH using USD on quota
