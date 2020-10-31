@@ -37,7 +37,7 @@ if len(sys.argv) == 4:
 
 # Open websocket connection.
 # Wait for bids to rise in price.
-logger.info(f'waiting for {pair} to rise {Decimal(rise)*100}% in price to buy {cash} {pair[3:]} worth..')
+logger.info(f'waiting for {pair} to rise {Decimal(rise)*100}% in price to sell {cash} {pair[3:]} worth..')
 deal = bidrise( pair, rise )
 if deal:
 
