@@ -12,6 +12,8 @@
 
 apitransactionfee = '0.001'
 
+# Manually configured DAI (was '0.000001')
+
 ticksizes = [
  {
    'currency': 'BTC',
@@ -39,7 +41,7 @@ ticksizes = [
  },
  {
    'currency': 'DAI',
-   'tick': '0.000001'
+   'tick': '0.00001'
  },
  {
    'currency': 'LINK',
