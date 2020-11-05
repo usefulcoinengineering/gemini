@@ -7,4 +7,4 @@
 
 # Parameter 0 is the pair.
 # Parameter 1 is the order size in terms of the base currency (0.1 is 0.1 DAI).
-python3 ../frontrunningask.py DAIUSD 19834.79999604 && echo success!
+python3 ../frontrunningask.py DAIUSD 19834.79999 && echo success!
