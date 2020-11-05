@@ -35,7 +35,7 @@ def bidorder(
     response = requests.get( resourcelocator.restserver + endpoint )
     askprice = Decimal( response.json()['ask'] )
     bidprice = str( Decimal( askprice - tick ).quantize( askprice ) )
-    quantity = str( Decimal( size ) ).quantize( tock )
+    quantity = str( Decimal( size ).quantize( tock ) )
 
     # Update logs.
     logger.debug(f'askprice: {askprice}')
@@ -139,7 +139,7 @@ def askorder(
     response = requests.get( resourcelocator.restserver + endpoint )
     bidprice = Decimal( response.json()['bid'] )
     askprice = str( Decimal( bidprice + tick ).quantize( bidprice ) )
-    quantity = str( Decimal( size ) ).quantize( tock ) 
+    quantity = str( Decimal( size ).quantize( tock ) )
 
     # Update logs.
     logger.debug(f'bidprice: {bidprice}')
