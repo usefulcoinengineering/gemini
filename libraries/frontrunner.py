@@ -30,11 +30,6 @@ def bidorder(
     item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
     tick = Decimal( item[0] )
 
-    # Determine minimum order size (let's call it a tock).
-    list = constants.minimumorders
-    item = [ item['minimumorder'] for item in list if item['currency'] == pair[:3] ]
-    tock = Decimal( item[0] )
-
     # Get the highest bid in the orderbook.
     # Make an offer that's one tick better.
     endpoint = '/v1/pubticker/' + pair
@@ -86,11 +81,6 @@ def quotabid(
     item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
     tick = Decimal( item[0] )
 
-    # Determine minimum order size (let's call it a tock).
-    list = constants.minimumorders
-    item = [ item['minimumorder'] for item in list if item['currency'] == pair[:3] ]
-    tock = Decimal( item[0] )
-
     # Get the highest bid in the orderbook.
     # Make an offer that's one tick better.
     # Then determine the bid order size.
@@ -135,11 +125,6 @@ def askorder(
     list = constants.ticksizes
     item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
     tick = Decimal( item[0] )
-
-    # Determine minimum order size (let's call it a tock).
-    list = constants.minimumorders
-    item = [ item['minimumorder'] for item in list if item['currency'] == pair[:3] ]
-    tock = Decimal( item[0] )
 
     # Get the lowest ask in the orderbook.
     # Make an offer that's one tick better.
@@ -191,11 +176,6 @@ def quotaask(
     list = constants.ticksizes
     item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
     tick = Decimal( item[0] )
-
-    # Determine minimum order size (let's call it a tock).
-    list = constants.minimumorders
-    item = [ item['minimumorder'] for item in list if item['currency'] == pair[:3] ]
-    tock = Decimal( item[0] )
 
     # Get the lowest ask in the orderbook.
     # Make an offer that's one tick better.
