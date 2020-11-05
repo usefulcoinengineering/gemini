@@ -7,4 +7,4 @@
 
 # Parameter 0 is the pair.
 # Parameter 1 is the order size in terms of the base currency (0.07765 is 0.07765 DAI).
-python3 ../spreadkillingask.py DAIUSD 0.1 && echo success!
+python3 ../frontrunningask.py DAIUSD 0.1 && echo success!
