@@ -40,7 +40,7 @@ def bidorder(
     endpoint = '/v1/pubticker/' + pair
     response = requests.get( resourcelocator.restserver + endpoint )
     bidprice = Decimal( response.json()['bid'] )
-    offering = str( Decimal( bidprice + tick ).quantize( bidprice ) )
+    offering = str( Decimal( bidprice + tick ).quantize( tick ) )
     quantity = str( Decimal( size ).quantize( tick ) )
 
     # Update logs.
@@ -97,7 +97,7 @@ def quotabid(
     endpoint = '/v1/pubticker/' + pair
     response = requests.get( resourcelocator.restserver + endpoint )
     bidprice = Decimal( response.json()['bid'] )
-    offering = str( Decimal( bidprice + tick ).quantize( bidprice ) )
+    offering = str( Decimal( bidprice + tick ).quantize( tick ) )
     quantity = str( Decimal( notional / Decimal(offering) ).quantize( tick ) )
 
     # Update logs.
@@ -146,7 +146,7 @@ def askorder(
     endpoint = '/v1/pubticker/' + pair
     response = requests.get( resourcelocator.restserver + endpoint )
     askprice = Decimal( response.json()['ask'] )
-    offering = str( Decimal( askprice - tick ).quantize( askprice ) )
+    offering = str( Decimal( askprice - tick ).quantize( tick ) )
     quantity = str( Decimal( size ).quantize( tick ) )
 
     # Update logs.
@@ -203,7 +203,7 @@ def quotaask(
     endpoint = '/v1/pubticker/' + pair
     response = requests.get( resourcelocator.restserver + endpoint )
     askprice = Decimal( response.json()['ask'] )
-    offering = str( Decimal( askprice - tick ).quantize( askprice ) )
+    offering = str( Decimal( askprice - tick ).quantize( tick ) )
     quantity = str( Decimal( notional / Decimal(offering) ).quantize( tick ) )
 
     # Update logs.
