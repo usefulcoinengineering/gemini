@@ -115,6 +115,8 @@ ticksizes = [
  }
 ]
 
+# DAI Manually Updated (was '0.1')
+
 minimumorders = [
  {
    'currency': 'BTC',
@@ -142,7 +144,7 @@ minimumorders = [
  },
  {
    'currency': 'DAI',
-   'minimumorder': '0.1'
+   'minimumorder': '0.00001'
  },
  {
    'currency': 'LINK',
