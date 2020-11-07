@@ -30,13 +30,18 @@ def bidorder(
     item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
     tick = Decimal( item[0] )
 
+    # Determine quantity size.
+    list = constants.minimumquantities
+    item = [ item['minimumquantity'] for item in list if item['currency'] == pair[:3] ]
+    bump = Decimal( item[0] )
+
     # Get the highest bid in the orderbook.
     # Make an offer that's one tick better.
     endpoint = '/v1/pubticker/' + pair
     response = requests.get( resourcelocator.restserver + endpoint )
     bidprice = Decimal( response.json()['bid'] )
     offering = str( Decimal( bidprice + tick ).quantize( tick ) )
-    quantity = str( Decimal( size ).quantize( tick ) )
+    quantity = str( Decimal( size ).quantize( bump ) )
 
     # Update logs.
     logger.debug(f'bidprice: {bidprice}')
@@ -81,6 +86,11 @@ def quotabid(
     item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
     tick = Decimal( item[0] )
 
+    # Determine quantity size.
+    list = constants.minimumquantities
+    item = [ item['minimumquantity'] for item in list if item['currency'] == pair[:3] ]
+    bump = Decimal( item[0] )
+
     # Get the highest bid in the orderbook.
     # Make an offer that's one tick better.
     # Then determine the bid order size.
@@ -88,7 +98,7 @@ def quotabid(
     response = requests.get( resourcelocator.restserver + endpoint )
     bidprice = Decimal( response.json()['bid'] )
     offering = str( Decimal( bidprice + tick ).quantize( tick ) )
-    quantity = str( Decimal( notional / Decimal(offering) ).quantize( tick ) )
+    quantity = str( Decimal( notional / Decimal(offering) ).quantize( bump ) )
 
     # Update logs.
     logger.debug(f'bidprice: {bidprice}')
@@ -126,13 +136,18 @@ def askorder(
     item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
     tick = Decimal( item[0] )
 
+    # Determine quantity size.
+    list = constants.minimumquantities
+    item = [ item['minimumquantity'] for item in list if item['currency'] == pair[:3] ]
+    bump = Decimal( item[0] )
+
     # Get the lowest ask in the orderbook.
     # Make an offer that's one tick better.
     endpoint = '/v1/pubticker/' + pair
     response = requests.get( resourcelocator.restserver + endpoint )
     askprice = Decimal( response.json()['ask'] )
     offering = str( Decimal( askprice - tick ).quantize( tick ) )
-    quantity = str( Decimal( size ).quantize( tick ) )
+    quantity = str( Decimal( size ).quantize( bump ) )
 
     # Update logs.
     logger.debug(f'askprice: {askprice}')
@@ -177,6 +192,11 @@ def quotaask(
     item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
     tick = Decimal( item[0] )
 
+    # Determine quantity size.
+    list = constants.minimumquantities
+    item = [ item['minimumquantity'] for item in list if item['currency'] == pair[:3] ]
+    bump = Decimal( item[0] )
+
     # Get the lowest ask in the orderbook.
     # Make an offer that's one tick better.
     # Then determine the ask order size.
@@ -184,7 +204,7 @@ def quotaask(
     response = requests.get( resourcelocator.restserver + endpoint )
     askprice = Decimal( response.json()['ask'] )
     offering = str( Decimal( askprice - tick ).quantize( tick ) )
-    quantity = str( Decimal( notional / Decimal(offering) ).quantize( tick ) )
+    quantity = str( Decimal( notional / Decimal(offering) ).quantize( bump ) )
 
     # Update logs.
     logger.debug(f'askprice: {askprice}')

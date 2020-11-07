@@ -222,3 +222,108 @@ minimumorders = [
    'minimumorder': '0.001'
  }
 ]
+
+# ETH Manually Updated (was '0.001')
+
+minimumquantities = [
+ {
+   'currency': 'BTC',
+   'minimumquantity': '0.00001'
+ },
+ {
+   'currency': 'ETH',
+   'minimumquantity': '0.000001'
+ },
+ {
+   'currency': 'ZEC',
+   'minimumquantity': '0.001'
+ },
+ {
+   'currency': 'BCH',
+   'minimumquantity': '0.001'
+ },
+ {
+   'currency': 'LTC',
+   'minimumquantity': '0.01'
+ },
+ {
+   'currency': 'BAT',
+   'minimumquantity': '1.0'
+ },
+ {
+   'currency': 'DAI',
+   'minimumquantity': '0.00001'
+ },
+ {
+   'currency': 'LINK',
+   'minimumquantity': '0.1'
+ },
+ {
+   'currency': 'OXT',
+   'minimumquantity': '1.0'
+ },
+ {
+   'currency': 'AMP',
+   'minimumquantity': '10.0'
+ },
+ {
+   'currency': 'COMP',
+   'minimumquantity': '0.001'
+ },
+ {
+   'currency': 'PAXG',
+   'minimumquantity': '0.0001'
+ },
+ {
+   'currency': 'MKR',
+   'minimumquantity': '0.001'
+ },
+ {
+   'currency': 'ZRX',
+   'minimumquantity': '0.1'
+ },
+ {
+   'currency': 'KNC',
+   'minimumquantity': '0.1'
+ },
+ {
+   'currency': 'MANA',
+   'minimumquantity': '1.0'
+ },
+ {
+   'currency': 'STORJ',
+   'minimumquantity': '0.1'
+ },
+ {
+   'currency': 'SNX',
+   'minimumquantity': '0.01'
+ },
+ {
+   'currency': 'CRV',
+   'minimumquantity': '0.1'
+ },
+ {
+   'currency': 'BAL',
+   'minimumquantity': '0.01'
+ },
+ {
+   'currency': 'UNI',
+   'minimumquantity': '0.01'
+ },
+ {
+   'currency': 'REN',
+   'minimumquantity': '0.01'
+ },
+ {
+   'currency': 'UMA',
+   'minimumquantity': '0.01'
+ },
+ {
+   'currency': 'YFI',
+   'minimumquantity': '0.00001'
+ },
+ {
+   'currency': 'AAVE',
+   'minimumquantity': '0.001'
+ }
+]
