@@ -13,6 +13,7 @@
 apitransactionfee = '0.001'
 
 # Manually configured DAI (was '0.000001')
+# Manually configured ETH (was '0.000001')
 
 ticksizes = [
  {
@@ -21,7 +22,7 @@ ticksizes = [
  },
  {
    'currency': 'ETH',
-   'tick': '0.000001'
+   'tick': '0.01'
  },
  {
    'currency': 'ZEC',
