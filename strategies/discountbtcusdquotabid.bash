@@ -9,4 +9,4 @@
 # Parameter 0 is the pair.
 # Parameter 1 is the budget (100 is 100 USD).
 # Parameter 2 is the discount (0.02 is a 2% discount).
-python3 ../discountquotafrontrunningbid.py BTCUSD 4500 0.01 && echo success!
+python3 ../discountquotafrontrunningbid.py BTCUSD 4500 0.005 && echo success!
