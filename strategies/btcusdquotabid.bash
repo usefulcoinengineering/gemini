@@ -9,4 +9,4 @@
 # Parameter 0 is the pair.
 # Parameter 1 is the budget (1000 is 1000 USD).
 # Parameter 2 is the price (450 is 450 USD).
-python3 ../quotabid.py BTCUSD 10000 31376 && echo success!
+python3 ../quotabid.py BTCUSD 10000 36000 && echo success!
