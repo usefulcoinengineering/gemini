@@ -10,5 +10,5 @@
 # Parameter 1 is the budget (100 is 100 USD).
 # Parameter 2 is the discount (0.02 is a 2% discount).
 while [[ True ]]; do
-  python3 ../quotafrontrunningskim.py BTCUSD 78 0.003 0.003
+  python3 ../quotafrontrunningskim.py BTCUSD 178 0.003 0.003
 done
