@@ -91,7 +91,7 @@ if deal:
         poststatus = Poststatus('')
 
         # Determine if the ask order was filled.
-        confirmexecution( orderid = post['order_id'], poststatus = poststatus )
+        confirmexecution( orderid = post['order_id'], poststatus = poststatus, bidpricing = bidpricing )
         if 'filled' in poststatus.getvalue(): poststatus = True
 
         # Let the shell know we successfully made it this far!
