@@ -69,29 +69,30 @@ if deal:
     poststatus = Poststatus('')
     bidpricing = Bidpricing('')
 
-    # Determine if the order was filled.
+    # Determine if the bid order was filled.
     confirmexecution( orderid = post['order_id'], poststatus = poststatus, bidpricing = bidpricing )
     if 'filled' in poststatus.getvalue(): poststatus = True
-    if 'filled' in poststatus.getvalue(): minimumask = Decimal(bidpricing)
+    if 'filled' in poststatus.getvalue():
+        minimumask = Decimal(bidpricing)
 
-    # Calculate ask price (skim/premium).
-    gain = 1 + Decimal(rise)
-    skim = Decimal( minimumask * gain ).quantize('0.00')
-    skim = str( skim )
+        # Calculate ask price (skim/premium).
+        gain = 1 + Decimal(rise)
+        skim = Decimal( minimumask * gain ).quantize('0.00')
+        skim = str( skim )
 
-    # Submit limit ask order.
-    logger.debug(f'submitting {pair} limit ask order: {skim} ask on a {cash} budget.')
-    post = quotaask( pair, cash, skim )
-    post = post.json()
-    dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
-    logger.debug ( dump )
+        # Submit limit ask order.
+        logger.debug(f'submitting {pair} limit ask order: {skim} ask on a {cash} budget.')
+        post = quotaask( pair, cash, skim )
+        post = post.json()
+        dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
+        logger.debug ( dump )
 
-    # Reset poststatus value.
-    poststatus = Poststatus('')
+        # Reset poststatus value.
+        poststatus = Poststatus('')
 
-    # Determine if the order was filled.
-    confirmexecution( orderid = post['order_id'], poststatus = poststatus )
-    if 'filled' in poststatus.getvalue(): poststatus = True
+        # Determine if the ask order was filled.
+        confirmexecution( orderid = post['order_id'], poststatus = poststatus )
+        if 'filled' in poststatus.getvalue(): poststatus = True
 
     # Let the shell know we successfully made it this far!
     if poststatus: sys.exit(0)
