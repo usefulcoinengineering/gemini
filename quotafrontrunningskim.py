@@ -73,7 +73,7 @@ if deal:
     confirmexecution( orderid = post['order_id'], poststatus = poststatus, bidpricing = bidpricing )
     if 'filled' in poststatus.getvalue(): poststatus = True
     if poststatus:
-        minimumask = Decimal(bidpricing)
+        minimumask = Decimal( bidpricing.getvalue() )
 
         # Calculate ask price (skim/premium).
         gain = 1 + Decimal(rise)
@@ -96,5 +96,5 @@ if deal:
 
         # Let the shell know we successfully made it this far!
         sys.exit(0)
-        
+
     else: sys.exit(1)
