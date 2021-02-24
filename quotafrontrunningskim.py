@@ -77,7 +77,7 @@ if deal:
 
         # Calculate ask price (skim/premium).
         gain = 1 + Decimal(rise)
-        skim = Decimal( minimumask * gain ).quantize('0.00')
+        skim = Decimal( minimumask * gain ).quantize( Decimal('0.00') )
         skim = str( skim )
 
         # Submit limit ask order.
