@@ -70,7 +70,7 @@ if deal:
     bidpricing = Bidpricing('')
 
     # Determine if the order was filled.
-    confirmexecution( orderid = post['order_id'], poststatus = poststatus )
+    confirmexecution( orderid = post['order_id'], poststatus = poststatus, bidpricing = bidpricing )
     if 'filled' in poststatus.getvalue(): poststatus = True
     if 'filled' in poststatus.getvalue(): minimumask = Decimal(bidpricing)
 
