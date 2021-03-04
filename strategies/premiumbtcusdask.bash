@@ -10,3 +10,5 @@
 # Parameter 1 is the order size in terms of the base currency (0.07765 is 0.07765 BTC).
 # Parameter 2 is the premium (0.03 is a 3% premium).
 python3 ../premiumfrontrunningask.py BTCUSD 0.32468703 0.076 && echo success!
+
+# Warning: Does not manage bid/ask irregularities well. It is suggested that you use quotask based scripts.
