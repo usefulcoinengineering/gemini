@@ -11,5 +11,5 @@
 # Parameter 2 is the discount (0.003 is a 0.3% discount on the market price).
 # Parameter 3 is the premium (0.007 is a 0.7% premium on the purchase price).
 while [[ True ]]; do
-  python3 ../discountfrontrunningskim.py BTCUSD 0.00001 0.003 0.0076
+  python3 ../discountfrontrunningskim.py BTCUSD 0.01376 0.003 0.0076
 done
