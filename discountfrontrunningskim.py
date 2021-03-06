@@ -2,9 +2,9 @@
 
 
 # Strategy Outline:
-#  1. Waiting for a drop in the price of YFI.
+#  1. Waiting for a drop in the price of BTC.
 #  2. Submit a bid one tick above the best bid (using frontrunner library).
-#  3. The bid size is limited by a USD (quote currency) budget.
+#  3. The bid size is specified in the base currency (BTC).
 #  4. Upon execution, immediately submit an ask that includes a small gain (skim).
 #
 # Execution:
@@ -18,36 +18,38 @@ from decimal import Decimal
 
 from libraries.logger import logger
 from libraries.dealseeker import askfall
-from libraries.frontrunner import quotabid
-from libraries.liquiditymaker import quotaask
+from libraries.frontrunner import bidorder
+from libraries.liquiditymaker import askorder
 from libraries.skimvalidator import confirmexecution
 
 
-# Set quote currency (USD in this case) budget.
-# This amount should exceed 20 cents ['0.00001' is the minimum for YFIUSD].
-# Configure price drop desired in decimal terms.
-# For example, 20 basis points is '0.002'. This covers Gemini API trading fees round trip!
-pair = 'YFIUSD'
-cash = '137.6'
-drop = '0.005'
-rise = '0.005'
+# Set bid size in the base currency (BTC in this case). You will accumulate USD.
+# This amount should exceed 20 cents ['0.00001' is the minimum for BTCUSD].
+# Configure price drop desired in decimal terms (for example 76 basis points).
+# Configure price rise desired in decimal terms (for example 78 basis points).
+# Makes sure both price changes, when summed, exceed 20 basis points (or '0.002').
+# This covers Gemini API trading fees round trip!
+pair = 'BTCUSD'
+size = '0.00001'
+drop = '0.0076'
+rise = '0.0078'
 
 # Override defaults with command line parameters from BASH wrapper.
 if len(sys.argv) == 5:
     pair = sys.argv[1]
-    cash = sys.argv[2]
+    size = sys.argv[2]
     drop = sys.argv[3]
     rise = sys.argv[4]
 
 # Open websocket connection.
 # Wait for asks to fall in price.
-logger.info(f'waiting for {pair} to drop {Decimal(drop)*100}% in price to buy {cash} {pair[3:]} worth..')
+logger.info(f'waiting for {pair} to drop {Decimal(drop)*100}% in price to buy {size} {pair[:3]}..')
 deal = askfall( pair, drop )
 if deal:
 
     # Submit limit bid order.
     logger.debug(f'submitting {pair} frontrunning limit bid order.')
-    post = quotabid( pair, cash )
+    post = bidorder( pair, size )
     post = post.json()
     dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( dump )
@@ -82,8 +84,8 @@ if deal:
         skim = str( skim )
 
         # Submit limit ask order.
-        logger.debug(f'submitting {pair} limit ask order: {skim} ask on a {cash} budget.')
-        post = quotaask( pair, cash, skim )
+        logger.debug(f'submitting {pair} limit ask order: {skim} ask for {size} {pair[:3]}..')
+        post = askorder( pair, size, skim )
         post = post.json()
         dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
         logger.debug ( dump )
