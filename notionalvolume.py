@@ -31,7 +31,7 @@ dump = json.dumps( data, sort_keys=True, indent=4, separators=(',', ': ') )
 
 
 # Format response.
-if field == 'notional_30d_volume': print( f'your notional 30-day volume is {post.json()["notional_30d_volume"]:,.2} USD.' )
+if field == 'notional_30d_volume': print( f'your notional 30-day volume is {post.json()[field]:.2,} USD.' )
 
 
 # Let the shell know we successfully made it this far!
