@@ -18,7 +18,7 @@ from libraries.volumizer import notionalvolume
 
 # Set locale and default field value.
 locale.setlocale( locale.LC_ALL, '' )
-field = 'notional_30d_volume'
+field = ''
 
 # Override defaults with command line parameters.
 if len(sys.argv) == 2:
@@ -28,19 +28,13 @@ if len(sys.argv) == 2:
 logger.debug(f'submitting request...')
 post = notionalvolume()
 
-# Display desired field (or everything received).
+# Format response.
+if field == 'notional_30d_volume': print( f'notional 30-day volume is {locale.currency( post.json()[field], grouping=True )}.' )
+if field == 'api_maker_fee_bps': print( f'the fee that Gemini is charging you for making orders via the API is {post.json()[field]} basis points.' )
 if field == '':
-    post = post.json()
-
-    # Format response.
-    dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
-    logger.info ( dump )
-
-else:
-    post = post.json()[field]
-    # Format response.
-    if field == 'notional_30d_volume': print( f'notional 30-day volume is {locale.currency( post, grouping=True )}.' )
-    if field == 'api_maker_fee_bps': print( f'the fee that Gemini is charging you for making orders via the API is {post} basis points.' )
+    dump = json.dumps( post.json(), sort_keys=True, indent=4, separators=(',', ': ') )
+    logger.debug ( dump )
+    
 
 # Let the shell know we successfully made it this far!
 if post: sys.exit(0)
