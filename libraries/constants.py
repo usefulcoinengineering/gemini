@@ -14,6 +14,7 @@ apitransactionfee = '0.001'
 
 # Manually configured DAI (was '0.000001')
 # Manually configured ETH (was '0.000001')
+# Manually configured ZRC (was '0.000001')
 # Manually configured BTC (was '0.00000001')
 
 ticksizes = [
@@ -71,7 +72,7 @@ ticksizes = [
  },
  {
    'currency': 'ZRX',
-   'tick': '0.000001'
+   'tick': '0.00001'
  },
  {
    'currency': 'KNC',
