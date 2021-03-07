@@ -26,8 +26,8 @@ if len(sys.argv) == 2:
 # Submit request.
 logger.debug(f'submitting request...')
 post = notionalvolume()
-json = post.json()
-dump = json.dumps( json, sort_keys=True, indent=4, separators=(',', ': ') )
+data = post.json()
+dump = json.dumps( data, sort_keys=True, indent=4, separators=(',', ': ') )
 
 
 # Format response.
