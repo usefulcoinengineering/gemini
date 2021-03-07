@@ -16,8 +16,7 @@ from libraries.logger import logger
 from libraries.volumizer import notionalvolume
 
 
-# Set locale and default field value.
-locale.setlocale( locale.LC_ALL, '' )
+# Set default field value.
 field = ''
 
 # Override defaults with command line parameters.
@@ -29,8 +28,7 @@ logger.debug(f'submitting request...')
 post = notionalvolume()
 
 # Format response.
-if field == 'notional_30d_volume': post = locale.currency( post.json()[field], grouping=True )
-if field == 'notional_30d_volume': print( f'notional 30-day volume is {post}.' )
+if field == 'notional_30d_volume': print( f'your notional 30-day volume is {post.json()[field]:,} USD.' )
 if field == 'api_maker_fee_bps': print( f'the fee that Gemini is charging you for making orders via the API is {post.json()[field]} basis points.' )
 if field == '':
     dump = json.dumps( post.json(), sort_keys=True, indent=4, separators=(',', ': ') )
