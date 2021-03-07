@@ -26,13 +26,13 @@ if len(sys.argv) == 2:
 # Submit request.
 logger.debug(f'submitting request...')
 post = notionalvolume()
+dump = json.dumps( post.json(), sort_keys=True, indent=4, separators=(',', ': ') )
+
 
 # Format response.
-if field == 'notional_30d_volume': print( f'your notional 30-day volume is {post.json()[field]:,} USD.' )
+if field == 'notional_30d_volume': print( f'your notional 30-day volume is {dump[field]:,} USD.' )
 if field == 'api_maker_fee_bps': print( f'the fee that Gemini is charging you for making orders via the API is {post.json()[field]} basis points.' )
-if field == '':
-    dump = json.dumps( post.json(), sort_keys=True, indent=4, separators=(',', ': ') )
-    logger.debug ( dump )
+if field == '': logger.debug ( dump )
 
 
 # Let the shell know we successfully made it this far!
