@@ -29,7 +29,7 @@ logger.debug(f'submitting request...')
 post = notionalvolume()
 
 # Format response.
-if field == 'notional_30d_volume': print( f'notional 30-day volume is {locale.currency( 100000, grouping=True )}.' )
+if field == 'notional_30d_volume': print( f'notional 30-day volume is {locale.currency( "100000", grouping=True )}.' )
 if field == 'api_maker_fee_bps': print( f'the fee that Gemini is charging you for making orders via the API is {post.json()[field]} basis points.' )
 if field == '':
     dump = json.dumps( post.json(), sort_keys=True, indent=4, separators=(',', ': ') )
