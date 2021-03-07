@@ -3,7 +3,7 @@
 
 # Strategy Outline:
 #  1. Waiting for a rise in the price of YFI.
-#  2. Submit an ask one tick below the best ask (using frontrunner).
+#  2. Submit an ask one tick below the best ask (using frontrunner library).
 #  3. The ask size is limited by a USD (quote currency) budget.
 #
 # Execution:
