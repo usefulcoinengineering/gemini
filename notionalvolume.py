@@ -32,8 +32,7 @@ dump = json.dumps( data, sort_keys=True, indent=4, separators=(',', ': ') )
 
 # Format response.
 if field:
-    if field == 'notional_30d_volume': print( f'your notional 30-day volume is {post.json()[field]:,} USD.' )
-    else if field == 'api_maker_fee_bps': print( f'the fee that Gemini is charging you for making orders via the API is {post.json()[field]} basis points.' )
+    if field == 'notional_30d_volume': print( f'your notional 30-day volume is {data[field]:,} USD.' )
 
 logger.debug ( dump )
 
