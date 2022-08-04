@@ -1,7 +1,7 @@
 Run the following commands to setup:
 
 ```bash
-git clone https://github.com/munair/gemini.git
+git clone https://github.com/usefulcoinengineering/gemini.git
 cd gemini
 cp examples/example-credentials.py libraries/credentials.py
 pip3 install websocket-client
@@ -22,7 +22,7 @@ Logfiles:
 To make it easier to read the logfiles:
 
 ```bash
-sudo timedatectl set-timezone America/Chicago
+sudo timedatectl set-timezone America/Vancouver
 ```
 
 Amazon Support:
