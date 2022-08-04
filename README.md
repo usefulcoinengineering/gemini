@@ -42,4 +42,7 @@ cat > ~/.aws/credentials << EOF
 [default]
 aws_access_key_id = AKIARB33NP5HGWSP145K
 aws_secret_access_key = c/MVoL9wOiKnt4fyPhKRWOt@hqqKhfvLcon!oZJ/
+EOF
 ```
+
+or run the scripts/setupaws.bash BASH script with your credentials.
