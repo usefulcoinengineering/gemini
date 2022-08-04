@@ -29,7 +29,7 @@ sudo timedatectl set-timezone America/Jamaica
 
 Amazon Support:
 
-1. To get SNS support, open up IAM and add a new user that has privileges to send messages.
+1. To get SNS support, open up IAM and add a new user that has privileges to send messages (i.e. attach a policy like **AmazonSNSFullAccess** to a user with programmatic AWS access type).
 2. Copy the credentials to the EC2 instance (or MacBook Pro) used for trading:
 
 ```bash
