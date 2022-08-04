@@ -1,39 +1,29 @@
 #!/usr/bin/env python3
+#
+# library name: volumizer.py
+# library author: munair simpson
+# library created: 20210307
+# library purpose: retrieve Gemini fees and notional volume (in USD terms) for the last 30 days across all pairs traded
 
 
 import requests
 import ssl
-import json
 import datetime
 import time
-
-from decimal import Decimal
 
 from libraries.logger import logger as logger
 
 import libraries.authenticator as authenticator
 import libraries.resourcelocator as resourcelocator
 
-def limitstop(
-        pair: str,
-        size: str,
-        trip: str,
-        stop: str
-    ) -> None:
+def notionalvolume() -> None:
 
-    # Construct stop loss order payload.
-    # Note that sell orders require the stop_price to be greater than the price.
-    endpoint = '/v1/order/new'
+    # Get the USD denominated notional volume.
+    endpoint = '/v1/notionalvolume'
     t = datetime.datetime.now()
     payload = {
-        'request': endpoint,
         'nonce': str(int(time.mktime(t.timetuple())*1000)),
-        'symbol': pair,
-        'amount': size,
-        'stop_price': trip,
-        'price': stop,
-        'side': 'sell',
-        'type': 'exchange stop limit'
+        'request': endpoint
     }
     headers = authenticator.authenticate(payload)
 
