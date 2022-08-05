@@ -21,7 +21,7 @@ apitransactionfee = '0.002'
 # Manually configured ETH (was '0.000001')
 # Manually configured ZRC (was '0.000001')
 # Manually configured BTC (was '0.00000001')
-# ENS Manually Added 
+# Manually configured ENS (was '0.000001')
 
 ticksizes = [
  {
@@ -126,7 +126,7 @@ ticksizes = [
  },
  {
    'currency': 'ENS',
-   'tick': '0.000001'
+   'tick': '0.001'
  }
 ]
 
