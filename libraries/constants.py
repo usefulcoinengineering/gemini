@@ -10,12 +10,14 @@
 # The following were manually updated:
 #  - YFI TICK : 0.01
 
-apitransactionfee = '0.001'
+apitransactionfee = '0.002'
+# apitransactionfee = '0.001' originally
 
 # Manually configured DAI (was '0.000001')
 # Manually configured ETH (was '0.000001')
 # Manually configured ZRC (was '0.000001')
 # Manually configured BTC (was '0.00000001')
+# ENS Manually Added 
 
 ticksizes = [
  {
@@ -117,10 +119,15 @@ ticksizes = [
  {
    'currency': 'AAVE',
    'tick': '0.000001'
+ },
+ {
+   'currency': 'ENS',
+   'tick': '0.000001'
  }
 ]
 
 # DAI Manually Updated (was '0.1')
+# ENS Manually Added
 
 minimumorders = [
  {
@@ -222,6 +229,10 @@ minimumorders = [
  {
    'currency': 'AAVE',
    'minimumorder': '0.001'
+ },
+ {
+   'currency': 'ENS',
+   'minimumorder': '0.002'
  }
 ]
 
