@@ -346,6 +346,6 @@ minimumquantities = [
  },
  {
    'currency': 'ENS',
-   'minimumorder': '0.002'
+   'minimumquantity': '0.002'
  }
 ]
