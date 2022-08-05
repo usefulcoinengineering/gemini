@@ -7,6 +7,10 @@
 #  - https://docs.gemini.com/rest-api/#symbols-and-minimums
 #
 # Unfortunately, they don't always match up with the Gemini web interface and API.
+#
+# So you can also try here:
+#  - https://support.gemini.com/hc/en-us/articles/4401824250267-Are-there-trading-minimums-
+#
 # The following were manually updated:
 #  - YFI TICK : 0.01
 
@@ -237,6 +241,7 @@ minimumorders = [
 ]
 
 # ETH Manually Updated (was '0.001')
+# ENS Manually Added
 
 minimumquantities = [
  {
@@ -338,5 +343,9 @@ minimumquantities = [
  {
    'currency': 'AAVE',
    'minimumquantity': '0.001'
+ },
+ {
+   'currency': 'ENS',
+   'minimumorder': '0.002'
  }
 ]
