@@ -1,4 +1,4 @@
-Run the following commands to rapid setup:
+Run the following commands to rapidly setup the execution environment:
 
 ```bash
 git clone https://github.com/usefulcoinengineering/gemini.git
