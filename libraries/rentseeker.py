@@ -22,7 +22,7 @@ from decimal import Decimal
 from websocket import create_connection
 
 from libraries.logger import logger as logger
-from libraries.messenger import smsalert as smsalert
+from libraries.messenger import appalert as appalert
 
 import libraries.authenticator as authenticator
 import libraries.resourcelocator as resourcelocator
@@ -99,7 +99,7 @@ def bidrise (
                         text = text + f'It is now {maximum:.2f} on Gemini. '
                         text = text + f'Selling above {rent:.2f} is profitable.'
                         logger.info( text )
-                        smsalert( text )
+                        appalert( text )
                         ws.close()
                         break
 

@@ -22,7 +22,7 @@ from decimal import Decimal
 from websocket import create_connection
 
 from libraries.logger import logger as logger
-from libraries.messenger import smsalert as smsalert
+from libraries.messenger import appalert as appalert
 
 import libraries.authenticator as authenticator
 import libraries.resourcelocator as resourcelocator
@@ -99,7 +99,7 @@ def askfall (
                         text = text + f'It is now {minimum:.2f} on Gemini. '
                         text = text + f'{sale:.2f} is a deal.'
                         logger.info( text )
-                        smsalert( text )
+                        appalert( text )
                         ws.close()
                         break
 
@@ -165,7 +165,7 @@ def pricedrop(
                     # Exit loop if there's a sale.
                     if sale.compare(last) == 1 :
                         logger.info( f'{pair} [now {last:.2f}] just went on sale [dropped below {sale:.2f}].' )
-                        smsalert( f'There was a {percentoff*100}% drop in the price of the {pair} pair on Gemini.' )
+                        appalert( f'There was a {percentoff*100}% drop in the price of the {pair} pair on Gemini.' )
 
                         # Update deal price.
                         deal.setvalue(last)
