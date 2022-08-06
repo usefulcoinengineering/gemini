@@ -21,5 +21,5 @@
 # python3 ../discountfrontrunningskim.py ENSUSD 1 0.076 0.078
 
 while [[ True ]]; do
-  python3 ../discountfrontrunningskim.py ENSUSD 1 0.0017 0.0017
+  python3 ../discountfrontrunningskim.py ENSUSD 1 0.076 0.078
 done
