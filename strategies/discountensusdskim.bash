@@ -14,9 +14,12 @@
 # Production
 # python3 ../discountfrontrunningskim.py ENSUSD 20 0.0376 0.0378
 
-# Testing
-# python3 ../discountfrontrunningskim.py ENSUSD 1 0.003 0.007
+# Little Dipper Testing
+# python3 ../discountfrontrunningskim.py ENSUSD 1 0.0037 0.0037
+
+# Big Dipper Testing
+# python3 ../discountfrontrunningskim.py ENSUSD 1 0.076 0.078
 
 while [[ True ]]; do
-  python3 ../discountfrontrunningskim.py ENSUSD 25 0.0000 0.0378
+  python3 ../discountfrontrunningskim.py ENSUSD 1 0.0037 0.0037
 done
