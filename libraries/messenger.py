@@ -2,17 +2,14 @@
 
 
 import json
-import boto3
+import requests
 
+import libraries.constants as constants
 from libraries.logger import logger
 
-# Create AWS SNS client
-snsclient = boto3.client('sns')
-
 # Define alert function
-def smsalert( message ):
-    # Send message via SMS.
-    snsresponse = snsclient.publish( PhoneNumber='+12062270634', Message=message )
-    responseout = json.dumps( snsresponse, sort_keys=True, indent=4, separators=(',', ': ') )
-    logger.debug ( f'Response to SNS Request:\n{responseout}' )
-    # Log SMS execution details
+def appalert( message ):
+    # Send message to Discord server.
+    appresponse = requests.post( constants.discordwebhook, data = json.dumps( { "content": message } ), headers = { 'Content-Type': 'application/json' } )
+    logger.debug ( f'Response to Discord Request:\n{appresponse}' )
+    # Log execution details

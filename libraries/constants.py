@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+discordwebhook = 'https://discord.com/api/webhooks/1005390932012716083/-OnUZdnJZnmdJTv3Dmx_TVmcAqjBoTN5ttnNBVeiLzyjZWXFZxBpjD02XxnLcpftCN6y'
 
 # Note:
 #
