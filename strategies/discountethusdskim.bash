@@ -31,5 +31,5 @@
 # Discount Impact: Always subtract 0.002 from the discount desired (in order to offset the fee for buying).
 
 while [[ True ]]; do
-  python3 ../discountfrontrunningskim.py ETHUSD 0.005 0.0037 0.0037
+  python3 ../discountfrontrunningskim.py ETHUSD 0.5 0.0037 0.0037
 done
