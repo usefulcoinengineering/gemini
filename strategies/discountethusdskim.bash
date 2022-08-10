@@ -23,5 +23,5 @@
 # python3 ../discountfrontrunningskim.py ETHUSD 1 0.076 0.078
 
 while [[ True ]]; do
-  python3 ../discountfrontrunningskim.py ETHUSD 0.25 0.013 0.013
+  python3 ../discountfrontrunningskim.py ETHUSD 0.5 0.013 0.013
 done
