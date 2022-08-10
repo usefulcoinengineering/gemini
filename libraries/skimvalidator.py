@@ -19,7 +19,7 @@ import libraries.resourcelocator as resourcelocator
 def confirmexecution(
         orderid: str,
         poststatus: object,
-        bidpricing: object
+        orderprice: object
     ) -> None:
 
     # Introduce function.
@@ -63,7 +63,7 @@ def confirmexecution(
             logger.info ( exitstatus )
             appalert ( exitstatus )
             poststatus.setvalue( exitstatus )
-            bidpricing.setvalue( rate )
+            orderprice.setvalue( rate )
 
     # Construct payload.
     endpoint = '/v1/order/events'

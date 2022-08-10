@@ -16,11 +16,14 @@ import requests
 
 from decimal import Decimal
 
+import libraries.constants as constants
+
 from libraries.logger import logger
 from libraries.dealseeker import askfall
 from libraries.frontrunner import bidorder
 from libraries.liquiditymaker import askorder
 from libraries.skimvalidator import confirmexecution
+from libraries.messenger import appalert as appalert
 
 
 # Set bid size in the base currency (BTC in this case). You will accumulate USD.
@@ -61,22 +64,22 @@ if deal:
         def getvalue(self): return self.__state
         def setvalue(self, state): self.__state = state
 
-    # Define bidpricing class.
+    # Define orderprice class.
     # Purpose: Stores the state of the filled bid price parameter upon exiting the websocket connection session.
-    class Bidpricing:
+    class Orderprice:
         def __init__(self, state): self.__state = state
         def getvalue(self): return self.__state
         def setvalue(self, state): self.__state = state
 
-    # Initialize poststatus and bidpricing values.
+    # Initialize poststatus and orderprice values.
     poststatus = Poststatus('')
-    bidpricing = Bidpricing('')
+    orderprice = Orderprice('')
 
     # Determine if the bid order was filled.
-    confirmexecution( orderid = post['order_id'], poststatus = poststatus, bidpricing = bidpricing )
+    confirmexecution( orderid = post['order_id'], poststatus = poststatus, orderprice = orderprice )
     if 'filled' in poststatus.getvalue(): poststatus = True
     if poststatus:
-        minimumask = Decimal( bidpricing.getvalue() )
+        minimumask = Decimal( orderprice.getvalue() )
 
         # Calculate ask price (skim/premium).
         gain = 1 + Decimal(rise)
@@ -90,12 +93,23 @@ if deal:
         dump = json.dumps( post, sort_keys=True, indent=4, separators=(',', ': ') )
         logger.debug ( dump )
 
-        # Reset poststatus value.
+        # Reset poststatus and orderprice values.
         poststatus = Poststatus('')
+        orderprice = Orderprice('')
 
         # Determine if the ask order was filled.
-        confirmexecution( orderid = post['order_id'], poststatus = poststatus, bidpricing = bidpricing )
+        confirmexecution( orderid = post['order_id'], poststatus = poststatus, orderprice = orderprice )
         if 'filled' in poststatus.getvalue(): poststatus = True
+        if poststatus:
+            netcost = Decimal( minimumask * size * ( 1 + constants.apitransactionfee ) ).quantize( Decimal('0.00') )
+            netgain = Decimal( orderprice.getvalue() * size * ( 1 + constants.apitransactionfee ) ).quantize( Decimal('0.00') )
+            surplus = netgain - netcost
+            clause0 = f'There was a profit/loss of {surplus} '
+            clause1 = f'from the gain of {netgain} '
+            clause2 = f'at a cost of {netcost} '
+            message = f'{clause0}{clause1}{clause2}'
+            logger.info ( message )
+            appalert ( message )
 
         # Let the shell know we successfully made it this far!
         sys.exit(0)
