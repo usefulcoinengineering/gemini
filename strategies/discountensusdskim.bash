@@ -23,6 +23,11 @@
 # Big Dipper Testing
 # python3 ../discountfrontrunningskim.py ENSUSD 1 0.076 0.078
 
+# Gemini's API Transaction Fee
+# Presently: 20 basis points (or '0.002').
+# Premium Impact: Always add 0.002 to the premium desired (in order to offset the fee for selling).
+# Discount Impact: Always subtract 0.002 from the discount desired (in order to offset the fee for buying).
+
 while [[ True ]]; do
   python3 ../discountfrontrunningskim.py ENSUSD 25 0.0076 0.01378
 done
