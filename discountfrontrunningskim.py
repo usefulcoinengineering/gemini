@@ -101,8 +101,9 @@ if deal:
         confirmexecution( orderid = post['order_id'], poststatus = poststatus, orderprice = orderprice )
         if 'filled' in poststatus.getvalue(): poststatus = True
         if poststatus:
-            netcost = Decimal( minimumask * size * ( 1 + constants.apitransactionfee ) ).quantize( Decimal('0.00') )
-            netgain = Decimal( orderprice.getvalue() * size * ( 1 + constants.apitransactionfee ) ).quantize( Decimal('0.00') )
+            apifees = Decimal( constants.apitransactionfee )
+            netcost = Decimal( minimumask * size * ( 1 + apifees ) ).quantize( Decimal('0.00') )
+            netgain = Decimal( orderprice.getvalue() * size * ( 1 - apifees ) ).quantize( Decimal('0.00') )
             surplus = netgain - netcost
             clause0 = f'There was a profit/loss of {surplus} '
             clause1 = f'from the gain of {netgain} '
