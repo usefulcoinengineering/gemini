@@ -101,10 +101,18 @@ if deal:
         confirmexecution( orderid = post['order_id'], poststatus = poststatus, orderprice = orderprice )
         if 'filled' in poststatus.getvalue(): poststatus = True
         if poststatus:
+            # cast size, gain, and cost to decimals.
+            size = Decimal( size )
+            gain = Decimal( orderprice.getvalue() )
+            cost = Decimal( minimumask )
+
+            # cast Gemini's api transaction fee to decimal and calculate profits.
             apifees = Decimal( constants.apitransactionfee )
-            netcost = Decimal( minimumask * size * ( 1 + apifees ) ).quantize( Decimal('0.00') )
-            netgain = Decimal( orderprice.getvalue() * size * ( 1 - apifees ) ).quantize( Decimal('0.00') )
+            netcost = Decimal( cost * size * ( 1 + apifees ) ).quantize( Decimal('0.00') )
+            netgain = Decimal( gain * size * ( 1 - apifees ) ).quantize( Decimal('0.00') )
             surplus = netgain - netcost
+
+            # log profits and report them via Discord alert.
             clause0 = f'There was a profit/loss of {surplus} '
             clause1 = f'from the gain of {netgain} '
             clause2 = f'at a cost of {netcost} '
