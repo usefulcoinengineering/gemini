@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-discordwebhook = 'https://discord.com/api/webhooks/1006964160514502888/9I0BJ5kReoZ0NPGvwJklrHiivh12_sYe9wSJzht-wyWJJ1ilAMQs7y0TDBxFKpqyt_mO'
-
 # Note:
 #
 # The source of these constants can be located here:
