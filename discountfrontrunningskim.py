@@ -103,8 +103,8 @@ if deal:
         if poststatus:
             # cast size, gain, and cost to decimals.
             size = Decimal( size )
-            gain = Decimal( orderprice.getvalue() )
             cost = Decimal( minimumask )
+            gain = Decimal( orderprice.getvalue() )
 
             # cast Gemini's api transaction fee to decimal and calculate profits.
             apifees = Decimal( constants.apitransactionfee )
