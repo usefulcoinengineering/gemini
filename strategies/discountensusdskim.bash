@@ -11,6 +11,9 @@
 # Parameter 2 is the discount (0.003 is a 0.3% discount on the market price).
 # Parameter 3 is the premium (0.007 is a 0.7% premium on the purchase price).
 
+# Bullish Market Trend: make the premium more than the discount.
+# Bearish Market Trend: make the discount more than the premium.
+
 # Production
 # python3 ../discountfrontrunningskim.py ENSUSD 20 0.0376 0.0378
 
@@ -21,5 +24,5 @@
 # python3 ../discountfrontrunningskim.py ENSUSD 1 0.076 0.078
 
 while [[ True ]]; do
-  python3 ../discountfrontrunningskim.py ENSUSD 25 0.0076 0.0078
+  python3 ../discountfrontrunningskim.py ENSUSD 25 0.0076 0.01378
 done
