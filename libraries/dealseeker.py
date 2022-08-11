@@ -157,15 +157,19 @@ def pricedrop(
                     move = 100 * ( sessionmax - last ) / sessionmax
 
                     # Display impact of event information received.
-                    logger.info( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {last} presently : [Message ID: {dictionary["socket_sequence"]}].' )
+                    fragmentone = f'{move:.2f}% off of the trade event highs [i.e. {sessionmax}] monitored by the dealseaker websocket connection. '
+                    fragmenttwo = f'{last} was the price of most recent {pair} trade : [Message ID: {dictionary["socket_sequence"]}].'
+                    logger.info( f'{fragmentone}{fragmenttwo}' )
 
                     # Define bargain (sale) price.
                     sale = Decimal( sessionmax * ( 1 - percentoff ) )
 
                     # Exit loop if there's a sale.
                     if sale.compare(last) == 1 :
-                        logger.info( f'{pair} [now {last:.2f}] just went on sale [dropped below {sale:.2f}].' )
-                        appalert( f'There was a {percentoff*100}% drop in the price of the {pair} pair on Gemini.' )
+                        fragmentone = f'{pair[:3]} dropped below the {sale:.2f} target (or sale) price. It just traded at {last:.2f} {pair[3:]}. '
+                        fragmenttwo = f'The highest price of {pair[:3]} since starting this websocket connection was {sessionmax:.2f}. '
+                        logger.info( f'{fragmentone}{fragmenttwo}This is a {percentoff*100}% discount.' )
+                        appalert( f'{fragmentone}{fragmenttwo}This is a {percentoff*100}% discount.' )
 
                         # Update deal price.
                         deal.setvalue(last)
