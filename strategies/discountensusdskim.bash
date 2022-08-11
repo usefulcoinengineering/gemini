@@ -29,5 +29,5 @@
 # Discount Impact: Always subtract 0.002 from the discount desired (in order to offset the fee for buying).
 
 while [[ True ]]; do
-  python3 ../discountfrontrunningskim.py ENSUSD 25 0.0076 0.01378
+  python3 ../discountfrontrunningskim.py ENSUSD 25 0.0076 0.00378
 done
