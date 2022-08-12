@@ -3,7 +3,7 @@
 # test name: maximumbid.py
 # test author: munair simpson
 # test created: 20220811
-# test purpose: retrieve public market data on the highest ask in the orderbook using Gemini's REST API.
+# test purpose: retrieve public market data on the highest bid in the orderbook using Gemini's REST API.
 
 
 # Detailed Description:
@@ -34,7 +34,7 @@ cost = maximumbid( pair )
 # Report the response if there is one.
 if cost:
     # Tell the user the result.
-    fragmentone = f'the highest bid for {pair[:3]} in the Gemini orderbook is: '
+    fragmentone = f'The highest bid for {pair[:3]} in the Gemini orderbook is: '
     fragmenttwo = f'{cost} {pair[3:]}.'
     logger.info ( f'{fragmentone}{fragmenttwo}')
     appalert ( f'{fragmentone}{fragmenttwo}')
