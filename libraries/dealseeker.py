@@ -97,7 +97,7 @@ def askfall (
                     if sale.compare( minimum ) == 1 :
                         text = f'{pair} fell {percentoff*100}% in price. '
                         text = text + f'It is now {minimum:.2f} on Gemini. '
-                        text = text + f'{sale:.2f} is a deal.'
+                        text = text + f'{pair[:3]} at {sale:.2f} {pair[3:]} or lower is defined as a deal.'
                         logger.info( text )
                         appalert( text )
                         ws.close()
