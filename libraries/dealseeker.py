@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+#
+# test name: dealseaker.py
+# test author: munair simpson
+# test created: 20220811
+# test purpose: find price deals using Gemini's Websockets API.
 
 
 # Warning:
@@ -27,10 +32,19 @@ from libraries.messenger import appalert as appalert
 import libraries.authenticator as authenticator
 import libraries.resourcelocator as resourcelocator
 
-def askfall (
+def lastfall (
         pair: str,
         drop: str
         ) -> None:
+    # Function Description:
+    #  1. Open a websocket connection.
+    #  2. Request L2 orderbook data.
+    #  3. Monitor the orderbook for a drop in last (i.e. the "last transaction price") for pair parameter specified.
+    #  4. Send an alert to a Discord channel using the messenger library's webhook when last falls.
+    #
+    # Execution:
+    #   - from libraries.dealseeker import lastfall
+    #   - lastprice = lastfall( "BTCUSD", "0.004" )
 
     # Define dataset class.
     # Purpose: Stores the offers received during the websocket connection session.
