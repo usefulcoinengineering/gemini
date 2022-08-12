@@ -46,8 +46,8 @@ if len(sys.argv) == 5:
     rise = sys.argv[4]
 
 # Tell the user that the code is opening a websocket connection and waiting for transaction prices to decrease.
-fragmentone = f'waiting for the trading price of {pair[:3]} to drop {Decimal(drop)*100}%. '
-fragmenttwo = f'going to buy {size} {pair[3:]} worth of it. grab a snickers...'
+fragmentone = f'Waiting for the trading price of {pair[:3]} to drop {Decimal(drop)*100}%. '
+fragmenttwo = f'Going to buy {size} {pair[:3]}. Grab a snickers...'
 logger.info ( f'{fragmentone}{fragmenttwo}')
 appalert ( f'{fragmentone}{fragmenttwo}')
 
@@ -64,7 +64,7 @@ deal = Decimal(deal)
 cost = Decimal(cost)
 txt1 = f'The highest bid in the order book [{cost:.2f}] exceeds the last transaction price [{deal:.2f} {pair[3:]}]. '
 txt2 = f'Continuation would mean paying more than desired for {pair[:3]}. Aborting...'
-if cost.compare( deal ) == 1:
+if deal.compare( cost ) == 1:
 
     # Submit limit bid order.
     logger.debug(f'submitting {pair} frontrunning limit bid order.')
