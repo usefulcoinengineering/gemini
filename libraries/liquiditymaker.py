@@ -11,9 +11,8 @@ from decimal import Decimal
 
 from libraries.logger import logger as logger
 
-import libraries.constants as constants
+import libraries.definer as definer
 import libraries.authenticator as authenticator
-import libraries.resourcelocator as resourcelocator
 
 def bidorder(
         pair: str,
@@ -37,7 +36,7 @@ def bidorder(
     }
     headers = authenticator.authenticate(payload)
 
-    request = resourcelocator.restserver + endpoint
+    request = definer.restserver + endpoint
     response = requests.post(request, data = None, headers = headers['restheader'])
 
     return response
@@ -52,11 +51,11 @@ def quotabid(
     # Refer to https://docs.gemini.com/rest-api/#basis-point.
     # Fees are calculated on the notional value of each trade (price × size).
     # Meaning (for API transactions): size * price * 1.001 = cash
-    fraction = Decimal( constants.apitransactionfee )
+    fraction = Decimal( definer.apitransactionfee )
     notional = Decimal(cash) / Decimal( 1 + fraction )
 
     # Determine minimum order size (let's call it a tock).
-    list = constants.minimumorders
+    list = definer.minimumorders
     item = [ item['minimumorder'] for item in list if item['currency'] == pair[:3] ]
     tock = Decimal( item[0] )
 
@@ -84,7 +83,7 @@ def quotabid(
     }
     headers = authenticator.authenticate(payload)
 
-    request = resourcelocator.restserver + endpoint
+    request = definer.restserver + endpoint
     response = requests.post(request, data = None, headers = headers['restheader'])
 
     return response
@@ -111,7 +110,7 @@ def askorder(
     }
     headers = authenticator.authenticate(payload)
 
-    request = resourcelocator.restserver + endpoint
+    request = definer.restserver + endpoint
     response = requests.post(request, data = None, headers = headers['restheader'])
 
     return response
@@ -126,11 +125,11 @@ def quotaask(
     # Refer to https://docs.gemini.com/rest-api/#basis-point.
     # Fees are calculated on the notional value of each trade (price × size).
     # Meaning (for API transactions): size * price * 1.001 = cash
-    fraction = Decimal( constants.apitransactionfee )
+    fraction = Decimal( definer.apitransactionfee )
     notional = Decimal(cash) / Decimal( 1 + fraction )
 
     # Determine minimum order size (let's call it a tock).
-    list = constants.minimumorders
+    list = definer.minimumorders
     item = [ item['minimumorder'] for item in list if item['currency'] == pair[:3] ]
     tock = Decimal( item[0] )
 
@@ -158,7 +157,7 @@ def quotaask(
     }
     headers = authenticator.authenticate(payload)
 
-    request = resourcelocator.restserver + endpoint
+    request = definer.restserver + endpoint
     response = requests.post(request, data = None, headers = headers['restheader'])
 
     return response

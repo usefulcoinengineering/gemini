@@ -29,8 +29,8 @@ from websocket import create_connection
 from libraries.logger import logger as logger
 from libraries.messenger import appalert as appalert
 
+import libraries.definer as definer
 import libraries.authenticator as authenticator
-import libraries.resourcelocator as resourcelocator
 
 def lastfall (
         pair: str,
@@ -54,7 +54,7 @@ def lastfall (
     subscriptionrequest = f'{{"type": "subscribe","subscriptions":[{{"name":"l2","symbols":["{pair}"]}}]}}'
 
     # Construct payload.
-    request = resourcelocator.sockserver + '/v2/marketdata'
+    request = definer.sockserver + '/v2/marketdata'
     nonce = int(time.time()*1000)
     payload = {
         'request': request,
@@ -190,7 +190,7 @@ def pricedrop(
                         ws.close()
 
     # Construct payload.
-    request = resourcelocator.sockserver + '/v1/marketdata/' + pair
+    request = definer.sockserver + '/v1/marketdata/' + pair
     nonce = int(time.time()*1000)
     payload = {
         'request': request,

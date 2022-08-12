@@ -16,9 +16,8 @@ from decimal import Decimal
 
 from libraries.logger import logger as logger
 
-import libraries.constants as constants
+import libraries.definer as definer
 import libraries.authenticator as authenticator
-import libraries.resourcelocator as resourcelocator
 
 def maximumbid(
         pair: str
@@ -26,7 +25,7 @@ def maximumbid(
 
     # Get the highest bid in the orderbook.
     endpoint = '/v1/pubticker/' + pair
-    response = requests.get( resourcelocator.restserver + endpoint )
+    response = requests.get( definer.restserver + endpoint )
     bidprice = Decimal( response.json()['bid'] )
 
     # Update logs.
@@ -40,7 +39,7 @@ def minimumask(
 
     # Get the lowest ask in the orderbook.
     endpoint = '/v1/pubticker/' + pair
-    response = requests.get( resourcelocator.restserver + endpoint )
+    response = requests.get( definer.restserver + endpoint )
     askprice = Decimal( response.json()['ask'] )
 
     # Update logs.

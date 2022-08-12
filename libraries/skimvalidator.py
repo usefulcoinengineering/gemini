@@ -13,8 +13,8 @@ from decimal import Decimal
 from libraries.logger import logger as logger
 from libraries.messenger import appalert as appalert
 
+import libraries.definer as definer
 import libraries.authenticator as authenticator
-import libraries.resourcelocator as resourcelocator
 
 def confirmexecution(
         orderid: str,
@@ -76,7 +76,7 @@ def confirmexecution(
 
     # Establish websocket connection.
     logger.debug( f'Establishing websocket connection to confirm the execution of order number {orderid}.' )
-    ws = websocket.WebSocketApp(str( resourcelocator.sockserver + endpoint ),
+    ws = websocket.WebSocketApp(str( definer.sockserver + endpoint ),
                                 on_open = on_open,
                                 on_message = on_message,
                                 on_error = on_error,

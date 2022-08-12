@@ -13,8 +13,8 @@ import time
 
 from libraries.logger import logger as logger
 
+import libraries.definer as definer
 import libraries.authenticator as authenticator
-import libraries.resourcelocator as resourcelocator
 
 def notionalvolume() -> None:
 
@@ -27,7 +27,7 @@ def notionalvolume() -> None:
     }
     headers = authenticator.authenticate(payload)
 
-    request = resourcelocator.restserver + endpoint
+    request = definer.restserver + endpoint
     response = requests.post(request, data = None, headers = headers['restheader'])
 
     return response

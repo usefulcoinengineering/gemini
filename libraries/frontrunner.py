@@ -16,9 +16,8 @@ from decimal import Decimal
 
 from libraries.logger import logger as logger
 
-import libraries.constants as constants
+import libraries.definer as definer
 import libraries.authenticator as authenticator
-import libraries.resourcelocator as resourcelocator
 
 def bidorder(
         pair: str,
@@ -26,19 +25,19 @@ def bidorder(
     ) -> None:
 
     # Determine tick size.
-    list = constants.ticksizes
+    list = definer.ticksizes
     item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
     tick = Decimal( item[0] )
 
     # Determine quantity size.
-    list = constants.minimumquantities
+    list = definer.minimumquantities
     item = [ item['minimumquantity'] for item in list if item['currency'] == pair[:3] ]
     bump = Decimal( item[0] )
 
     # Get the highest bid in the orderbook.
     # Make an offer that's one tick better.
     endpoint = '/v1/pubticker/' + pair
-    response = requests.get( resourcelocator.restserver + endpoint )
+    response = requests.get( definer.restserver + endpoint )
     bidprice = Decimal( response.json()['bid'] )
     offering = str( Decimal( bidprice + tick ).quantize( tick ) )
     quantity = str( Decimal( size ).quantize( bump ) )
@@ -64,7 +63,7 @@ def bidorder(
     }
     headers = authenticator.authenticate(payload)
 
-    request = resourcelocator.restserver + endpoint
+    request = definer.restserver + endpoint
     response = requests.post(request, data = None, headers = headers['restheader'])
 
     return response
@@ -78,16 +77,16 @@ def quotabid(
     # Refer to https://docs.gemini.com/rest-api/#basis-point.
     # Fees are calculated on the notional value of each trade (price × size).
     # Meaning (for API transactions): size * price * 1.001 = cash
-    fraction = Decimal( constants.apitransactionfee )
+    fraction = Decimal( definer.apitransactionfee )
     notional = Decimal(cash) / Decimal( 1 + fraction )
 
     # Determine tick size.
-    list = constants.ticksizes
+    list = definer.ticksizes
     item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
     tick = Decimal( item[0] )
 
     # Determine quantity size.
-    list = constants.minimumquantities
+    list = definer.minimumquantities
     item = [ item['minimumquantity'] for item in list if item['currency'] == pair[:3] ]
     bump = Decimal( item[0] )
 
@@ -95,7 +94,7 @@ def quotabid(
     # Make an offer that's one tick better.
     # Then determine the bid order size.
     endpoint = '/v1/pubticker/' + pair
-    response = requests.get( resourcelocator.restserver + endpoint )
+    response = requests.get( definer.restserver + endpoint )
     bidprice = Decimal( response.json()['bid'] )
     offering = str( Decimal( bidprice + tick ).quantize( tick ) )
     quantity = str( Decimal( notional / Decimal(offering) ).quantize( bump ) )
@@ -121,7 +120,7 @@ def quotabid(
     }
     headers = authenticator.authenticate(payload)
 
-    request = resourcelocator.restserver + endpoint
+    request = definer.restserver + endpoint
     response = requests.post(request, data = None, headers = headers['restheader'])
 
     return response
@@ -132,19 +131,19 @@ def askorder(
     ) -> None:
 
     # Determine tick size.
-    list = constants.ticksizes
+    list = definer.ticksizes
     item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
     tick = Decimal( item[0] )
 
     # Determine quantity size.
-    list = constants.minimumquantities
+    list = definer.minimumquantities
     item = [ item['minimumquantity'] for item in list if item['currency'] == pair[:3] ]
     bump = Decimal( item[0] )
 
     # Get the lowest ask in the orderbook.
     # Make an offer that's one tick better.
     endpoint = '/v1/pubticker/' + pair
-    response = requests.get( resourcelocator.restserver + endpoint )
+    response = requests.get( definer.restserver + endpoint )
     askprice = Decimal( response.json()['ask'] )
     offering = str( Decimal( askprice - tick ).quantize( tick ) )
     quantity = str( Decimal( size ).quantize( bump ) )
@@ -170,7 +169,7 @@ def askorder(
     }
     headers = authenticator.authenticate(payload)
 
-    request = resourcelocator.restserver + endpoint
+    request = definer.restserver + endpoint
     response = requests.post(request, data = None, headers = headers['restheader'])
 
     return response
@@ -184,16 +183,16 @@ def quotaask(
     # Refer to https://docs.gemini.com/rest-api/#basis-point.
     # Fees are calculated on the notional value of each trade (price × size).
     # Meaning (for API transactions): size * price * 1.001 = cash
-    fraction = Decimal( constants.apitransactionfee )
+    fraction = Decimal( definer.apitransactionfee )
     notional = Decimal(cash) / Decimal( 1 + fraction )
 
     # Determine tick size.
-    list = constants.ticksizes
+    list = definer.ticksizes
     item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
     tick = Decimal( item[0] )
 
     # Determine quantity size.
-    list = constants.minimumquantities
+    list = definer.minimumquantities
     item = [ item['minimumquantity'] for item in list if item['currency'] == pair[:3] ]
     bump = Decimal( item[0] )
 
@@ -201,7 +200,7 @@ def quotaask(
     # Make an offer that's one tick better.
     # Then determine the ask order size.
     endpoint = '/v1/pubticker/' + pair
-    response = requests.get( resourcelocator.restserver + endpoint )
+    response = requests.get( definer.restserver + endpoint )
     askprice = Decimal( response.json()['ask'] )
     offering = str( Decimal( askprice - tick ).quantize( tick ) )
     quantity = str( Decimal( notional / Decimal(offering) ).quantize( bump ) )
@@ -227,7 +226,7 @@ def quotaask(
     }
     headers = authenticator.authenticate(payload)
 
-    request = resourcelocator.restserver + endpoint
+    request = definer.restserver + endpoint
     response = requests.post(request, data = None, headers = headers['restheader'])
 
     return response
