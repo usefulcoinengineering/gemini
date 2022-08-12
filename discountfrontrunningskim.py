@@ -129,9 +129,9 @@ if deal.compare( cost ) == 1:
             surplus = netgain - netcost
 
             # log profits and report them via Discord alert.
-            clause0 = f'There was a profit/loss of {surplus} '
-            clause1 = f'from the gain of {netgain} '
-            clause2 = f'at a cost of {netcost} '
+            clause0 = f'There was a profit/loss of {surplus} {pair[3:]} '
+            clause1 = f'from the sale of {size} {pair[:3]} at {netgain} {pair[3:]} '
+            clause2 = f'which cost {netcost} {pair[3:]} to acquire.'
             message = f'{clause0}{clause1}{clause2}'
             logger.info ( message )
             appalert ( message )
