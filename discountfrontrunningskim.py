@@ -19,6 +19,7 @@ from decimal import Decimal
 import libraries.constants as constants
 
 from libraries.logger import logger
+from libraries.informer import maximumbid
 from libraries.dealseeker import askfall
 from libraries.frontrunner import bidorder
 from libraries.liquiditymaker import askorder
@@ -44,11 +45,26 @@ if len(sys.argv) == 5:
     drop = sys.argv[3]
     rise = sys.argv[4]
 
+# Tell the user that the code is opening a websocket connection and waiting for transaction prices to decrease.
+fragmentone = f'waiting for the trading price of {pair[:3]} to drop {Decimal(drop)*100}%. '
+fragmenttwo = f'going to buy {size} {pair[3:]} worth of it. grab a snickers...'
+logger.info ( f'{fragmentone}{fragmenttwo}')
+appalert ( f'{fragmentone}{fragmenttwo}')
+
 # Open websocket connection.
-# Wait for asks to fall in price.
-logger.info(f'waiting for {pair} to drop {Decimal(drop)*100}% in price to buy {size} {pair[:3]}..')
+# Wait for the trading price to fall.
 deal = askfall( pair, drop )
-if deal:
+
+# Get public market data on the highest bid in the orderbook using the Gemini REST API.
+cost = maximumbid( pair )
+
+# Make sure that the highest deal price is less than the highest bid (i.e. "cost" exceeds "deal").
+# Without this check it is possible to submit a frontrunning bid that exceeds required discount.
+deal = Decimal(deal)
+cost = Decimal(cost)
+txt1 = f'The highest bid in the order book [{cost:.2f}] exceeds the last transaction price [{deal:.2f} {pair[3:]}]. '
+txt2 = f'Continuation would mean paying more than desired for {pair[:3]}. Aborting...'
+if cost.compare( deal ) == 1:
 
     # Submit limit bid order.
     logger.debug(f'submitting {pair} frontrunning limit bid order.')
@@ -124,3 +140,4 @@ if deal:
         sys.exit(0)
 
     else: sys.exit(1)
+else: logger.info ( f'{txt1}{txt2}' ) ; appalert ( f'{txt1}{txt2}' )
