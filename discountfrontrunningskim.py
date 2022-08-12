@@ -16,7 +16,7 @@ import requests
 
 from decimal import Decimal
 
-import libraries.constants as constants
+import libraries.definer as definer
 
 from libraries.logger import logger
 from libraries.informer import maximumbid
@@ -123,7 +123,7 @@ if deal.compare( cost ) == 1:
             gain = Decimal( orderprice.getvalue() )
 
             # cast Gemini's api transaction fee to decimal and calculate profits.
-            apifees = Decimal( constants.apitransactionfee )
+            apifees = Decimal( definer.apitransactionfee )
             netcost = Decimal( cost * size * ( 1 + apifees ) ).quantize( Decimal('0.00') )
             netgain = Decimal( gain * size * ( 1 - apifees ) ).quantize( Decimal('0.00') )
             surplus = netgain - netcost
