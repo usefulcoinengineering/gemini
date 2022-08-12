@@ -47,7 +47,7 @@ if len(sys.argv) == 5:
 
 # Tell the user that the code is opening a websocket connection and waiting for transaction prices to decrease.
 fragmentone = f'Waiting for the trading price of {pair[:3]} to drop {Decimal(drop)*100}%. '
-fragmenttwo = f'Going to buy {size} {pair[:3]}. Grab a snickers...'
+fragmenttwo = f'Going to buy {size} {pair[:3]} when it does. Grab a snickers...'
 logger.info ( f'{fragmentone}{fragmenttwo}')
 appalert ( f'{fragmentone}{fragmenttwo}')
 
