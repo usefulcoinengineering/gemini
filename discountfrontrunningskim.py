@@ -45,6 +45,11 @@ if len(sys.argv) == 5:
     drop = sys.argv[3]
     rise = sys.argv[4]
 
+# Define tick size.
+list = definer.ticksizes
+item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
+tick = Decimal( item[0] )
+
 # Tell the user that the code is opening a websocket connection and waiting for transaction prices to decrease.
 fragmentone = f'Waiting for the trading price of {pair[:3]} to drop {Decimal(drop)*100}%. '
 fragmenttwo = f'Going to buy {size} {pair[:3]} when it does. Grab a snickers...'
@@ -99,7 +104,7 @@ if deal.compare( cost ) == 1:
 
         # Calculate ask price (skim/premium).
         gain = 1 + Decimal(rise)
-        skim = Decimal( minimumask * gain ).quantize( Decimal('0.00') )
+        skim = Decimal( minimumask * gain ).quantize( tick )
         skim = str( skim )
 
         # Submit limit ask order.
@@ -124,8 +129,8 @@ if deal.compare( cost ) == 1:
 
             # cast Gemini's api transaction fee to decimal and calculate profits.
             apifees = Decimal( definer.apitransactionfee )
-            netcost = Decimal( cost * size * ( 1 + apifees ) ).quantize( Decimal('0.00') )
-            netgain = Decimal( gain * size * ( 1 - apifees ) ).quantize( Decimal('0.00') )
+            netcost = Decimal( cost * size * ( 1 + apifees ) ).quantize( tick )
+            netgain = Decimal( gain * size * ( 1 - apifees ) ).quantize( tick )
             surplus = netgain - netcost
 
             # log profits and report them via Discord alert.
