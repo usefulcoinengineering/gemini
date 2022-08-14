@@ -20,7 +20,7 @@ import libraries.definer as definer
 
 from libraries.logger import logger
 from libraries.informer import maximumbid
-from libraries.dealseeker import lastfall
+from libraries.dealseeker import askfall
 from libraries.frontrunner import bidorder
 from libraries.liquiditymaker import askorder
 from libraries.skimvalidator import confirmexecution
@@ -58,7 +58,7 @@ appalert ( f'{fragmentone}{fragmenttwo}')
 
 # Open websocket connection.
 # Wait for the trading price to fall.
-deal = lastfall( pair, drop )
+deal = askfall( pair, drop )
 
 # Get public market data on the highest bid in the orderbook using the Gemini REST API.
 cost = maximumbid( pair )

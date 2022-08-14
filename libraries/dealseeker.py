@@ -32,19 +32,19 @@ from libraries.messenger import appalert as appalert
 import libraries.definer as definer
 import libraries.authenticator as authenticator
 
-def lastfall (
+def askfall (
         pair: str,
         drop: str
         ) -> None:
     # Function Description:
     #  1. Open a websocket connection.
     #  2. Request L2 orderbook data.
-    #  3. Monitor the orderbook for a drop in last (i.e. the "last transaction price") for pair parameter specified.
-    #  4. Send an alert to a Discord channel using the messenger library's webhook when last falls.
+    #  3. Monitor the orderbook for a drop in asks (i.e. the "selling prices offered") for pair parameter specified.
+    #  4. Send an alert to a Discord channel using the messenger library's webhook when asks falls.
     #
     # Execution:
-    #   - from libraries.dealseeker import lastfall
-    #   - lastprice = lastfall( "BTCUSD", "0.004" )
+    #   - from libraries.dealseeker import askfall
+    #   - askprice = askfall( "BTCUSD", "0.004" )
 
     # Define dataset class.
     # Purpose: Stores the offers received during the websocket connection session.
