@@ -99,9 +99,9 @@ def bidrise (
                     # Exit loop if profitable.
                     # Return maximum bid.
                     if maximum.compare( rent ) == 1 :
-                        text = f'{pair} rose {grossmargin*100}% in price. '
-                        text = text + f'It is now {maximum:.2f} on Gemini. '
-                        text = text + f'Selling above {rent:.2f} is profitable.'
+                        text = f'{pair[:3]} rose {grossmargin*100}% in price. '
+                        text = text + f'It is now {maximum:.2f} {pair[3:]} on Gemini. '
+                        text = text + f'{pair[:3]} at {rent:.2f} {pair[3:]} is defined as profitable.'
                         logger.info( text )
                         appalert( text )
                         ws.close()
