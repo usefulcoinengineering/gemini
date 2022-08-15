@@ -51,6 +51,10 @@ def bidrise (
     # Establish websocket connection.
     ws = create_connection( request )
     ws.send( subscriptionrequest )
+
+    # Set default value for the maximum bid price to zero.
+    maximum = Decimal(0)
+    
     while True:
         newmessage = ws.recv()
         dictionary = json.loads( newmessage )
