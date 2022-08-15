@@ -14,4 +14,4 @@
 # Execution:
 # python3 ../stoplimitask.py ETHUSD
 
-python3 ../stoplimitask.py ETHUSD 0.001 1996.43 1976.43
+python3 ../stoplimitask.py ETHUSD 0.001 1976.43 1996.43
