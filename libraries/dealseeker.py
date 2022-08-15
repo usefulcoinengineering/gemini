@@ -68,7 +68,7 @@ def askfall (
 
     # Set default value for the minimum ask price to zero.
     minimum = Decimal(0)
-    
+
     while True:
         newmessage = ws.recv()
         dictionary = json.loads( newmessage )
@@ -105,7 +105,7 @@ def askfall (
                             continue
 
                     # Display impact of event information received.
-                    logger.info( f'{move:.2f}% off highs [{sessionmax}] : {pair} is {minimum} presently.' )
+                    logger.info( f'{move:.2f}% below highs [{sessionmax}] : {pair} is {minimum} presently.' )
 
                     # Define bargain (sale) price.
                     sale = Decimal( sessionmax * ( 1 - percentoff ) )
