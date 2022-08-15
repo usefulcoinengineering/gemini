@@ -41,6 +41,9 @@ else:
 
 # Make sure that the "sell price" is less than "stop price" as required by Gemini.
 if Decimal(sell).compare( Decimal(stop) ) == 1:
+    notice = f'The sale price {sell} {pair[3:]} cannot be larger than the stop price {stop} {pair[3:]}. '
+    logger.info ( f'{notice}' )
+    appalert ( f'{notice}' )
     sys.exit(1)
 
 # Get public market data on the lowest ask in the orderbook using the Gemini REST API.
