@@ -100,10 +100,11 @@ def bidrise (
                     
                     # Exit loop if profitable.
                     if maximumbid.compare( exitprice ) == 1 :
-                        text = f'{pair[:3]} above {exitprice:.2f} {pair[3:]} is defined as profitable.'
-                        text = text + f'It is now {maximumbid:.2f} {pair[3:]} on Gemini. Exiting loop and closing websocket.'
-                        logger.info( text )
-                        appalert( text )
+                        notice = f'Exiting loop and closing websocket. {pair[:3]} above {exitprice:.2f} {pair[3:]}. '
+                        notice = notice + f'It is now {maximumbid:.2f} {pair[3:]}. '
+                        notice = notice + f'This is sufficiently profitable to warrant submiting a stop limit order to lock in gains. '
+                        logger.info( notice )
+                        appalert( notice )
                         ws.close()
                         break
 
