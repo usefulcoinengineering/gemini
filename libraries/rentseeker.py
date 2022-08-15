@@ -94,7 +94,6 @@ def bidrise (
                             logger.info( f'{fragmentone}{fragmenttwo} The {fluctuated:.2f}% fluctuation is aberratic... Dumping!' )
                             dataset.pop()
                             continue
-                        continue
 
                     # Display impact of event information received.
                     logger.info( f'Traders are offering {maximumbid} for {pair[:3]}.' )    
