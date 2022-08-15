@@ -44,6 +44,9 @@ if len(sys.argv) == 5:
     size = sys.argv[2]
     drop = sys.argv[3]
     rise = sys.argv[4]
+else: 
+    logger.info ( f'command line parameters improperly specified. using default values for {pair}...' )
+    appalert ( f'command line parameters improperly specified. using default values {pair}...' )
 
 # Define tick size.
 list = definer.ticksizes
