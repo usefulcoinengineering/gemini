@@ -52,14 +52,16 @@ def bidrise (
     ws = create_connection( request )
     ws.send( subscriptionrequest )
 
-    # Set default value for the maximum bid price to zero.
-    maximum = Decimal(0)
+    # Set the highest bid to zero.
+    maximumbid = Decimal(0)
+
+    # Set bid price at which to exit the loop.
+    exitprice = Decimal(rise)
     
     while True:
         newmessage = ws.recv()
         dictionary = json.loads( newmessage )
-        grossmargin = Decimal( rise )
-
+        
         # Uncomment this statement to debug messages: logger.debug(dictionary)
 
         # Process "type": "update" messages with events only.
@@ -69,44 +71,43 @@ def bidrise (
 
                 # Rank bids and determine the highest bid among the changes in the Gemini L2 update response.
                 bidranking = [ Decimal(change[1]) for change in changes if change[0] == 'buy' ]
-                if bidranking != []:
-                    maximum = max(bidranking)
-                    dataset.append(maximum)
-
-                    # Define session minimum and average values.
-                    sessionmin = Decimal( min(dataset) )
-                    sessionavg = Decimal( statistics.mean(dataset) )
-
-                    # Calculate movement away from cost [if any].
-                    move = 100 * ( maximum - sessionmin ) / sessionmin
-
-                    # Determine how much the maximum deviates away from the session average.
+                if bidranking != [] :
+                    
+                    # Define highest offer price.
+                    maximumbid = max(bidranking)
+                    
+                    # Filter out aberrations.
+                    # Add to a defined dataset.
+                    dataset.append(maximumbid)
+                    
+                    # Determine how much the maximum bid fluctuated away from the session average.
                     # If it deviated by more than four standard deviations, then do nothing further.
-                    # Continue at the start of the loop.
-                    deviatedby = maximum - sessionavg
+                    # Continue at the start of the while loop.
+                    sessionavg = Decimal( statistics.mean(dataset) )
+                    fluctuated = 100 * ( maximumbid - sessionavg ) / sessionavg
+                    deviatedby = maximumbid - sessionavg
+                    deviatedby = abs(deviatedby)
                     if len(dataset) != 1:
                         if deviatedby.compare( 4 * statistics.stdev(dataset) ) == 1:
-                            logger.info( f'{move:.2f}% off lows [{sessionmin}] : {pair} is {maximum} presently. Aberration... The mean is: {sessionavg:.2f}. Dumping!' )
+                            fragmentone = f'{maximumbid} was offered to buy {pair[:3]}. '
+                            fragmenttwo = f'It is more than four standard deviations off the {sessionavg:.2f} session average. '
+                            logger.info( f'{fragmentone}{fragmenttwo} The {fluctuated:.2f}% fluctuation is aberratic... Dumping!' )
                             dataset.pop()
                             continue
+                        continue
 
                     # Display impact of event information received.
-                    logger.info( f'{move:.2f}% off lows [{sessionmin}] : {pair} is {maximum} presently.' )
-
-                    # Define profitable (rent) price.
-                    rent = Decimal( sessionmin * ( 1 + grossmargin ) )
-
+                    logger.info( f'Traders are offering {maximumbid} for {pair[:3]}.' )    
+                    
                     # Exit loop if profitable.
-                    # Return maximum bid.
-                    if maximum.compare( rent ) == 1 :
-                        text = f'{pair[:3]} rose {grossmargin*100}% in price. '
-                        text = text + f'It is now {maximum:.2f} {pair[3:]} on Gemini. '
-                        text = text + f'{pair[:3]} at {rent:.2f} {pair[3:]} is defined as profitable.'
+                    if maximumbid.compare( exitprice ) == 1 :
+                        text = f'{pair[:3]} above {exitprice:.2f} {pair[3:]} is defined as profitable.'
+                        text = text + f'It is now {maximumbid:.2f} {pair[3:]} on Gemini. Exiting loop and closing websocket.'
                         logger.info( text )
                         appalert( text )
                         ws.close()
                         break
 
     # Return value when profitable only.
-    if maximum.compare(0) == 1 : return maximum
+    if maximumbid.compare(0) == 1 : return maximumbid
     else: return False

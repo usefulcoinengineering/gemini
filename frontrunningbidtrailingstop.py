@@ -108,9 +108,9 @@ if poststatus:
     appalert ( f'{fragmentone}{fragmenttwo}' )
 
     # Open websocket connection.
-    # Wait for the trading price to rise.
+    # Wait for the trading price to rise to the trip price.
     # Close loop and continue executing this script when the price increase exceeds trip.
-    deal = bidrise( pair, trip )
+    deal = bidrise( pair, tripprice )
 
     # Submit Gemini "stop-limit" order. 
     # If in doubt about what's going on, refer to documentation here: https://docs.gemini.com/rest-api/#new-order.
