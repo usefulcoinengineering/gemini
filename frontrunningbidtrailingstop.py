@@ -101,8 +101,8 @@ if poststatus:
     stopprice = str( stopprice )
 
     # Tell the user that the code is opening a websocket connection and waiting for transaction prices to increase.
-    fragmentone = f'Waiting for the trading price of {pair[:3]} to increase {Decimal(trip)*100}%. '
-    fragmenttwo = f'Going to stop market sell {size} {pair[:3]} when it does. Grab a snickers...'
+    fragmentone = f'Waiting for the trading price of {pair[:3]} to increase {Decimal(trip)*100}% to {tripprice} {pair[3:]}. '
+    fragmenttwo = f'Going to stop market sell {size} {pair[:3]} at {stopprice} {pair[3:]} when it does. Grab a snickers...'
     logger.info ( f'{fragmentone}{fragmenttwo}' )
     appalert ( f'{fragmentone}{fragmenttwo}' )
 
