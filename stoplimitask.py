@@ -48,6 +48,8 @@ if Decimal(sell).compare( Decimal(stop) ) == 1:
 
 # Get public market data on the lowest ask in the orderbook using the Gemini REST API.
 sale = limitstop( pair, size, stop, sell )
+logger.info ( sale )
+appalert ( sale )
 
 # Report the response if there is one.
 if sale:
