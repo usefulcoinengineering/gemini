@@ -27,9 +27,9 @@ from libraries.messenger import appalert as appalert
 import libraries.definer as definer
 import libraries.authenticator as authenticator
 
-def bidrise (
+def exitprice (
         pair: str,
-        rise: str
+        exit: str
         ) -> None:
 
     # Define dataset class.
@@ -56,7 +56,7 @@ def bidrise (
     maximumbid = Decimal(0)
 
     # Set bid price at which to exit the loop.
-    exitprice = Decimal(rise)
+    exitprice = Decimal(exit)
     
     while True:
         newmessage = ws.recv()

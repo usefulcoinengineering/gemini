@@ -26,7 +26,7 @@ from decimal import Decimal
 import libraries.definer as definer
 
 from libraries.logger import logger
-from libraries.rentseeker import bidrise
+from libraries.bidmonitor import exitprice
 from libraries.frontrunner import bidorder
 from libraries.losspreventer import limitstop
 from libraries.skimvalidator import confirmexecution
@@ -109,7 +109,7 @@ if poststatus:
     # Open websocket connection.
     # Wait for the trading price to rise to the trip price.
     # Close loop and continue executing this script when the price increase exceeds trip.
-    deal = bidrise( pair, tripprice )
+    deal = exitprice( pair, tripprice )
 
     # Submit Gemini "stop-limit" order. 
     # If in doubt about what's going on, refer to documentation here: https://docs.gemini.com/rest-api/#new-order.

@@ -15,29 +15,29 @@ import requests
 from decimal import Decimal
 
 from libraries.logger import logger
-from libraries.rentseeker import bidrise
+from libraries.bidmonitor import exitprice
 from libraries.frontrunner import askorder
 from libraries.fillvalidator import confirmexecution
 
 
 # Set quote currency (USD in this case) budget.
 # This amount should exceed 20 cents ['0.00001' is the minimum for YFIUSD].
-# Configure price rise desired in decimal terms.
+# Configure exit price desired in decimal terms.
 # For example, 20 basis points is '0.002'. This covers Gemini API trading fees round trip!
 pair = 'YFIUSD'
 size = '0.07765'
-rise = '0.005'
+exit = '0.005'
 
 # Override defaults with command line parameters.
 if len(sys.argv) == 4:
     pair = sys.argv[1]
     size = sys.argv[2]
-    rise = sys.argv[3]
+    exit = sys.argv[3]
 
 # Open websocket connection.
 # Wait for bids to rise in price.
-logger.info(f'waiting for {pair} to rise {Decimal(rise)*100}% in price to sell {size} {pair[3:]} worth..')
-deal = bidrise( pair, rise )
+logger.info(f'waiting for {pair} to rise {Decimal(exit)*100}% in price to exit and sell {size} {pair[3:]} worth..')
+deal = exitprice( pair, exit )
 if deal:
 
     # Submit limit ask order.
