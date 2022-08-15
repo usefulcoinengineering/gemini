@@ -65,6 +65,10 @@ def askfall (
     # Establish websocket connection.
     ws = create_connection( request )
     ws.send( subscriptionrequest )
+
+    # Set default value for the minimum ask price to zero.
+    minimum = Decimal(0)
+    
     while True:
         newmessage = ws.recv()
         dictionary = json.loads( newmessage )
