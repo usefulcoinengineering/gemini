@@ -89,14 +89,14 @@ def bidrise (
                     deviatedby = abs(deviatedby)
                     if len(dataset) != 1:
                         if deviatedby.compare( 4 * statistics.stdev(dataset) ) == 1:
-                            fragmentone = f'{maximumbid} was offered to buy {pair[:3]}. '
-                            fragmenttwo = f'It is more than four standard deviations off the {sessionavg:.2f} session average. '
+                            fragmentone = f'A trader just offered {maximumbid} to buy {pair[:3]}. That bid is odd. '
+                            fragmenttwo = f'It is more than four standard deviations from average bids [{sessionavg:.2f}]. '
                             logger.info( f'{fragmentone}{fragmenttwo} The {fluctuated:.2f}% fluctuation is aberratic... Dumping!' )
                             dataset.pop()
                             continue
 
                     # Display impact of event information received.
-                    logger.info( f'Traders are offering {maximumbid} for {pair[:3]}.' )    
+                    logger.info( f'A trader just offered {maximumbid} to buy {pair[:3]}.' )    
                     
                     # Exit loop if profitable.
                     if maximumbid.compare( exitprice ) == 1 :
