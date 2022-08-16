@@ -56,8 +56,8 @@ logger.debug ( dump )
 # Share the JSON response.
 if sale["result"] == "error" :
 
-    logger.info ( f'{sale["reason"]} {sale["result"]}: {sale["message"]}' )
-    appalert ( f'{sale["reason"]} {sale["result"]}: {sale["message"]}' )
+    logger.info ( f'\"{sale["reason"]}\" {sale["result"]}: {sale["message"]}' )
+    appalert ( f'\"{sale["reason"]}\" {sale["result"]}: {sale["message"]}' )
 
     # Exit prematurely and let the shell know that execution wasn't clean.
     sys.exit(1) 
