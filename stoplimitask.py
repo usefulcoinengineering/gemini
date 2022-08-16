@@ -40,9 +40,11 @@ if len(sys.argv) == 5:
 else: 
     logger.debug ( f'command line parameters improperly specified. using default values for {pair}...' )
 
+# Get the highest bid in the orderbook.
+roof = maximumbid( pair )
+
 try:
-    # Get the highest bid in the orderbook.
-    roof = maximumbid( pair ).json()
+    roof.json()
 
 except ValueError as e:
 
