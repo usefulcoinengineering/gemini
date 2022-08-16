@@ -40,9 +40,8 @@ def maximumbid(
         logger.debug( f'bidprice: {bidprice}' )
         return str(bidprice)
 
+    # Send error alert and exit returning a boolean value of "False".
     appalert ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
-
-    # Exit returning a boolean value of "False".
     return False
 
     
