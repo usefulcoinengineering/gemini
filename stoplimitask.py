@@ -14,6 +14,7 @@
 # Execution:
 #   - Use the wrapper BASH script in the "tests" directory.
 
+from operator import contains
 import sys
 import json
 
@@ -49,6 +50,8 @@ if Decimal(sell).compare( Decimal(stop) ) == 1:
 
 # Get public market data on the lowest ask in the orderbook using the Gemini REST API.
 sale = limitstop( pair, size, stop, sell )
+if sale.status == 400 :
+    logger.debug ( "Error encountered.")
 sale = sale.json()
 dump = json.dumps( sale, sort_keys=True, indent=4, separators=(',', ': ') )
 logger.debug ( dump )
