@@ -35,7 +35,7 @@ orderstatus = islive( order )
 if order:
     # Tell the user the result.
     alertmessage = f'Order {order} is live on the Gemini orderbook. '
-    logger.debug = f'{alertmessage}' ; appalert ( f'{alertmessage}')
+    logger.debug ( f'{alertmessage}' ) ; appalert ( f'{alertmessage}')
 
     # Let the shell know we successfully made it this far!
     sys.exit(0)
@@ -43,7 +43,7 @@ if order:
 else: 
     # Tell the user the result.
     alertmessage = f'Order {order} is NOT live on the Gemini orderbook. '
-    logger.debug = f'{alertmessage}' ; appalert ( f'{alertmessage}')
+    logger.debug ( f'{alertmessage}' ) ; appalert ( f'{alertmessage}')
 
     # Let the shell know that the desired output was not received.
     sys.exit(1)
