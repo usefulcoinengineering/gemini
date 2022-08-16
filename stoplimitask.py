@@ -53,6 +53,11 @@ sell = Decimal( sell )
 stop = Decimal( roof * (1 - stop) )
 sell = Decimal( roof * (1 - sell) )
 
+# Record prices in logfile.
+logger.debug ( f'roof: {roof}' )
+logger.debug ( f'stop: {stop}' )
+logger.debug ( f'sell: {sell}' )
+
 # Make sure that the "sell price" is less than "stop price" as required by Gemini.
 if Decimal(sell).compare( Decimal(stop) ) == 1:
     notice = f'The sale price {sell} {pair[3:]} cannot be larger than the stop price {stop} {pair[3:]}. '
