@@ -45,6 +45,7 @@ roof = maximumbid( pair )
 
 try:
     json.loads(roof)
+
 except ValueError as e:
 
     # JSON not found.
