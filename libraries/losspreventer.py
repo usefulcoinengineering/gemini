@@ -17,8 +17,8 @@ import libraries.authenticator as authenticator
 def limitstop(
         pair: str,
         size: str,
-        trip: str,
-        stop: str
+        stop: str,
+        sell: str
     ) -> None:
 
     # Construct stop loss order payload.
@@ -30,8 +30,8 @@ def limitstop(
         'nonce': str(int(time.mktime(t.timetuple())*1000)),
         'symbol': pair,
         'amount': size,
-        'stop_price': trip,
-        'price': stop,
+        'stop_price': stop,
+        'price': sell,
         'side': 'sell',
         'type': 'exchange stop limit'
     }
