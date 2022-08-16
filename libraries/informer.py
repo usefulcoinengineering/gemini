@@ -31,7 +31,7 @@ def maximumbid(
     logger.debug ( datadump )
  
     try:    
-        datadump["result"]
+        response["result"]
 
     # On response error..
     except KeyError as e:
