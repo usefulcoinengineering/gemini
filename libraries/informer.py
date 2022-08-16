@@ -35,7 +35,7 @@ def maximumbid(
 
     # On response error..
     except KeyError as e:
-        appalert ( f'\"{datadump["reason"]}\" {datadump["result"]}: {datadump["message"]}' )
+        appalert ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
 
         # Exit returning a boolean value of "False".
         return False
