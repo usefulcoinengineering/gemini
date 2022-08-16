@@ -64,3 +64,30 @@ if stop.compare( roof ) == 1:
     notice = f'The stop price {stop} {pair[3:]} cannot be larger than the market price ~{roof} {pair[3:]}. '
     logger.debug ( f'{notice}' )
     sys.exit(1)
+
+# Get public market data on the lowest ask in the orderbook using the Gemini REST API.
+sale = limitstop( pair, size, stop, sell )
+
+# Share the response.
+if sale["result"] == "error" :
+
+    data = sale.json()
+    dump = json.dumps( data, sort_keys=True, indent=4, separators=(',', ': ') )
+
+    # Log JSON response.
+    logger.debug ( dump )
+    logger.info ( f'\"{sale["reason"]}\" {sale["result"]}: {sale["message"]}' )
+    appalert ( f'\"{sale["reason"]}\" {sale["result"]}: {sale["message"]}' )
+
+    # Exit prematurely and let the shell know that execution wasn't clean.
+    sys.exit(1) 
+
+else: 
+
+    fragmentone = f'A stop limit ask order for {size} {pair[:3]} was submitted to the Gemini orderbook. '
+    fragmenttwo = f'The stop price was set to {stop} {pair[3:]}. The sell price was set to {sell} {pair[3:]}.'
+    logger.info ( f'{fragmentone}{fragmenttwo}')
+    appalert ( f'{fragmentone}{fragmenttwo}')
+
+    # Let the shell know we successfully made it this far!
+    sys.exit(0)
