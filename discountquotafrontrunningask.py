@@ -16,7 +16,7 @@ import requests
 from decimal import Decimal
 
 from libraries.logger import logger
-from libraries.bidmonitor import exitprice
+from libraries.bidmonitor import bidrise
 from libraries.frontrunner import quotaask
 from libraries.fillvalidator import confirmexecution
 
@@ -38,7 +38,7 @@ if len(sys.argv) == 4:
 # Open websocket connection.
 # Wait for bids to rise in price.
 logger.info(f'waiting for {pair} to rise {Decimal(exit)*100}% in price to exit and sell {cash} {pair[3:]} worth..')
-deal = exitprice( pair, exit )
+deal = bidrise( pair, exit )
 if deal:
 
     # Submit limit ask order.

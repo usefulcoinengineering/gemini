@@ -27,7 +27,7 @@ from libraries.messenger import appalert as appalert
 import libraries.definer as definer
 import libraries.authenticator as authenticator
 
-def exitprice (
+def bidrise (
         pair: str,
         exit: str
         ) -> None:
@@ -56,7 +56,7 @@ def exitprice (
     maximumbid = Decimal(0)
 
     # Set bid price at which to exit the loop.
-    exitprice = Decimal(exit)
+    bidrise = Decimal(exit)
     
     while True:
         newmessage = ws.recv()
@@ -99,8 +99,8 @@ def exitprice (
                     logger.info( f'A trader just offered {maximumbid} to buy {pair[:3]}.' )    
                     
                     # Exit loop if profitable.
-                    if maximumbid.compare( exitprice ) == 1 :
-                        notice = f'Exiting loop and closing websocket. {pair[:3]} above {exitprice:.2f} {pair[3:]}. '
+                    if maximumbid.compare( bidrise ) == 1 :
+                        notice = f'Exiting loop and closing websocket. {pair[:3]} above {bidrise:.2f} {pair[3:]}. '
                         notice = notice + f'It is now {maximumbid:.2f} {pair[3:]}. '
                         notice = notice + f'This is sufficiently profitable to warrant submiting a stop limit order to lock in gains. '
                         logger.info( notice )
