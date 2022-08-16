@@ -60,9 +60,9 @@ stop = Decimal( roof * (1 - stop) ).quantize( tick )
 sell = Decimal( roof * (1 - sell) ).quantize( tick )
 
 # Record prices in logfile.
-logger.debug ( f'roof: {roof}' )
-logger.debug ( f'stop: {stop}' )
-logger.debug ( f'sell: {sell}' )
+logger.debug ( f'roofdump: {roof}' )
+logger.debug ( f'stopdump: {stop}' )
+logger.debug ( f'selldump: {sell}' )
 
 # Make sure that the "sell price" is less than "stop price" as required by Gemini.
 if Decimal(sell).compare( Decimal(stop) ) == 1:
@@ -77,7 +77,7 @@ if stop.compare( roof ) == 1:
     sys.exit(1)
 
 # Get public market data on the lowest ask in the orderbook using the Gemini REST API.
-sale = limitstop( pair, size, str(stop), str(sell) )
+sale = limitstop( str(pair), str(size), str(stop), str(sell) )
 if sale:
     fragmentone = f'A stop limit ask order for {size} {pair[:3]} was submitted to the Gemini orderbook. '
     fragmenttwo = f'The stop price was set to {stop} {pair[3:]}. The sell price was set to {sell} {pair[3:]}.'
