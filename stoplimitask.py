@@ -43,48 +43,27 @@ else:
 # Get the highest bid in the orderbook.
 roof = maximumbid( pair )
 
-try:
-    roof.json()
+# JSON not found.
+# Response is a price.
+# Cast decimal prices.
+roof = Decimal( roof )
+stop = Decimal( stop )
+sell = Decimal( sell )
 
-except ValueError as e:
+stop = Decimal( roof * (1 - stop) )
+sell = Decimal( roof * (1 - sell) )
 
-    # JSON not found.
-    # Response is a price.
-    # Cast decimal prices.
-    roof = Decimal( roof )
-    stop = Decimal( stop )
-    sell = Decimal( sell )
+# Make sure that the "sell price" is less than "stop price" as required by Gemini.
+if Decimal(sell).compare( Decimal(stop) ) == 1:
+    notice = f'The sale price {sell} {pair[3:]} cannot be larger than the stop price {stop} {pair[3:]}. '
+    logger.debug ( f'{notice}' )
+    sys.exit(1)
 
-    stop = Decimal( roof * (1 - stop) )
-    sell = Decimal( roof * (1 - sell) )
-
-    # Make sure that the "sell price" is less than "stop price" as required by Gemini.
-    if Decimal(sell).compare( Decimal(stop) ) == 1:
-        notice = f'The sale price {sell} {pair[3:]} cannot be larger than the stop price {stop} {pair[3:]}. '
-        logger.debug ( f'{notice}' )
-        sys.exit(1)
-
-    # Make sure that the "sell price" and the "stop price" are below the market price (ceiling/roof).
-    if stop.compare( roof ) == 1:
-        notice = f'The stop price {stop} {pair[3:]} cannot be larger than the market price ~{roof} {pair[3:]}. '
-        logger.debug ( f'{notice}' )
-        sys.exit(1)
-
-# Parse JSON response.
-dump = json.dumps( data, sort_keys=True, indent=4, separators=(',', ': ') )
-
-# Log it.
-logger.debug ( dump )
-
-# Check for errors.
-if roof["result"] == "error" :
-
-    # Send notifications.
-    logger.info ( f'\"{roof["reason"]}\" {roof["result"]}: {roof["message"]}' )
-    appalert ( f'\"{roof["reason"]}\" {roof["result"]}: {roof["message"]}' )
-
-    # Exit prematurely and let the shell know that execution wasn't clean.
-    sys.exit(1) 
+# Make sure that the "sell price" and the "stop price" are below the market price (ceiling/roof).
+if stop.compare( roof ) == 1:
+    notice = f'The stop price {stop} {pair[3:]} cannot be larger than the market price ~{roof} {pair[3:]}. '
+    logger.debug ( f'{notice}' )
+    sys.exit(1)
 
 # Get public market data on the lowest ask in the orderbook using the Gemini REST API.
 sale = limitstop( pair, size, stop, sell )
