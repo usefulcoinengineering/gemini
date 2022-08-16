@@ -65,3 +65,14 @@ if stop.compare( roof ) == 1:
     logger.debug ( f'{notice}' )
     sys.exit(1)
 
+# Get public market data on the lowest ask in the orderbook using the Gemini REST API.
+sale = limitstop( pair, size, stop, sell )
+if sale:
+    fragmentone = f'A stop limit ask order for {size} {pair[:3]} was submitted to the Gemini orderbook. '
+    fragmenttwo = f'The stop price was set to {stop} {pair[3:]}. The sell price was set to {sell} {pair[3:]}.'
+    logger.info ( f'{fragmentone}{fragmenttwo}')
+    appalert ( f'{fragmentone}{fragmenttwo}')
+
+    # Let the shell know we successfully made it this far!
+    sys.exit(0)
+else: sys.exit(1)

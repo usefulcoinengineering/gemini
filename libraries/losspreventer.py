@@ -10,6 +10,7 @@ import time
 from decimal import Decimal
 
 from libraries.logger import logger as logger
+from libraries.messenger import appalert as appalert
 
 import libraries.definer as definer
 import libraries.authenticator as authenticator
@@ -39,5 +40,20 @@ def limitstop(
 
     request = definer.restserver + endpoint
     response = requests.post(request, data = None, headers = headers['restheader'])
+    response = response.json()
+    datadump = json.dumps( response, sort_keys=True, indent=4, separators=(',', ': ') )
 
-    return response
+    # Write the dump to logs.
+    logger.debug ( datadump )
+ 
+    try:    
+        response["result"]
+
+    # Response error..
+    except KeyError as e:
+        appalert ( datadump )
+        return False
+
+    # Send result status and exit returning a boolean value of "True".
+    appalert ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
+    return True
