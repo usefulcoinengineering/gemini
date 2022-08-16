@@ -19,7 +19,7 @@ from decimal import Decimal
 import libraries.definer as definer
 
 from libraries.logger import logger
-from libraries.informer import maximumbid
+from libraries.pricegetter import maximumbid
 from libraries.askmonitor import askfall
 from libraries.frontrunner import bidorder
 from libraries.liquiditymaker import askorder

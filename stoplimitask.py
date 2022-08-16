@@ -20,7 +20,7 @@ import json
 from decimal import Decimal
 
 from libraries.logger import logger
-from libraries.informer import maximumbid
+from libraries.pricegetter import maximumbid
 from libraries.losspreventer import limitstop
 from libraries.messenger import appalert as appalert
 from libraries.definer import ticksizes as ticksizes

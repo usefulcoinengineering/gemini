@@ -17,7 +17,7 @@
 import sys
 
 from libraries.logger import logger
-from libraries.informer import minimumask
+from libraries.pricegetter import minimumask
 from libraries.messenger import appalert as appalert
 
 

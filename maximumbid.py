@@ -17,7 +17,7 @@
 import sys
 
 from libraries.logger import logger
-from libraries.informer import maximumbid
+from libraries.pricegetter import maximumbid
 from libraries.messenger import appalert as appalert
 
 
