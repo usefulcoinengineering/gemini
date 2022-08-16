@@ -60,15 +60,16 @@ def minimumask(
     # Write the dump to logs.
     logger.debug ( datadump )
 
-    # Send notice if error arises.
-    if datadump["result"] == "error" :
-        appalert ( f'\"{datadump["reason"]}\" {datadump["result"]}: {datadump["message"]}' )
+    try:    
+        response["result"]
 
-        # Exit returning a boolean value of "False".
-        return False
-
-    else:
+    # No response error..
+    except KeyError as e:
         # Update logs and return ask price as a string.
-        askprice = Decimal( response.json()['ask'] )
+        askprice = Decimal( response["ask"] )
         logger.debug( f'askprice: {askprice}' )
         return str(askprice)
+
+    # Send error alert and exit returning a boolean value of "False".
+    appalert ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
+    return False
