@@ -3,7 +3,7 @@
 # test name: stoplimitask.py
 # test author: munair simpson
 # test created: 20220815
-# test purpose: submit a "stop-limit" sell order the orderbook using Gemini's REST API.
+# test purpose: submit a "stop-limit" sell order to the orderbook using Gemini's REST API.
 
 
 # Detailed Description:
