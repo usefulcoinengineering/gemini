@@ -23,6 +23,7 @@ from libraries.logger import logger
 from libraries.informer import maximumbid
 from libraries.losspreventer import limitstop
 from libraries.messenger import appalert as appalert
+from libraries.definer import ticksizes as ticksizes
 
 
 # Set trading default trading pair in cause a BASH wrapper has not been used.
@@ -40,6 +41,11 @@ if len(sys.argv) == 5:
 else: 
     logger.debug ( f'command line parameters improperly specified. using default values for {pair}...' )
 
+# Determine tick size.
+list = ticksizes
+item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
+tick = Decimal( item[0] )
+
 # Get the highest bid in the orderbook.
 roof = maximumbid( pair )
 
@@ -50,8 +56,8 @@ roof = Decimal( roof )
 stop = Decimal( stop )
 sell = Decimal( sell )
 
-stop = Decimal( roof * (1 - stop) )
-sell = Decimal( roof * (1 - sell) )
+stop = Decimal( roof * (1 - stop) ).quantize( tick )
+sell = Decimal( roof * (1 - sell) ).quantize( tick )
 
 # Record prices in logfile.
 logger.debug ( f'roof: {roof}' )
