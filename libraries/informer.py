@@ -29,19 +29,21 @@ def maximumbid(
 
     # Write the dump to logs.
     logger.debug ( datadump )
+ 
+    try:    
+        datadump["result"]
 
-    # Send notice if error arises.
-    if response["result"] == "error" :
+    # On response error..
+    except KeyError as e:
         appalert ( f'\"{datadump["reason"]}\" {datadump["result"]}: {datadump["message"]}' )
 
         # Exit returning a boolean value of "False".
         return False
 
-    else:
-        # Update logs and return bid price as a string.
-        bidprice = Decimal( response.json()['bid'] )
-        logger.debug( f'bidprice: {bidprice}' )
-        return str(bidprice)
+    # Update logs and return bid price as a string.
+    bidprice = Decimal( response.json()['bid'] )
+    logger.debug( f'bidprice: {bidprice}' )
+    return str(bidprice)
 
 def minimumask(
         pair: str
@@ -58,7 +60,7 @@ def minimumask(
     logger.debug ( datadump )
 
     # Send notice if error arises.
-    if response["result"] == "error" :
+    if datadump["result"] == "error" :
         appalert ( f'\"{datadump["reason"]}\" {datadump["result"]}: {datadump["message"]}' )
 
         # Exit returning a boolean value of "False".
