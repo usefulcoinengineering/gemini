@@ -50,9 +50,8 @@ if Decimal(sell).compare( Decimal(stop) ) == 1:
 
 # Get public market data on the lowest ask in the orderbook using the Gemini REST API.
 sale = limitstop( pair, size, stop, sell )
+if "400" in sale: logger.debug ( "Error encountered.")
 sale = sale.json()
-if sale['status'] == "400" :
-    logger.debug ( "Error encountered.")
 dump = json.dumps( sale, sort_keys=True, indent=4, separators=(',', ': ') )
 logger.debug ( dump )
 
