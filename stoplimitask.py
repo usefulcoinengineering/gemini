@@ -38,26 +38,33 @@ if len(sys.argv) == 5:
     stop = sys.argv[3]
     sell = sys.argv[4]
 else: 
-    logger.info ( f'command line parameters improperly specified. using default values for {pair}...' )
-    appalert ( f'command line parameters improperly specified. using default values {pair}...' )
+    logger.debug ( f'command line parameters improperly specified. using default values for {pair}...' )
 
 # Make sure that the "sell price" is less than "stop price" as required by Gemini.
 if Decimal(sell).compare( Decimal(stop) ) == 1:
     notice = f'The sale price {sell} {pair[3:]} cannot be larger than the stop price {stop} {pair[3:]}. '
-    logger.info ( f'{notice}' )
-    appalert ( f'{notice}' )
+    logger.debug ( f'{notice}' )
     sys.exit(1)
 
 # Get public market data on the lowest ask in the orderbook using the Gemini REST API.
 sale = limitstop( pair, size, stop, sell )
-if "400" in sale: logger.debug ( "Error encountered.")
 sale = sale.json()
 dump = json.dumps( sale, sort_keys=True, indent=4, separators=(',', ': ') )
+
+# Log JSON response.
 logger.debug ( dump )
 
-# Report the response if there is one.
-if sale:
-    # Tell the user the result.
+# Share the JSON response.
+if sale["result"] == "error" :
+
+    logger.info ( f'{sale["reason"]} {sale["result"]}: {sale["message"]}' )
+    appalert ( f'{sale["reason"]} {sale["result"]}: {sale["message"]}' )
+
+    # Exit prematurely and let the shell know that execution wasn't clean.
+    sys.exit(1) 
+
+else: 
+
     fragmentone = f'A stop limit ask order for {size} {pair[:3]} was submitted to the Gemini orderbook. '
     fragmenttwo = f'The stop price was set to {stop} {pair[3:]}. The sell price was set to {sell} {pair[3:]}.'
     logger.info ( f'{fragmentone}{fragmenttwo}')
@@ -65,5 +72,3 @@ if sale:
 
     # Let the shell know we successfully made it this far!
     sys.exit(0)
-
-else: sys.exit(1)
