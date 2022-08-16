@@ -43,21 +43,13 @@ else:
 # Get the highest bid in the orderbook.
 roof = maximumbid( pair )
 
-# Share the response.
-if roof["result"] == "error" :
+try:
+    json.loads(roof)
+except ValueError as e:
 
-    data = roof.json()
-    dump = json.dumps( data, sort_keys=True, indent=4, separators=(',', ': ') )
-
-    # Log JSON response.
-    logger.debug ( dump )
-    logger.info ( f'\"{roof["reason"]}\" {roof["result"]}: {roof["message"]}' )
-    appalert ( f'\"{roof["reason"]}\" {roof["result"]}: {roof["message"]}' )
-
-    # Exit prematurely and let the shell know that execution wasn't clean.
-    sys.exit(1) 
-
-else:
+    # JSON not found.
+    # Response is a price.
+    # Cast decimal prices.
     roof = Decimal( roof )
     stop = Decimal( stop )
     sell = Decimal( sell )
@@ -76,6 +68,24 @@ else:
         notice = f'The stop price {stop} {pair[3:]} cannot be larger than the market price ~{roof} {pair[3:]}. '
         logger.debug ( f'{notice}' )
         sys.exit(1)
+
+# JSON response.
+# Parse it.
+data = roof.json()
+dump = json.dumps( data, sort_keys=True, indent=4, separators=(',', ': ') )
+
+# Log it.
+logger.debug ( dump )
+
+# Check for errors.
+if roof["result"] == "error" :
+
+    # Send notifications.
+    logger.info ( f'\"{roof["reason"]}\" {roof["result"]}: {roof["message"]}' )
+    appalert ( f'\"{roof["reason"]}\" {roof["result"]}: {roof["message"]}' )
+
+    # Exit prematurely and let the shell know that execution wasn't clean.
+    sys.exit(1) 
 
 # Get public market data on the lowest ask in the orderbook using the Gemini REST API.
 sale = limitstop( pair, size, stop, sell )
