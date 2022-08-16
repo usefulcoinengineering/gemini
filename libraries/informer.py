@@ -24,6 +24,7 @@ def maximumbid(
     # Get the highest bid in the orderbook.
     endpoint = '/v1/pubticker/' + pair
     response = requests.get( definer.restserver + endpoint )
+    response = response.json()
     datadump = json.dumps( response, sort_keys=True, indent=4, separators=(',', ': ') )
 
     # Write the dump to logs.
@@ -49,6 +50,7 @@ def minimumask(
     # Get the lowest ask in the orderbook.
     endpoint = '/v1/pubticker/' + pair
     response = requests.get( definer.restserver + endpoint )
+    response = response.json()
     datadump = json.dumps( response, sort_keys=True, indent=4, separators=(',', ': ') )
     
     
