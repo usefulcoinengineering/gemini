@@ -31,7 +31,7 @@ def maximumbid(
     logger.debug ( datadump )
 
     # Send notice if error arises.
-    if datadump["result"] == "error" :
+    if response["result"] == "error" :
         appalert ( f'\"{datadump["reason"]}\" {datadump["result"]}: {datadump["message"]}' )
 
         # Exit returning a boolean value of "False".
@@ -58,7 +58,7 @@ def minimumask(
     logger.debug ( datadump )
 
     # Send notice if error arises.
-    if datadump["result"] == "error" :
+    if response["result"] == "error" :
         appalert ( f'\"{datadump["reason"]}\" {datadump["result"]}: {datadump["message"]}' )
 
         # Exit returning a boolean value of "False".
