@@ -44,7 +44,7 @@ else:
 roof = maximumbid( pair )
 
 try:
-    json.loads(roof)
+    data = roof.json()
 
 except ValueError as e:
 
@@ -70,9 +70,7 @@ except ValueError as e:
         logger.debug ( f'{notice}' )
         sys.exit(1)
 
-# JSON response.
-# Parse it.
-data = roof.json()
+# Parse JSON response.
 dump = json.dumps( data, sort_keys=True, indent=4, separators=(',', ': ') )
 
 # Log it.
