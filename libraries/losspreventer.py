@@ -49,11 +49,10 @@ def limitstop(
     try:    
         response["result"]
 
-    # Response error..
+    # Return response.
     except KeyError as e:
-        appalert ( datadump )
-        return False
+        return datadump
 
     # Send result status and exit returning a boolean value of "True".
     appalert ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
-    return True
+    return False
