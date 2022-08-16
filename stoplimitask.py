@@ -42,8 +42,7 @@ else:
     logger.debug ( f'command line parameters improperly specified. using default values for {pair}...' )
 
 # Determine tick size.
-list = ticksizes
-item = [ item['tick'] for item in list if item['currency'] == pair[:3] ]
+item = [ item['tick'] for item in ticksizes if item['currency'] == pair[:3] ]
 tick = Decimal( item[0] )
 
 # Get the highest bid in the orderbook.
