@@ -31,16 +31,16 @@ def maximumbid(
     logger.debug ( datadump )
  
     try:    
-        response["result"]
+        response['result']
 
     # No response error..
     except KeyError as e:
         # Update logs and return bid price as a string.
-        bidprice = Decimal( response.json()['bid'] )
+        bidprice = Decimal( response['bid'] )
         logger.debug( f'bidprice: {bidprice}' )
         return str(bidprice)
 
-    appalert ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
+    appalert ( f'\"{response['reason']}\" {response['result']}: {response['message']}' )
 
     # Exit returning a boolean value of "False".
     return False
