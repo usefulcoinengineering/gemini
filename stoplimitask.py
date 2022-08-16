@@ -42,15 +42,15 @@ else:
 
 # Get the highest bid in the orderbook.
 roof = maximumbid( pair )
-data = roof.json()
-dump = json.dumps( data, sort_keys=True, indent=4, separators=(',', ': ') )
 
-# Log JSON response.
-logger.debug ( dump )
-
-# Share the JSON response.
+# Share the response.
 if roof["result"] == "error" :
 
+    data = roof.json()
+    dump = json.dumps( data, sort_keys=True, indent=4, separators=(',', ': ') )
+
+    # Log JSON response.
+    logger.debug ( dump )
     logger.info ( f'\"{roof["reason"]}\" {roof["result"]}: {roof["message"]}' )
     appalert ( f'\"{roof["reason"]}\" {roof["result"]}: {roof["message"]}' )
 
@@ -79,15 +79,15 @@ else:
 
 # Get public market data on the lowest ask in the orderbook using the Gemini REST API.
 sale = limitstop( pair, size, stop, sell )
-data = sale.json()
-dump = json.dumps( data, sort_keys=True, indent=4, separators=(',', ': ') )
 
-# Log JSON response.
-logger.debug ( dump )
-
-# Share the JSON response.
+# Share the response.
 if sale["result"] == "error" :
 
+    data = sale.json()
+    dump = json.dumps( data, sort_keys=True, indent=4, separators=(',', ': ') )
+
+    # Log JSON response.
+    logger.debug ( dump )
     logger.info ( f'\"{sale["reason"]}\" {sale["result"]}: {sale["message"]}' )
     appalert ( f'\"{sale["reason"]}\" {sale["result"]}: {sale["message"]}' )
 
