@@ -33,17 +33,19 @@ def maximumbid(
     try:    
         response["result"]
 
-    # On response error..
+    # No response error..
     except KeyError as e:
-        appalert ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
+        # Update logs and return bid price as a string.
+        bidprice = Decimal( response.json()['bid'] )
+        logger.debug( f'bidprice: {bidprice}' )
+        return str(bidprice)
 
-        # Exit returning a boolean value of "False".
-        return False
+    appalert ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
 
-    # Update logs and return bid price as a string.
-    bidprice = Decimal( response.json()['bid'] )
-    logger.debug( f'bidprice: {bidprice}' )
-    return str(bidprice)
+    # Exit returning a boolean value of "False".
+    return False
+
+    
 
 def minimumask(
         pair: str
