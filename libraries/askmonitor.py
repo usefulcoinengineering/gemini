@@ -9,7 +9,7 @@
 
 # Warning:
 #
-# This version of dealseeker is using synchronous communications. This may not be ideal.
+# This version of askmonitor is using synchronous communications. This may not be ideal.
 # If the messages are processed faster than they are received, this code is good. If not,
 # you are going to lose money.
 #
@@ -44,7 +44,7 @@ def askfall (
     #  4. Send an alert to a Discord channel using the messenger library's webhook when asks falls.
     #
     # Execution:
-    #   - from libraries.dealseeker import askfall
+    #   - from libraries.askmonitor import askfall
     #   - askprice = askfall( "BTCUSD", "0.004" )
 
     # Define dataset class.
