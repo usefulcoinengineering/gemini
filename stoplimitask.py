@@ -14,7 +14,6 @@
 # Execution:
 #   - Use the wrapper BASH script in the "tests" directory.
 
-from operator import contains
 import sys
 import json
 
