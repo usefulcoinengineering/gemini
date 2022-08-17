@@ -102,6 +102,9 @@ if 'filled' in poststatus.getvalue(): poststatus = True
 if poststatus:
     costprice = Decimal( orderprice.getvalue() )
 
+    # Cast stop as decimal.
+    stop = Decimal(stop)
+
     # Calculate exit price.
     exitratio = Decimal( 1 + stop + apifee )
     exitprice = Decimal( costprice * exitratio ).quantize( tick )
