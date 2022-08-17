@@ -48,11 +48,11 @@ def anchoredrise (
     #
     # Arguments:
     #  1. pair is the trading pair monitored.
-    #  2. rise is the rise in ask prices (specified in decimal terms) required to rise the loop and close the websocket.
+    #  2. rise is the actual price that must be exceeded to breach the loop and close the websocket.
     # 
     # Execution:
     #   - from libraries.bidmonitor import anchoredrise
-    #   - highestbid = anchoredrise( "BTCUSD", "0.004" )
+    #   - highestbid = anchoredrise( "BTCUSD", "25000" )
 
     # Define dataset class.
     # Purpose: Stores the offers received during the websocket connection session.
