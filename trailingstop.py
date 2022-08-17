@@ -180,7 +180,7 @@ if poststatus:
     ratiogain = str( f'{ratiogain}%' )
 
     # log profits and report them via Discord alert.
-    clause0 = f'There was a {ratiogain} profit/loss of {quotegain} {pair[3:]} '
+    clause0 = f'There was a {ratiogain}% profit/loss of {quotegain} {pair[3:]} '
     clause1 = f'from the sale of {size} {pair[:3]} at {Decimal(sellprice * size)} {pair[3:]} '
     clause2 = f'which cost {Decimal(costprice * size)} {pair[3:]} to acquire.'
     message = f'{clause0}{clause1}{clause2}'
