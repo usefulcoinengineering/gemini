@@ -135,7 +135,7 @@ if poststatus:
     logger.debug ( f'stop price: {stopprice}' )
     logger.debug ( f'sell price: {sellprice}' )
     logger.debug ( f'quote gain: {quotegain}' )
-    logger.debug ( f'ratio gain: {ratiogain}' )
+    logger.debug ( f'ratio gain: {ratiogain*100:.2f}%' )
 
     # Tell the user that the code is opening a websocket connection and waiting for transaction prices to increase.
     fragmentone = f'Waiting for the trading price of {pair[:3]} to increase {Decimal(stop)*100}% to {exitprice} {pair[3:]}. '
@@ -180,7 +180,7 @@ if poststatus:
     ratiogain = str( f'{ratiogain}%' )
 
     # log profits and report them via Discord alert.
-    clause0 = f'There was a {ratiogain}% profit/loss of {quotegain} {pair[3:]} '
+    clause0 = f'There was a {ratiogain*100:.2f}% profit/loss of {quotegain} {pair[3:]} '
     clause1 = f'from the sale of {size} {pair[:3]} at {Decimal(sellprice * size)} {pair[3:]} '
     clause2 = f'which cost {Decimal(costprice * size)} {pair[3:]} to acquire.'
     message = f'{clause0}{clause1}{clause2}'
