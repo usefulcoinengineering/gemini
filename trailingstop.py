@@ -162,6 +162,7 @@ if 'filled' in poststatus.getvalue() :
         # Wait. Cancel. New.
 
         # Calculate new sell/stop prices.
+        logger.debug ( f'exitprice: {exitprice}' )
         stopprice = Decimal( exitprice * stopratio )
         sellprice = Decimal( exitprice * sellratio )
         # Note: "costprice" is no longer used to set stop and sell prices.
