@@ -151,7 +151,7 @@ if 'filled' in poststatus.getvalue() :
     notification = notification + f'This stop limit order has a {sellprice} {pair[3:]} limit price to sell {size} {pair[:3]}. '
     notification = notification + f'Resulting in a {ratiogain:.2f}% gain if executed. '
     logger.debug ( f'{notification}' ) ; appalert ( f'{notification}' )
-    postresponse = limitstop( pair, size, stop, sell )
+    postresponse = limitstop( str(pair), str(size), str(stopprice), str(sellprice) )
     jsonresponse = postresponse.json()
     jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( jsondatadump )
@@ -178,7 +178,7 @@ if 'filled' in poststatus.getvalue() :
             orderstatus = cancelorder( jsonresponse['order_id'] )
 
             # Post updated stop-limit order.
-            postresponse = limitstop( pair, size, stop, sell )
+            postrepostresponse = limitstop( str(pair), str(size), str(stopprice), str(sellprice) )
             jsonresponse = postresponse.json()
             jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
             logger.debug ( jsondatadump )
