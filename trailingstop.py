@@ -152,7 +152,6 @@ if 'filled' in poststatus.getvalue() :
     notification = notification + f'Resulting in a {ratiogain:.2f}% gain if executed. '
     logger.debug ( f'{notification}' ) ; appalert ( f'{notification}' )
     postresponse = limitstop( str(pair), str(size), str(stopprice), str(sellprice) )
-    logger.debug ( postresponse )
     jsonresponse = postresponse.json()
     jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( jsondatadump )
@@ -169,6 +168,7 @@ if 'filled' in poststatus.getvalue() :
         # Note: The last transaction price exceeds the previous exit price creates the new exit price.
 
         # If stop still active.
+        logger.debug ( f'order: {jsonresponse["order_id"]}' )
         if islive( jsonresponse['order_id'] ) :
 
             # Open websocket connection.
