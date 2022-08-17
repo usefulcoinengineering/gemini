@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+#
+# library name: bidmonitor.py
+# library author: munair simpson
+# library created: 20220811
+# library purpose: continually monitor bid prices via Gemini's Websockets API.
 
 
 # Warning:
@@ -27,10 +32,27 @@ from libraries.messenger import appalert as appalert
 import libraries.definer as definer
 import libraries.authenticator as authenticator
 
-def bidrise (
+def anchoredrise (
         pair: str,
-        exit: str
+        rise: str
         ) -> None:
+
+    # Function Description:
+    #  1. Open a websocket connection.
+    #  2. Request L2 orderbook data.
+    #  3. Monitor the orderbook for a rise in bids (i.e. "prices offered to acquire the asset") for the pair specified.
+    #  4. Send an alert to a Discord channel via the messenger library's webhook when bid prices surpass the specified threshold.
+    #
+    # Function Purpose: 
+    #     Waiting for an absolute rise in bid prices.
+    #
+    # Arguments:
+    #  1. pair is the trading pair monitored.
+    #  2. rise is the rise in ask prices (specified in decimal terms) required to rise the loop and close the websocket.
+    # 
+    # Execution:
+    #   - from libraries.bidmonitor import anchoredrise
+    #   - highestbid = anchoredrise( "BTCUSD", "0.004" )
 
     # Define dataset class.
     # Purpose: Stores the offers received during the websocket connection session.
@@ -56,7 +78,7 @@ def bidrise (
     maximumbid = Decimal(0)
 
     # Set bid price at which to exit the loop.
-    bidrise = Decimal(exit)
+    anchoredrise = Decimal(rise)
     
     while True:
         newmessage = ws.recv()
@@ -99,8 +121,8 @@ def bidrise (
                     logger.info( f'A trader just offered {maximumbid} to buy {pair[:3]}.' )    
                     
                     # Exit loop if profitable.
-                    if maximumbid.compare( bidrise ) == 1 :
-                        notice = f'Exiting loop and closing websocket. {pair[:3]} above {bidrise:.2f} {pair[3:]}. '
+                    if maximumbid.compare( anchoredrise ) == 1 :
+                        notice = f'Exiting loop and closing websocket. {pair[:3]} above {anchoredrise:.2f} {pair[3:]}. '
                         notice = notice + f'It is now {maximumbid:.2f} {pair[3:]}. '
                         notice = notice + f'This is sufficiently profitable to warrant submiting a stop limit order to lock in gains. '
                         logger.info( notice )
