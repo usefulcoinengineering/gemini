@@ -133,7 +133,7 @@ if 'filled' in poststatus.getvalue() :
     logger.debug ( f'exit price: {exitprice}' )
     logger.debug ( f'stop price: {stopprice}' )
     logger.debug ( f'sell price: {sellprice}' )
-    logger.debug ( f'quote gain: {quotegain}' )
+    logger.debug ( f'quote gain: {quotegain} {pair[3:]}' )
     logger.debug ( f'ratio gain: {ratiogain:.2f}%' )
 
     # Explain the opening a websocket connection.
@@ -189,8 +189,6 @@ if 'filled' in poststatus.getvalue() :
             # Recalculate quote gain.
             quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
             ratiogain = Decimal( 100 * sellprice * size / costprice / size - 100 )
-            quotegain = str( quotegain )
-            ratiogain = str( f'{ratiogain}%' )
 
             # log profits and report them via Discord alert.
             clause0 = f'There was a {ratiogain:.2f}% profit/loss of {quotegain} {pair[3:]} '
