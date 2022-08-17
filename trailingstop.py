@@ -168,10 +168,10 @@ if poststatus:
         stopprice = Decimal( exitprice * stopratio )
         sellprice = Decimal( exitprice * sellratio )
         # Note: "costprice" is no longer used to set stop and sell prices.
-        # Note: The last transaction prices exceeds the previous exit price creates the new exit price.
+        # Note: The last transaction price exceeds the previous exit price creates the new exit price.
 
         # Update stop-limit order.
-        appalert ( "Should be updating stop order now, but the code isn't written." )
+        appalert ( "Should be using last price and updating stop order now, but the code isn't written." )
 
     # Recalculate quote gain.
     quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
