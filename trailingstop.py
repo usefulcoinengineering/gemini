@@ -141,8 +141,8 @@ if 'filled' in poststatus.getvalue() :
     notification = f'Waiting for the trading price of {pair[:3]} to increase {Decimal(stop)*100}% to {exitprice} {pair[3:]}. '
     logger.debug ( f'{notification}' ) ; appalert ( f'{notification}' )
 
-    # Open websocket connection. Wait for the trading price to rise to the exit price.
-    # Close loop and continue executing this script when the price increase exceeds trip.
+    # Open websocket connection. 
+    # Wait for the trading price to rise to the exit price.
     exitprice = anchoredrise( pair, exitprice )
 
     # Submit initial Gemini "stop-limit" order. 
