@@ -78,7 +78,7 @@ def anchoredrise (
     maximumbid = Decimal(0)
 
     # Set bid price at which to exit the loop.
-    anchoredrise = Decimal(rise)
+    targetprice = Decimal(rise)
     
     while True:
         newmessage = ws.recv()
@@ -118,16 +118,16 @@ def anchoredrise (
                             continue
 
                     # Display impact of event information received.
-                    logger.info( f'A trader just offered {maximumbid} to buy {pair[:3]}.' )    
+                    bidshortfall = 100 * ( targetprice - maximumbid ) / targetprice
+                    notification = f'A trader just offered {maximumbid} to buy {pair[:3]}. '
+                    notification = notification + f'That is {bidshortfall:.2f}% below {targetprice} {pair[3:]}. '
+                    logger.debug ( f'{notification}' )
                     
-                    # Exit loop if profitable.
-                    if maximumbid.compare( anchoredrise ) == 1 :
-                        notice = f'Exiting loop and closing websocket. {pair[:3]} above {anchoredrise:.2f} {pair[3:]}. '
-                        notice = notice + f'It is now {maximumbid:.2f} {pair[3:]}. '
-                        notice = notice + f'This is sufficiently profitable to warrant submiting a stop limit order to lock in gains. '
-                        logger.info( notice )
-                        appalert( notice )
-                        ws.close()
+                    # Exit loop on price (rise) target breach.
+                    if maximumbid.compare( targetprice ) == 1 :
+                        notification = f'Exiting loop and closing websocket: {pair[:3]} above {targetprice:.2f} {pair[3:]}. '
+                        notification = notification + f'It is now {maximumbid:.2f} {pair[3:]}. '
+                        logger.debug ( notification ) ; appalert( notification ) ; ws.close()
                         break
 
     # Return value when profitable only.
