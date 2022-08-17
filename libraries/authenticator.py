@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-
+#
+# library name: authenticator.py
+# library author: munair simpson
+# library created: 20220816
+# library purpose: authenticate payloads for private interations with Gemini API servers.
 
 import json
 import base64
