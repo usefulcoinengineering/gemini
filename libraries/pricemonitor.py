@@ -13,6 +13,6 @@ def on_message(ws, message):
     print(message)
 
 ws = websocket.WebSocketApp(
-    "wss://api.gemini.com/v1/marketdata/ensusd?top_of_book=true&bids=false",
+    "wss://api.gemini.com/v1/marketdata/btcusd?trades=true",
     on_message=on_message)
 ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
