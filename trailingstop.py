@@ -110,23 +110,18 @@ if poststatus:
     # Calculate exit price.
     exitratio = Decimal( 1 + stop + apifee )
     exitprice = Decimal( costprice * exitratio ).quantize( tick )
-    exitprice = str( exitprice )
     
     # Calculate stop price.
     stopratio = Decimal( 1 - stop )
     stopprice = Decimal( costprice * stopratio ).quantize( tick )
-    stopprice = str( stopprice )
 
     # Calculate sell price.
     sellratio = Decimal( 1 - sell - apifee )
     sellprice = Decimal( costprice * sellratio ).quantize( tick )
-    sellprice = str( sellprice )
 
     # Calculate quote gain.
     quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
     ratiogain = Decimal( 100 * sellprice * size / costprice * size - 100 )
-    quotegain = str( quotegain )
-    ratiogain = str( f'{ratiogain}%' )
 
     # Validate "stop price".
     if stopprice.compare( costprice ) == 1:
