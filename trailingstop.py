@@ -53,14 +53,14 @@ if len(sys.argv) == 5:
     stop = sys.argv[3]
     sell = sys.argv[4]
 else: 
-    logger.debug ( f'incorrect number of command line arguments. using default values for {pair} trailing...' )
+    logger.warning ( f'incorrect number of command line arguments. using default values for {pair} trailing...' )
 
 # Make sure "sell" is more than "stop".
 # Gemini requires this for stop ask orders:
 # The stop price must exceed the sell price.
 if Decimal(stop).compare( Decimal(sell) ) == 1:
     notification = f'The sale price {sell} {pair[3:]} cannot be larger than the stop price {stop} {pair[3:]}. '
-    logger.debug ( f'{notification}' )
+    logger.error ( f'{notification}' )
     sys.exit(1)
 
 # Determine Gemini API transaction fee.
@@ -126,7 +126,7 @@ if 'filled' in poststatus.getvalue() :
     if stopprice.compare( costprice ) == 1:
         # Make sure that the "stop price" is below the purchase price (i.e. "cost price").
         notification = f'The stop price {stop} {pair[3:]} cannot be larger than the purchase price of {costprice} {pair[3:]}. '
-        logger.debug ( f'{notification}' ) ; appalert ( f'{notification}' ) ; sys.exit(1)
+        logger.error ( f'{notification}' ) ; appalert ( f'{notification}' ) ; sys.exit(1)
 
     # Record parameters to logs.
     logger.debug ( f'cost price: {costprice}' )
@@ -203,4 +203,4 @@ if 'filled' in poststatus.getvalue() :
     # Let the shell know we successfully made it this far!
     sys.exit(0)
 
-else: logger.info ( f'bid order not filled.' ) ; appalert ( f'bid order not filled.' )
+else: logger.critical ( f'bid order not filled.' ) ; appalert ( f'bid order not filled.' )
