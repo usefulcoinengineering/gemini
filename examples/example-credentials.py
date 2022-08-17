@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
-
+#
+# example name: credentials.py
+# example author: munair simpson
+# example created: 20220816
+# example purpose: store sensitive information.
 
 # To deploy:
 #   1. Replace these variables with your Gemini API credentials.
 #   2. Move the file to the "libraries" folder.
-#   3. Change the file name to "credentials.py"
+#   3. Change the file name from "example-credentials.py" to "credentials.py".
+#   4. Make sure that "credentials.py" is added to the repository's .gitignore file.
 
 name = 'tester'
 key = 'account-wCyxf41Q3Ytavlkx0CSs'
