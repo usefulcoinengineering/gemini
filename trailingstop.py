@@ -102,7 +102,8 @@ if 'filled' in poststatus.getvalue(): poststatus = True
 if poststatus:
     costprice = Decimal( orderprice.getvalue() )
 
-    # Cast stop and sell as decimals.
+    # Cast decimals.
+    size = Decimal(size)
     stop = Decimal(stop)
     sell = Decimal(sell)
 
