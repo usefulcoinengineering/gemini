@@ -30,7 +30,6 @@ from libraries.logger import logger
 from libraries.bidmonitor import anchoredrise
 from libraries.orderchecker import islive
 from libraries.frontrunner import bidorder
-from libraries.lastmonitor import stoprise
 from libraries.losspreventer import limitstop
 from libraries.skimvalidator import confirmexecution
 from libraries.messenger import appalert as appalert
