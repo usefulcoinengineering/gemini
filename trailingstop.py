@@ -17,7 +17,6 @@
 # Execution:
 #   - Use the wrapper BASH script in the "strategies" directory.
 
-from mmap import ACCESS_DEFAULT
 import sys
 import json
 import requests
@@ -28,9 +27,10 @@ import libraries.definer as definer
 
 from libraries.logger import logger
 from libraries.bidmonitor import anchoredrise
-from libraries.orderchecker import islive
+from libraries.ordermanager import islive
 from libraries.frontrunner import bidorder
 from libraries.losspreventer import limitstop
+from libraries.ordermanager import cancelorder
 from libraries.skimvalidator import confirmexecution
 from libraries.messenger import appalert as appalert
 from libraries.definer import ticksizes as ticksizes
@@ -59,8 +59,8 @@ else:
 # Gemini requires this for stop ask orders:
 # The stop price must exceed the sell price.
 if Decimal(stop).compare( Decimal(sell) ) == 1:
-    notice = f'The sale price {sell} {pair[3:]} cannot be larger than the stop price {stop} {pair[3:]}. '
-    logger.debug ( f'{notice}' )
+    notification = f'The sale price {sell} {pair[3:]} cannot be larger than the stop price {stop} {pair[3:]}. '
+    logger.debug ( f'{notification}' )
     sys.exit(1)
 
 # Determine Gemini API transaction fee.
@@ -98,8 +98,7 @@ orderprice = Orderprice('')
 # Open websocket connection.
 # Determine if the bid order was filled.
 confirmexecution( orderid = jsonresponse['order_id'], poststatus = poststatus, orderprice = orderprice )
-if 'filled' in poststatus.getvalue(): poststatus = True
-if poststatus:
+if 'filled' in poststatus.getvalue() :
     costprice = Decimal( orderprice.getvalue() )
 
     # Cast decimals.
@@ -121,13 +120,13 @@ if poststatus:
 
     # Calculate quote gain.
     quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
-    ratiogain = Decimal( 100 * sellprice * size / costprice * size - 100 )
+    ratiogain = Decimal( 100 * sellprice * size / costprice / size - 100 ).quantize( tick )
 
     # Validate "stop price".
     if stopprice.compare( costprice ) == 1:
         # Make sure that the "stop price" is below the purchase price (i.e. "cost price").
-        notice = f'The stop price {stop} {pair[3:]} cannot be larger than the purchase price of {costprice} {pair[3:]}. '
-        logger.debug ( f'{notice}' ) ; appalert ( f'{notice}' ) ; sys.exit(1)
+        notification = f'The stop price {stop} {pair[3:]} cannot be larger than the purchase price of {costprice} {pair[3:]}. '
+        logger.debug ( f'{notification}' ) ; appalert ( f'{notification}' ) ; sys.exit(1)
 
     # Record parameters to logs.
     logger.debug ( f'cost price: {costprice}' )
@@ -137,54 +136,69 @@ if poststatus:
     logger.debug ( f'quote gain: {quotegain}' )
     logger.debug ( f'ratio gain: {ratiogain:.2f}%' )
 
-    # Tell the user that the code is opening a websocket connection and waiting for transaction prices to increase.
-    fragmentone = f'Waiting for the trading price of {pair[:3]} to increase {Decimal(stop)*100}% to {exitprice} {pair[3:]}. '
-    fragmenttwo = f'Going to submit a stop limit sell {size} {pair[:3]} at {stopprice} {pair[3:]} when it does. '
-    logger.info ( f'{fragmentone}{fragmenttwo}' ) ; appalert ( f'{fragmentone}{fragmenttwo}' )
+    # Explain the opening a websocket connection.
+    # Also explain the wait for an increase in the latest transaction prices beyond the "exitprice".
+    notification = f'Waiting for the trading price of {pair[:3]} to increase {Decimal(stop)*100}% to {exitprice} {pair[3:]}. '
+    logger.debug ( f'{notification}' ) ; appalert ( f'{notification}' )
 
-    # Open websocket connection.
-    # Wait for the trading price to rise to the exit price.
+    # Open websocket connection. Wait for the trading price to rise to the exit price.
     # Close loop and continue executing this script when the price increase exceeds trip.
     exitprice = anchoredrise( pair, exitprice )
 
-    # Submit Gemini "stop-limit" order. 
+    # Submit initial Gemini "stop-limit" order. 
     # If in doubt about what's going on, refer to documentation here: https://docs.gemini.com/rest-api/#new-order.
-    alertmessage = f'Submitting stop-limit (ask) order with a {stopprice} {pair[3:]} stop. '
-    alertmessage = alertmessage + f'This stop limit order a {sellprice} {pair[3:]} limit price to sell {size} {pair[:3]}. '
-    alertmessage = alertmessage + f'Resulting in a {ratiogain} if executed. '
-    logger.debug ( f'{alertmessage}' )
+    notification = f'Submitting initial stop-limit (ask) order with a {stopprice} {pair[3:]} stop. '
+    notification = notification + f'This stop limit order has a {sellprice} {pair[3:]} limit price to sell {size} {pair[:3]}. '
+    notification = notification + f'Resulting in a {ratiogain:.2f}% gain if executed. '
+    logger.debug ( f'{notification}' ) ; appalert ( f'{notification}' )
     postresponse = limitstop( pair, size, stop, sell )
     jsonresponse = postresponse.json()
     jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( jsondatadump )
 
-    # Loop until sold.
-    # Using the REST API to determine if the order was filled.
-    while islive :
+    # Open loop.
+    while True :
 
-        # Update exitprice.
-        # Use it set stop and sell prices.
-        exitprice = anchoredrise( pair, exitprice )
+        # Wait. Cancel. New.
+
+        # Calculate new sell/stop prices.
         stopprice = Decimal( exitprice * stopratio )
         sellprice = Decimal( exitprice * sellratio )
         # Note: "costprice" is no longer used to set stop and sell prices.
         # Note: The last transaction price exceeds the previous exit price creates the new exit price.
 
-        # Update stop-limit order.
-        appalert ( "Should be using last price and updating stop order now, but the code isn't written." )
+        # If stop still active.
+        if islive( jsonresponse['order_id'] ) :
 
-    # Recalculate quote gain.
-    quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
-    ratiogain = Decimal( 100 * sellprice * size / costprice * size - 100 )
-    quotegain = str( quotegain )
-    ratiogain = str( f'{ratiogain}%' )
+            # Open websocket connection.
+            # Wait for bids to exceed exitprice.
+            exitprice = anchoredrise( pair, exitprice )
 
-    # log profits and report them via Discord alert.
-    clause0 = f'There was a {ratiogain:.2f}% profit/loss of {quotegain} {pair[3:]} '
-    clause1 = f'from the sale of {size} {pair[:3]} at {Decimal(sellprice * size)} {pair[3:]} '
-    clause2 = f'which cost {Decimal(costprice * size)} {pair[3:]} to acquire.'
-    message = f'{clause0}{clause1}{clause2}'
-    logger.info ( message ) ; appalert ( message )
+            # Cancel outdated stop-limit order.
+            orderstatus = cancelorder( jsonresponse['order_id'] )
+
+            # Post updated stop-limit order.
+            postresponse = limitstop( pair, size, stop, sell )
+            jsonresponse = postresponse.json()
+            jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
+            logger.debug ( jsondatadump )
+            continue
+
+        else :
+
+            # Recalculate quote gain.
+            quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
+            ratiogain = Decimal( 100 * sellprice * size / costprice / size - 100 )
+            quotegain = str( quotegain )
+            ratiogain = str( f'{ratiogain}%' )
+
+            # log profits and report them via Discord alert.
+            clause0 = f'There was a {ratiogain:.2f}% profit/loss of {quotegain} {pair[3:]} '
+            clause1 = f'from the sale of {size} {pair[:3]} at {Decimal(sellprice * size)} {pair[3:]} '
+            clause2 = f'which cost {Decimal(costprice * size)} {pair[3:]} to acquire.'
+            message = f'{clause0}{clause1}{clause2}'
+            logger.info ( message ) ; appalert ( message )
+            break
 
     # Let the shell know we successfully made it this far!
     sys.exit(0)
