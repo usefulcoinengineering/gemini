@@ -168,7 +168,7 @@ if 'filled' in poststatus.getvalue() :
         # Note: "costprice" is no longer used to set stop and sell prices.
         # Note: The last transaction price exceeds the previous exit price creates the new exit price.
 
-        # If stop still active.
+        # If the stop limit order still active.
         logger.debug ( f'order: {jsonresponse["order_id"]}' )
         if islive( jsonresponse['order_id'] ) :
 
@@ -180,7 +180,7 @@ if 'filled' in poststatus.getvalue() :
             orderstatus = cancelorder( jsonresponse['order_id'] )
 
             # Post updated stop-limit order.
-            postrepostresponse = limitstop( str(pair), str(size), str(stopprice), str(sellprice) )
+            postresponse = limitstop( str(pair), str(size), str(stopprice), str(sellprice) )
             jsonresponse = postresponse.json()
             jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
             logger.debug ( jsondatadump )
