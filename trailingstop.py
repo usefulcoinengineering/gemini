@@ -58,7 +58,7 @@ else:
 # Make sure "sell" is more than "stop".
 # Gemini requires this for stop ask orders:
 # The stop price must exceed the sell price.
-if Decimal(sell).compare( Decimal(stop) ) == 1:
+if Decimal(stop).compare( Decimal(sell) ) == 1:
     notice = f'The sale price {sell} {pair[3:]} cannot be larger than the stop price {stop} {pair[3:]}. '
     logger.debug ( f'{notice}' )
     sys.exit(1)
