@@ -152,6 +152,7 @@ if 'filled' in poststatus.getvalue() :
     notification = notification + f'Resulting in a {ratiogain:.2f}% gain if executed. '
     logger.debug ( f'{notification}' ) ; appalert ( f'{notification}' )
     postresponse = limitstop( str(pair), str(size), str(stopprice), str(sellprice) )
+    logger.debug ( postresponse )
     jsonresponse = postresponse.json()
     jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( jsondatadump )
