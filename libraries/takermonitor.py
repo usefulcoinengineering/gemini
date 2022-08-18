@@ -28,11 +28,34 @@ def increasemonitor(
     logger.info(f'Looping until the last transaction price {pair[:3]} on Gemini exceeds: {exit} {pair[3:]}')
 
     # Define websocket functions.
-    def on_message( ws, message ) : logger.debug( message )  
-              
+    def on_open( ws ) : logger.info( f'{ws} connection opened.' )
+    def on_close( ws ) : logger.info( f'{ws} connection closed.' )
+    def on_error( ws, error ) : logger.error( error )
+    def on_message( ws, message, exit=exit ) : 
+        
+        logger.debug( message )
+        dictionary = json.loads( message )
+
+        # Remove comment to debug with: 
+        logger.debug( dictionary )
+
+        if isinstance(dictionary, list):
+            for dictionaryitem in dictionary:
+                events = dictionaryitem['events']
+                if isinstance(events, list):
+                    for eventitem in events:
+                        tradeprice = eventitem['price'] 
+                        if eventitem['makerSide'] == "ask" : takeraction = "paid for"
+                        if eventitem['makerSide'] == "bid" : takeraction = "sold for"
+                        logger.debug( f'{tradeprice} {pair[3:]} {takeraction} {pair[:3]}. ' )
+                        if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : ws.close()
+            
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
     logger.debug( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
     ws = websocket.WebSocketApp( connection,
+                                 on_open = on_open,
+                                 on_close = on_close,
+                                 on_error = on_error,
                                  on_message = on_message )
     ws.run_forever(sslopt={'cert_reqs': ssl.CERT_NONE})
