@@ -11,7 +11,7 @@ pip3 install boto3
 sudo timedatectl set-timezone America/Jamaica
 ```
 
-##Notes:
+## Notes:
 
 1. You need to edit credentials.py and add your real Gemini API credentials.
 2. You may need to change the timezone to your location. For example, if in Los Angeles, California (i.e. PST):
@@ -22,7 +22,7 @@ sudo timedatectl set-timezone America/Los_Angeles
 
 This will make it easier to read the logfiles.
 
-##Discord Support:
+## Discord Support:
 
 Edit credentials.py to include the webhook to a monitored Discord Channel:
 
@@ -30,7 +30,7 @@ Edit credentials.py to include the webhook to a monitored Discord Channel:
 discordwebhook = 'https://discord.com/api/webhooks/1006964160514502888/9I0BJ5kReoZ0NPGvwJklrHiivh12_sYe9wSJzht-wyWJJ1ilAMQs7y0TDBxFKpqyt_mO'
 ```
 
-##Amazon Support:
+## Amazon Support:
 
 The libraries no longer use SNS by default because it became very onerous to send messages with AWS. Sending messages 
 programmatically to a monitored Discord channel using webhooks is preferred. However, for those with a preference for 
