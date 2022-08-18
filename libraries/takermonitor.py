@@ -33,22 +33,22 @@ def increasemonitor(
     def on_error( ws, error ) : logger.error( error )
     def on_message( ws, message, exit=exit ) : 
         
-        logger.debug( message )
+        # Remove comment to debug with: logger.debug( message )
+        
         dictionary = json.loads( message )
-
-        # Remove comment to debug with: 
-        logger.debug( dictionary )
-
-        if isinstance(dictionary, list):
-            for dictionaryitem in dictionary:
-                events = dictionaryitem['events']
-                if isinstance(events, list):
-                    for eventitem in events:
-                        tradeprice = eventitem['price'] 
-                        if eventitem['makerSide'] == "ask" : takeraction = "paid for"
-                        if eventitem['makerSide'] == "bid" : takeraction = "sold for"
-                        logger.debug( f'{tradeprice} {pair[3:]} {takeraction} {pair[:3]}. ' )
-                        if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : ws.close()
+        events = dictionary['events']
+        if events == [] : 
+            logger.debug( f'no update events. perhaps this is the initial response from Gemini: [{message}] ' )
+        else:
+            # Capture the array of events to a list.
+            # Iterate through each event in the update.
+            if isinstance(events, list):
+                for event in events:
+                    tradeprice = event['price'] 
+                    if event['makerSide'] == "ask" : takeraction = "paid for"
+                    if event['makerSide'] == "bid" : takeraction = "sold for"
+                    logger.debug( f'{tradeprice} {pair[3:]} {takeraction} {pair[:3]}. ' )
+                    if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
