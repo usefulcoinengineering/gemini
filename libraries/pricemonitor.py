@@ -21,7 +21,7 @@ import json
 import decimal
 import websocket
 
-# from libraries.logger import logger as logger
+from libraries.logger import logger as logger
 # from libraries.messenger import appalert as appalert
 
 def on_message( ws, message ) : 
