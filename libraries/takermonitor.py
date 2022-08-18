@@ -29,7 +29,7 @@ def increasemonitor(
 
     # Define websocket functions.
     def on_open( ws ) : logger.info( f'{ws} connection opened.' )
-    def on_close( connection ) : logger.info( f'{connection} closed.' )
+    def on_close( ws, connection ) : logger.info( f'{ws} {connection} closed.' )
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, exit=exit ) : 
         
@@ -45,9 +45,10 @@ def increasemonitor(
             if isinstance(events, list):
                 for event in events:
                     tradeprice = event['price'] 
+                    trade = event['amount'] 
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'{tradeprice} {pair[3:]} taken to quickly {takeraction} {pair[:3]} hoard. '
+                    notification = f'{tradeprice} {pair[3:]} taken to quickly {takeraction} {pair[:3]} hoard by {trade} {pair[:3]} . '
                     logger.debug( f'{notification}' )
                     if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : 
                         notification = f'{exit} {pair[3:]} price level breached: {notification}. '
