@@ -111,9 +111,9 @@ def anchoredrise (
                     deviatedby = abs(deviatedby)
                     if len(dataset) != 1:
                         if deviatedby.compare( 4 * statistics.stdev(dataset) ) == 1:
-                            fragmentone = f'A trader just offered {maximumbid} to buy {pair[:3]}. That bid is odd. '
-                            fragmenttwo = f'It is more than four standard deviations from average bids [{sessionavg:.2f}]. '
-                            logger.info( f'{fragmentone}{fragmenttwo} The {fluctuated:.2f}% fluctuation is aberratic... Dumping!' )
+                            warningmessage = f'A trader just offered {maximumbid} to buy {pair[:3]}. That bid is odd. '
+                            warningmessage = warningmessage + f'It is more than four standard deviations from average bids [{sessionavg:.2f}]. '
+                            logger.warning ( f'{warningmessage} The {fluctuated:.2f}% fluctuation is aberratic... Dumping!' )
                             dataset.pop()
                             continue
 
