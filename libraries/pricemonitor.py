@@ -28,7 +28,7 @@ def on_message( ws, message ) :
     if message.json()["events"] == [] :
         print ( "probably just connected." )
     else : 
-        if message.json()["events"]["price"] == "1876" : return message
+        if message.json()["events"]["price"] >= "1876" : return message
 
 ws = websocket.WebSocketApp( "wss://api.gemini.com/v1/marketdata/btcusd?trades=true", on_message = on_message )
 ws.run_forever( sslopt = { "cert_reqs" : ssl.CERT_NONE } )
