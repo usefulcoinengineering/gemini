@@ -45,9 +45,11 @@ def increasemonitor(
             if isinstance(events, list):
                 for event in events:
                     tradeprice = event['price'] 
-                    if event['makerSide'] == "ask" : takeraction = "paid for"
-                    if event['makerSide'] == "bid" : takeraction = "sold for"
-                    logger.debug( f'{tradeprice} {pair[3:]} {takeraction} {pair[:3]}. ' )
+                    if event['makerSide'] == "ask" : takeraction = "increase"
+                    if event['makerSide'] == "bid" : takeraction = "decrease"
+                    trade = f'The trader accepted the {tradeprice} {pair[3:]} taker price. '
+                    trade = trade + f'A desire to quickly {takeraction} their {pair[:3]} hoard was satified. '
+                    logger.debug( trade )
                     if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : ws.close()
             
     # Establish websocket connection.
