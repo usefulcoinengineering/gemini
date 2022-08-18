@@ -9,18 +9,30 @@ sudo apt-get install --assume-yes python3-pip
 pip3 install websocket-client
 pip3 install boto3
 sudo timedatectl set-timezone America/Jamaica
+bash scripts/sethostname.bash
 ```
 
-## Notes:
+## Gemini API Credentials:
 
-1. You need to edit credentials.py and add your real Gemini API credentials.
-2. You may need to change the timezone to your location. For example, if in Los Angeles, California (i.e. PST):
+You need to edit credentials.py and add your real Gemini API credentials.
+
+## Timezone Support:
+
+You may need to change the timezone to your location. For example, if in Los Angeles, California (i.e. PST):
 
 ```bash
 sudo timedatectl set-timezone America/Los_Angeles
 ```
 
 This will make it easier to read the logfiles.
+
+## Hostname Configuration:
+
+It helps to name your AWS EC2 instance. To do so run the scripts/sethostname.bash BASH script:
+
+```bash
+bash scripts/sethostname.bash
+```
 
 ## Discord Support:
 
