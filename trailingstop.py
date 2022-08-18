@@ -162,22 +162,21 @@ if 'filled' in poststatus.getvalue() :
         # Wait. Cancel. New.
 
         # Calculate new sell/stop prices.
-        logger.debug ( f'exitprice: {exitprice}' )
         stopprice = Decimal( exitprice * stopratio )
         sellprice = Decimal( exitprice * sellratio )
         # Note: "costprice" is no longer used to set stop and sell prices.
         # Note: The last transaction price exceeds the previous exit price creates the new exit price.
 
         # If the stop limit order still active.
-        logger.debug ( f'order: {jsonresponse["order_id"]}' )
-        if islive( jsonresponse['order_id'] ) :
+        lastorder = jsonresponse['order_id']
+        if islive( lastorder ) :
 
             # Open websocket connection.
             # Wait for bids to exceed exitprice.
             exitprice = anchoredrise( pair, exitprice )
 
             # Cancel outdated stop-limit order.
-            orderstatus = cancelorder( jsonresponse['order_id'] )
+            orderstatus = cancelorder( lastorder )
 
             # Post updated stop-limit order.
             postresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) )
