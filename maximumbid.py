@@ -18,7 +18,7 @@ import sys
 
 from libraries.logger import logger
 from libraries.pricegetter import maximumbid
-from libraries.messenger import appalert as appalert
+from libraries.messenger import sendmessage as sendmessage
 
 
 # Set trading default trading pair in cause a BASH wrapper has not been used.
@@ -37,7 +37,7 @@ if cost:
     fragmentone = f'The highest bid for {pair[:3]} in the Gemini orderbook is: '
     fragmenttwo = f'{cost} {pair[3:]}.'
     logger.info ( f'{fragmentone}{fragmenttwo}')
-    appalert ( f'{fragmentone}{fragmenttwo}')
+    sendmessage ( f'{fragmentone}{fragmenttwo}')
 
     # Let the shell know we successfully made it this far!
     sys.exit(0)

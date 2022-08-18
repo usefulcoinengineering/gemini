@@ -11,7 +11,7 @@ import time
 from decimal import Decimal
 
 from libraries.logger import logger as logger
-from libraries.messenger import appalert as appalert
+from libraries.messenger import sendmessage as sendmessage
 
 import libraries.definer as definer
 import libraries.authenticator as authenticator
@@ -60,7 +60,7 @@ def confirmexecution(
         if exitstatus:
             ws.close()
             logger.info ( exitstatus )
-            appalert ( exitstatus )
+            sendmessage ( exitstatus )
             poststatus.setvalue( exitstatus )
 
     # Construct payload.

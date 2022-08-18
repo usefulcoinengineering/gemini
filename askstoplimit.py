@@ -20,11 +20,10 @@ import json
 from decimal import Decimal
 
 from libraries.logger import logger
-from libraries.pricegetter import maximumbid
 from libraries.stopper import askstoplimit
-from libraries.messenger import appalert as appalert
+from libraries.pricegetter import maximumbid
 from libraries.definer import ticksizes as ticksizes
-
+from libraries.messenger import sendmessage as sendmessage
 
 # Set trading default trading pair in cause a BASH wrapper has not been used.
 pair = 'BTCUSD'
@@ -84,8 +83,7 @@ datadump = json.dumps( response, sort_keys=True, indent=4, separators=(',', ': '
 logger.debug ( datadump )
 
 try:    
-    response["result"]
-    appalert ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
+    if response["result"] : sendmessage ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
 
 # Return response.
 except KeyError as e:
@@ -95,7 +93,7 @@ except KeyError as e:
 fragmentone = f'A stop limit ask order for {size} {pair[:3]} was submitted to the Gemini orderbook. '
 fragmenttwo = f'The stop price was set to {stop} {pair[3:]}. The sell price was set to {sell} {pair[3:]}.'
 logger.info ( f'{fragmentone}{fragmenttwo}')
-appalert ( f'{fragmentone}{fragmenttwo}')
+sendmessage ( f'{fragmentone}{fragmenttwo}')
 
 # Exit 0
 sys.exit(0)

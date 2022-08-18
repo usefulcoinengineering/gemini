@@ -18,7 +18,6 @@ import sys
 
 from libraries.logger import logger
 from libraries.ordermanager import cancelorder
-from libraries.messenger import appalert as appalert
 
 # Set trading default trading pair in cause a BASH wrapper has not been used.
 order = 136457975606
@@ -27,7 +26,7 @@ order = 136457975606
 if len(sys.argv) == 2 :
     order = sys.argv[1]
 else :
-    logger.debug ( f'incorrect number of command line arguments. using default value of {order}...' )
+    logger.error ( f'incorrect number of command line arguments. using default value of {order}...' )
 
 # Cancel order.
 orderstatus = cancelorder( order )

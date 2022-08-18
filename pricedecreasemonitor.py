@@ -17,7 +17,6 @@ import sys
 
 from libraries.logger import logger
 from libraries.takermonitor import decreasemonitor
-from libraries.messenger import appalert as appalert
 
 # Set default trading pair and loop exit price in case a BASH wrapper has not been used.
 pair = "ETHUSD"

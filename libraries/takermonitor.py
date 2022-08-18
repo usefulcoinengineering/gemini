@@ -13,7 +13,7 @@ import websocket
 from decimal import Decimal
 
 from libraries.logger import logger as logger
-from libraries.messenger import appalert as appalert
+from libraries.messenger import sendmessage as sendmessage
 
 def increasemonitor(
         pair: str,
@@ -52,7 +52,7 @@ def increasemonitor(
                     if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : 
                         notification = f'{exit} {pair[3:]} price level breached: {notification}. '
                         logger.info( notification )
-                        appalert( notification )
+                        sendmessage( notification )
                         ws.close()
             
     # Establish websocket connection.

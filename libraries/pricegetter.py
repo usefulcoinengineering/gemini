@@ -12,7 +12,7 @@ import json
 from decimal import Decimal
 
 from libraries.logger import logger as logger
-from libraries.messenger import appalert as appalert
+from libraries.messenger import sendmessage as sendmessage
 
 import libraries.definer as definer
 import libraries.authenticator as authenticator
@@ -41,7 +41,7 @@ def maximumbid(
         return str(bidprice)
 
     # Send error alert and exit returning a boolean value of "False".
-    appalert ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
+    sendmessage ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
     return False
 
     
@@ -71,5 +71,5 @@ def minimumask(
         return str(askprice)
 
     # Send error alert and exit returning a boolean value of "False".
-    appalert ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
+    sendmessage ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
     return False

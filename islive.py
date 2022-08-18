@@ -18,7 +18,6 @@ import sys
 
 from libraries.logger import logger
 from libraries.ordermanager import islive
-from libraries.messenger import appalert as appalert
 
 # Set trading default trading pair in cause a BASH wrapper has not been used.
 order = 136457975606

@@ -32,7 +32,7 @@ from libraries.frontrunner import bidorder
 from libraries.stopper import askstoplimit
 from libraries.ordermanager import cancelorder
 from libraries.skimvalidator import confirmexecution
-from libraries.messenger import appalert as appalert
+from libraries.messenger import sendmessage as sendmessage
 from libraries.definer import ticksizes as ticksizes
 
 # Set bid size in the base currency (BTC in this case).
@@ -126,7 +126,7 @@ if 'filled' in poststatus.getvalue() :
     if stopprice.compare( costprice ) == 1:
         # Make sure that the "stop price" is below the purchase price (i.e. "cost price").
         notification = f'The stop price {stop} {pair[3:]} cannot be larger than the purchase price of {costprice} {pair[3:]}. '
-        logger.error ( f'{notification}' ) ; appalert ( f'{notification}' ) ; sys.exit(1)
+        logger.error ( f'{notification}' ) ; sendmessage ( f'{notification}' ) ; sys.exit(1)
 
     # Record parameters to logs.
     logger.debug ( f'cost price: {costprice}' )
@@ -139,7 +139,7 @@ if 'filled' in poststatus.getvalue() :
     # Explain the opening a websocket connection.
     # Also explain the wait for an increase in the latest transaction prices beyond the "exitprice".
     notification = f'Waiting for the trading price of {pair[:3]} to increase {Decimal(stop)*100}% to {exitprice} {pair[3:]}. '
-    logger.debug ( f'{notification}' ) ; appalert ( f'{notification}' )
+    logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
 
     # Open websocket connection. 
     # Wait for the trading price to rise to the exit price.
@@ -150,7 +150,7 @@ if 'filled' in poststatus.getvalue() :
     notification = f'Submitting initial stop-limit (ask) order with a {stopprice} {pair[3:]} stop. '
     notification = notification + f'This stop limit order has a {sellprice} {pair[3:]} limit price to sell {size} {pair[:3]}. '
     notification = notification + f'Resulting in a {ratiogain:.2f}% gain if executed. '
-    logger.debug ( f'{notification}' ) ; appalert ( f'{notification}' )
+    logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
     postresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) )
     jsonresponse = postresponse.json()
     jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
@@ -199,10 +199,10 @@ if 'filled' in poststatus.getvalue() :
             clause1 = f'from the sale of {size} {pair[:3]} at {Decimal(sellprice * size)} {pair[3:]} '
             clause2 = f'which cost {Decimal(costprice * size)} {pair[3:]} to acquire.'
             message = f'{clause0}{clause1}{clause2}'
-            logger.info ( message ) ; appalert ( message )
+            logger.info ( message ) ; sendmessage ( message )
             break
 
     # Let the shell know we successfully made it this far!
     sys.exit(0)
 
-else: logger.critical ( f'bid order not filled.' ) ; appalert ( f'bid order not filled.' )
+else: logger.critical ( f'bid order not filled.' ) ; sendmessage ( f'bid order not filled.' )

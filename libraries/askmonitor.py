@@ -28,7 +28,7 @@ from decimal import Decimal
 from websocket import create_connection
 
 from libraries.logger import logger as logger
-from libraries.messenger import appalert as appalert
+from libraries.messenger import sendmessage as sendmessage
 
 import libraries.definer as definer
 import libraries.authenticator as authenticator
@@ -126,7 +126,7 @@ def floatingfall (
                         text = text + f'It is now {minimumask:.2f} {pair[3:]} on Gemini. '
                         text = text + f'{pair[:3]} at {sale:.2f} {pair[3:]} or lower is defined as a deal.'
                         logger.info( text )
-                        appalert( text )
+                        sendmessage( text )
                         ws.close()
                         break
 
@@ -227,7 +227,7 @@ def anchoredfall (
                         text = text + f'It is now {minimumask:.2f} {pair[3:]} on Gemini. '
                         text = text + f'{pair[:3]} at {sale:.2f} {pair[3:]} or lower is defined as a deal.'
                         logger.info( text )
-                        appalert( text )
+                        sendmessage( text )
                         ws.close()
                         break
 

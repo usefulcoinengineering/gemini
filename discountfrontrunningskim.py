@@ -24,7 +24,7 @@ from libraries.askmonitor import floatingfall
 from libraries.frontrunner import bidorder
 from libraries.liquiditymaker import askorder
 from libraries.skimvalidator import confirmexecution
-from libraries.messenger import appalert as appalert
+from libraries.messenger import sendmessage as sendmessage
 
 
 # Set bid size in the base currency (BTC in this case). You will accumulate USD.
@@ -46,7 +46,7 @@ if len(sys.argv) == 5:
     rise = sys.argv[4]
 else: 
     logger.info ( f'command line parameters improperly specified. using default values for {pair}...' )
-    appalert ( f'command line parameters improperly specified. using default values {pair}...' )
+    sendmessage ( f'command line parameters improperly specified. using default values {pair}...' )
 
 # Define tick size.
 list = definer.ticksizes
@@ -57,7 +57,7 @@ tick = Decimal( item[0] )
 fragmentone = f'Waiting for the trading price of {pair[:3]} to drop {Decimal(drop)*100}%. '
 fragmenttwo = f'Going to buy {size} {pair[:3]} when it does. Grab a snickers...'
 logger.info ( f'{fragmentone}{fragmenttwo}')
-appalert ( f'{fragmentone}{fragmenttwo}')
+sendmessage ( f'{fragmentone}{fragmenttwo}')
 
 # Open websocket connection.
 # Wait for the trading price to fall.
@@ -142,10 +142,10 @@ if deal.compare( cost ) == 1:
             clause2 = f'which cost {netcost} {pair[3:]} to acquire.'
             message = f'{clause0}{clause1}{clause2}'
             logger.info ( message )
-            appalert ( message )
+            sendmessage ( message )
 
         # Let the shell know we successfully made it this far!
         sys.exit(0)
 
     else: sys.exit(1)
-else: logger.info ( f'{txt1}{txt2}' ) ; appalert ( f'{txt1}{txt2}' )
+else: logger.info ( f'{txt1}{txt2}' ) ; sendmessage ( f'{txt1}{txt2}' )

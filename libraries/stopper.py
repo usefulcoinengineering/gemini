@@ -10,7 +10,7 @@ import time
 from decimal import Decimal
 
 from libraries.logger import logger as logger
-from libraries.messenger import appalert as appalert
+from libraries.messenger import sendmessage as sendmessage
 
 import libraries.definer as definer
 import libraries.authenticator as authenticator

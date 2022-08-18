@@ -27,7 +27,7 @@ from decimal import Decimal
 from websocket import create_connection
 
 from libraries.logger import logger as logger
-from libraries.messenger import appalert as appalert
+from libraries.messenger import sendmessage as sendmessage
 
 import libraries.definer as definer
 import libraries.authenticator as authenticator
@@ -127,7 +127,7 @@ def anchoredrise (
                     if maximumbid.compare( targetprice ) == 1 :
                         notification = f'Exiting loop and closing websocket: {pair[:3]} above {targetprice:.2f} {pair[3:]}. '
                         notification = notification + f'It is now {maximumbid:.2f} {pair[3:]}. '
-                        logger.debug ( notification ) ; appalert( notification ) ; ws.close()
+                        logger.debug ( notification ) ; sendmessage( notification ) ; ws.close()
                         break
 
     # Return value when profitable only.
