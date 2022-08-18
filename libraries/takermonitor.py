@@ -31,14 +31,8 @@ def increasemonitor(
     def on_open( ws ) : logger.info( f'{ws} connection opened.' )
     def on_close( ws ) : logger.info( f'{ws} connection closed.' )
     def on_error( ws, error ) : logger.error( error )
-    def on_message( ws, message, exit=exit ) : 
-        
-        logger.debug( message )
-        dictionary = json.loads( message )
-
-        # Remove comment to debug with: 
-        logger.debug( dictionary )
-            
+    def on_message( ws, message ) : logger.debug( message )  
+              
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
     logger.debug( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
