@@ -12,4 +12,13 @@
 # Execution:
 # python3 ../priceincreasemonitor.py ETHUSD 24000
 
-python3 ../priceincreasemonitor.py ETHUSD 2400
+tradingpair="ETHUSD"
+tradingexit="2400"
+
+read -p "type (trading) pair or press enter to continue with default [$tradingpair]: " tradingpair
+read -p "type (trading price level) exit or press enter to continue with default [$tradingexit]: " tradingexit
+
+tradingpair=${tradingpair:-ETHUSD}
+tradingexit=${tradingexit:-2400}
+
+python3 ../priceincreasemonitor.py $tradingpair $tradingexit
