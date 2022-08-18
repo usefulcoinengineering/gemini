@@ -25,11 +25,8 @@ from libraries.messenger import appalert as appalert
 
 def on_message( ws, message ) : 
     print ( message )
-    try :
-        if message.json()["events"]["price"] == "1876" : 
-    except KeyError as e :
-        logger.critical ( f'KeyError: {e}' )
-        sys.exit(1)
+    if message.json()["events"] == [] : continue
+    else : if message.json()["events"]["price"] == "1876" : break
 
 ws = websocket.WebSocketApp( "wss://api.gemini.com/v1/marketdata/btcusd?trades=true", on_message = on_message )
 ws.run_forever( sslopt = { "cert_reqs" : ssl.CERT_NONE } )
