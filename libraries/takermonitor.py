@@ -19,7 +19,7 @@ def increasemonitor(
         pair: str,
         exit: str,
         tradeprice: str,
-        trademaker: str
+        tradetaker: str
     ) -> None:
 
     urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair
@@ -33,14 +33,32 @@ def increasemonitor(
     def on_open( ws ) : logger.info( f'{ws} connection opened.' )
     def on_close( ws ) : logger.info( f'{ws} connection closed.' )
     def on_error( ws, error ) : logger.error( error )
-    def on_message( ws, message, exit=exit ) : logger.info ( exit + ": " + message )
+    def on_message( ws, message, exit=exit ) : 
         
+        dictionary = json.loads( message )
+
+        # Remove comment to debug with: 
+        logger.debug( dictionary )
+
+        if isinstance(dictionary, list):
+            for dictionaryitem in dictionary:
+                events = dictionaryitem['events']
+                if isinstance(events, list):
+                    for eventitem in events:
+                        tradeprice.setvalue( eventitem['price'] )
+                        if eventitem['makerSide'] == "ask" : tradetaker.setvalue( "paid for" )
+                        if eventitem['makerSide'] == "bid" : tradetaker.setvalue( "sold for" )
+                        logger.debug( f'{tradeprice} {pair[3:]} {tradetaker} {pair[:3]}. ' )
+
+        if tradeprice: 
+            if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : ws.close()
+            
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
     logger.debug( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
     ws = websocket.WebSocketApp( connection,
                                  on_open = on_open,
-                                 on_message = on_message,
+                                 on_close = on_close,
                                  on_error = on_error,
-                                 on_close = on_close )
+                                 on_message = on_message )
     ws.run_forever(sslopt={'cert_reqs': ssl.CERT_NONE})
