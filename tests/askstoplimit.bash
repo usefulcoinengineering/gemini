@@ -1,9 +1,9 @@
 #! /bin/bash
 #
-# script name: stoplimitask.bash
+# script name: askstoplimit.bash
 # script author: munair simpson
 # script created: 20220815
-# script purpose: wrapper for stoplimitask.py
+# script purpose: wrapper for askstoplimit.py
 
 # Submit a "stop-limit" sell order the orderbook using Gemini's REST API:
 # Parameter 0 is the pair.
@@ -12,6 +12,6 @@
 # Parameter 3 is the sell.
 
 # Execution:
-# python3 ../stoplimitask.py ETHUSD
+# python3 ../askstoplimit.py ETHUSD
 
-python3 ../stoplimitask.py ETHUSD 0.001 0.0050 0.0100
+python3 ../askstoplimit.py ETHUSD 0.001 0.0050 0.0100

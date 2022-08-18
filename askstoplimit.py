@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# test name: stoplimitask.py
+# test name: askstoplimit.py
 # test author: munair simpson
 # test created: 20220815
 # test purpose: submit a "stop-limit" sell order to the orderbook using Gemini's REST API.
@@ -75,14 +75,27 @@ if stop.compare( roof ) == 1:
     logger.debug ( f'{notice}' )
     sys.exit(1)
 
-# Get public market data on the lowest ask in the orderbook using the Gemini REST API.
-sale = askstoplimit( str(pair), str(size), str(stop), str(sell) )
-if sale:
-    fragmentone = f'A stop limit ask order for {size} {pair[:3]} was submitted to the Gemini orderbook. '
-    fragmenttwo = f'The stop price was set to {stop} {pair[3:]}. The sell price was set to {sell} {pair[3:]}.'
-    logger.info ( f'{fragmentone}{fragmenttwo}')
-    appalert ( f'{fragmentone}{fragmenttwo}')
+# Submit stop sell order to the orderbook using the Gemini REST API.
+response = askstoplimit( str(pair), str(size), str(stop), str(sell) )
+response = response.json()
+datadump = json.dumps( response, sort_keys=True, indent=4, separators=(',', ': ') )
 
-    # Let the shell know we successfully made it this far!
-    sys.exit(0)
-else: sys.exit(1)
+# Write the dump to logs.
+logger.debug ( datadump )
+
+try:    
+    response["result"]
+    appalert ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
+
+# Return response.
+except KeyError as e:
+    logger.critical ( f'KeyError: {e}' )
+    sys.exit(1)
+
+fragmentone = f'A stop limit ask order for {size} {pair[:3]} was submitted to the Gemini orderbook. '
+fragmenttwo = f'The stop price was set to {stop} {pair[3:]}. The sell price was set to {sell} {pair[3:]}.'
+logger.info ( f'{fragmentone}{fragmenttwo}')
+appalert ( f'{fragmentone}{fragmenttwo}')
+
+# Exit 0
+sys.exit(0)
