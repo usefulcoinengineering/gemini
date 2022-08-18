@@ -60,10 +60,9 @@ def cancelorder(
     request = definer.restserver + endpoint
 
     response = requests.post(request, data = None, headers = headers['restheader'])
-    response = response.json()['is_cancelled']
 
     # Update logs.
-    if response : logger.debug( f'{order} was cancelled. ' )
+    if response.json()['is_cancelled'] : logger.debug( f'{order} was cancelled. ' )
     else : logger.debug( f'unable to cancel {order}. ' )
 
     return response
