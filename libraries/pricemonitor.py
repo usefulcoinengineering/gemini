@@ -25,7 +25,8 @@ from libraries.messenger import appalert as appalert
 
 def on_message( ws, message ) : 
     print ( message )
-    if message.json()["events"] == [] : continue
+    if message.json()["events"] == [] :
+        print ( "probably just connected." )
     else : 
         if message.json()["events"]["price"] == "1876" : break
 
