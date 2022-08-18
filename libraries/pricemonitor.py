@@ -20,8 +20,8 @@ import ssl
 import json
 import websocket
 
-from libraries.logger import logger as logger
-from libraries.messenger import appalert as appalert
+# from libraries.logger import logger as logger
+# from libraries.messenger import appalert as appalert
 
 def on_message( ws, message ) : 
     print ( message )
