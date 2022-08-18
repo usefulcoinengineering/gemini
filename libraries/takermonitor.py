@@ -28,17 +28,11 @@ def increasemonitor(
     logger.info(f'Looping until the last transaction price {pair[:3]} on Gemini exceeds: {exit} {pair[3:]}')
 
     # Define websocket functions.
-    def on_open( ws ) : logger.info( f'{ws} connection opened.' )
-    def on_close( ws ) : logger.info( f'{ws} connection closed.' )
-    def on_error( ws, error ) : logger.error( error )
     def on_message( ws, message ) : logger.debug( message )  
               
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
     logger.debug( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
     ws = websocket.WebSocketApp( connection,
-                                 on_open = on_open,
-                                 on_close = on_close,
-                                 on_error = on_error,
                                  on_message = on_message )
     ws.run_forever(sslopt={'cert_reqs': ssl.CERT_NONE})
