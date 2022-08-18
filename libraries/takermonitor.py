@@ -24,12 +24,18 @@ def increasemonitor(
     parameters = "?trades=true"
     connection = urlrequest + parameters
 
+    close_status_code = 'OK'
+    close_msg = f'{connection} connection closed.'
+    # Close connection arguments.
+    # Reference: https://pypi.org/project/websocket-client/#:~:text=ws%2C%20close_status_code%2C%20close_msg.
+
+
     # Introduce function.
     logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini exceeds: {exit} {pair[3:]}')
 
     # Define websocket functions.
     def on_open( ws ) : logger.info( f'{ws} connection opened.' )
-    def on_close( ws, urlrequest, parameters ) : logger.info( f'{ws} {urlrequest}{parameters} closed.' )
+    def on_close( ws, close_status_code, close_msg ) : logger.info( 'closed.' )
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, exit=exit ) : 
         
