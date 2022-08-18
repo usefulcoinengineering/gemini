@@ -26,10 +26,10 @@ from libraries.logger import logger as logger
 
 def on_message( ws, message ) : 
     logger.info ( message )
-    if message.json()["events"] == [] :
+    if message.json()['events'] == [] :
         logger.info ( "probably just connected." )
     else : 
-        if Decimal(message.json()["events"]["price"]).compare("1876") == 1 : return message
+        if Decimal(message.json()["events"]["price"]).compare("24000") == 1 : return message
 
 ws = websocket.WebSocketApp( "wss://api.gemini.com/v1/marketdata/btcusd?trades=true", on_message = on_message )
 ws.run_forever( sslopt = { "cert_reqs" : ssl.CERT_NONE } )
