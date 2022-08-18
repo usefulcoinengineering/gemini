@@ -47,9 +47,13 @@ def increasemonitor(
                     tradeprice = event['price'] 
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
-                    trade = f'{tradeprice} {pair[3:]} taken to quickly {takeraction} {pair[:3]} hoard. '
-                    logger.debug( trade )
-                    if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : ws.close()
+                    notification = f'{tradeprice} {pair[3:]} taken to quickly {takeraction} {pair[:3]} hoard. '
+                    logger.debug( f'{notification}' )
+                    if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : 
+                        notification = f'{exit} {pair[3:]} price level breached: {notification}. '
+                        logger.info( notification )
+                        appalert( notification )
+                        ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
