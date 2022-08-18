@@ -47,9 +47,7 @@ def increasemonitor(
                         if eventitem['makerSide'] == "ask" : takeraction = "paid for"
                         if eventitem['makerSide'] == "bid" : takeraction = "sold for"
                         logger.debug( f'{tradeprice} {pair[3:]} {takeraction} {pair[:3]}. ' )
-
-        if tradeprice: 
-            if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : ws.close()
+                        if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
