@@ -28,9 +28,6 @@ def increasemonitor(
     logger.info(f'Looping until the last transaction price {pair[:3]} on Gemini exceeds: {exit} {pair[3:]}')
 
     # Define websocket functions.
-    def on_open( ws ) : logger.info( f'{ws} connection opened.' )
-    def on_close( ws ) : logger.info( f'{ws} connection closed.' )
-    def on_error( ws, error ) : logger.error( error )
     def on_message( ws, message ) : logger.debug( message )  
               
     # Establish websocket connection.
