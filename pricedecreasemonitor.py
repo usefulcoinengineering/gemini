@@ -30,28 +30,7 @@ if len( sys.argv ) == 3 :
 else :
     logger.warning ( f'incorrect number of command line arguments. using default values of a {exit} price level for {pair}...' )
 
-# Define tradeprice class.
-# Purpose: Stores the state of the price of the last trade.
-class Tradeprice:
-    def __init__(self, state): self.__state = state
-    def getvalue(self): return self.__state
-    def setvalue(self, state): self.__state = state
-
-# Define tradetaker class.
-# Purpose: Stores the state of the taker side of the last trade.
-class Tradetaker:
-    def __init__(self, state): self.__state = state
-    def getvalue(self): return self.__state
-    def setvalue(self, state): self.__state = state
-
-# Initialize tradeprice and tradetaker values.
-tradeprice = Tradeprice( '' )
-tradetaker = Tradetaker( '' )
-
 # Enter price monitor loop.
-orderstatus = decreasemonitor( pair=pair, exit=exit, tradeprice=tradeprice, tradetaker=tradetaker )
-
-if tradetaker == "bid" : appalert ( f'{tradeprice} {pair[:3]} purchased. ' )
-if tradetaker == "ask" : appalert ( f'{tradeprice} {pair[:3]} sold. ' )
+orderstatus = decreasemonitor( pair=pair, exit=exit )
 if orderstatus : sys.exit( 0 )
 else : sys.exit( 1 )
