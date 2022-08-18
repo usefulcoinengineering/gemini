@@ -168,15 +168,15 @@ if 'filled' in poststatus.getvalue() :
         # Note: The last transaction price exceeds the previous exit price creates the new exit price.
 
         # If the stop limit order still active.
-        lastorder = jsonresponse['order_id']
-        if islive( lastorder ) :
+        previousorder = jsonresponse['order_id']
+        if islive( previousorder ) :
 
             # Open websocket connection.
             # Wait for bids to exceed exitprice.
             exitprice = anchoredrise( pair, exitprice )
 
             # Cancel outdated stop-limit order.
-            orderstatus = cancelorder( lastorder )
+            orderstatus = cancelorder( previousorder )
 
             # Post updated stop-limit order.
             postresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) )
