@@ -38,7 +38,7 @@ def increasemonitor(
         dictionary = json.loads( message )
         events = dictionary['events']
         if events == [] : 
-            logger.debug( f'no update events. perhaps this is the initial response from Gemini: [{message}] ' )
+            logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
         else:
             # Capture the array of events to a list.
             # Iterate through each event in the update.
