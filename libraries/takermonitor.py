@@ -35,7 +35,7 @@ def increasemonitor(
 
     # Define websocket functions.
     def on_open( ws ) : logger.info( f'{ws} connection opened.' )
-    def on_close( ws, close_status_code, close_msg ) : logger.info( f'{close_status_code} : {close_msg}' )
+    def on_close( ws, close_status_code, close_msg ) : logger.info( 'connection closed.' )
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, exit=exit ) : 
         
