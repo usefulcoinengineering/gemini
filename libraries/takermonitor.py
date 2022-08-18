@@ -33,6 +33,7 @@ def increasemonitor(
     def on_error( ws, error ) : logger.error( error )
     def on_message( ws, message, exit=exit ) : 
         
+        logger.debug( message )
         dictionary = json.loads( message )
 
         # Remove comment to debug with: 
