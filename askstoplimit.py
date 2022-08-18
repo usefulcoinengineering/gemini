@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 #
-# test name: askstoplimit.py
-# test author: munair simpson
-# test created: 20220815
-# test purpose: submit a "stop-limit" sell order to the orderbook using Gemini's REST API.
+# script name: askstoplimit.py
+# script author: munair simpson
+# script created: 20220815
+# script purpose: submit a "stop-limit" sell order to the orderbook using Gemini's REST API.
 
 
 # Detailed Description:

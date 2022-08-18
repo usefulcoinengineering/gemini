@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 #
-# test name: minimumask.py
-# test author: munair simpson
-# test created: 20220811
-# test purpose: retrieve public market data on the lowest ask in the orderbook using Gemini's REST API.
+# script name: minimumask.py
+# script author: munair simpson
+# script created: 20220811
+# script purpose: retrieve public market data on the lowest ask in the orderbook using Gemini's REST API.
 
 
 # Detailed Description:

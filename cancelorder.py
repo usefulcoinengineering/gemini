@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 #
-# test name: cancelorder.py
-# test author: munair simpson
-# test created: 20220816
-# test purpose: cancel order number specified.
+# script name: cancelorder.py
+# script author: munair simpson
+# script created: 20220816
+# script purpose: cancel order number specified.
 
 
 # Detailed Description:

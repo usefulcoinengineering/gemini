@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 #
-# test name: maximumbid.py
-# test author: munair simpson
-# test created: 20220811
-# test purpose: retrieve public market data on the highest bid in the orderbook using Gemini's REST API.
+# script name: maximumbid.py
+# script author: munair simpson
+# script created: 20220811
+# script purpose: retrieve public market data on the highest bid in the orderbook using Gemini's REST API.
 
 
 # Detailed Description:

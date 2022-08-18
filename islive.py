@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 #
-# test name: islive.py
-# test author: munair simpson
-# test created: 20220816
-# test purpose: check order number specified is active on the orderbook (i.e. has remaining size and has not been canceled).
+# script name: islive.py
+# script author: munair simpson
+# script created: 20220816
+# script purpose: check order number specified is active on the orderbook (i.e. has remaining size and has not been canceled).
 
 
 # Detailed Description:
