@@ -162,8 +162,8 @@ if 'filled' in poststatus.getvalue() :
         # Wait. Cancel. New.
 
         # If the stop limit order still active.
-        previousorder = postresponse['order_id']
-        previousprice = postresponse['price']
+        previousorder = postresponse.json()['order_id']
+        previousprice = postresponse.json()['price']
         if islive( previousorder ) :
 
             # Open websocket connection.
