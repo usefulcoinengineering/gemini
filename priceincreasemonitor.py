@@ -37,21 +37,21 @@ class Tradeprice:
     def getvalue(self): return self.__state
     def setvalue(self, state): self.__state = state
 
-# Define trademaker class.
-# Purpose: Stores the state of the maker side of the last trade.
-class Trademaker:
+# Define tradetaker class.
+# Purpose: Stores the state of the taker side of the last trade.
+class Tradetaker:
     def __init__(self, state): self.__state = state
     def getvalue(self): return self.__state
     def setvalue(self, state): self.__state = state
 
-# Initialize tradeprice and trademaker values.
+# Initialize tradeprice and tradetaker values.
 tradeprice = Tradeprice( '' )
-trademaker = Trademaker( '' )
+tradetaker = Tradetaker( '' )
 
 # Enter price monitor loop.
-orderstatus = increasemonitor( pair=pair, exit=exit, tradeprice=tradeprice, trademaker=trademaker )
+orderstatus = increasemonitor( pair=pair, exit=exit, tradeprice=tradeprice, tradetaker=tradetaker )
 
-if trademaker == "bid" : appalert ( f'{tradeprice} {pair[:3]} purchased. ' )
-if trademaker == "ask" : appalert ( f'{tradeprice} {pair[:3]} sold. ' )
+if tradetaker == "bid" : appalert ( f'{tradeprice} {pair[:3]} purchased. ' )
+if tradetaker == "ask" : appalert ( f'{tradeprice} {pair[:3]} sold. ' )
 if orderstatus : sys.exit( 0 )
 else : sys.exit( 1 )
