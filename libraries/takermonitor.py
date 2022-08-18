@@ -47,8 +47,7 @@ def increasemonitor(
                     tradeprice = event['price'] 
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
-                    trade = f'The trader accepted the {tradeprice} {pair[3:]} taker price. '
-                    trade = trade + f'A desire to quickly {takeraction} their {pair[:3]} hoard was satified. '
+                    trade = f'{tradeprice} {pair[3:]} taken to quickly {takeraction} {pair[:3]} hoard. '
                     logger.debug( trade )
                     if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : ws.close()
             
