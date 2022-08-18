@@ -17,9 +17,7 @@ from libraries.messenger import appalert as appalert
 
 def increasemonitor(
         pair: str,
-        exit: str,
-        tradeprice: str,
-        tradetaker: str
+        exit: str
     ) -> None:
 
     urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair
@@ -45,10 +43,10 @@ def increasemonitor(
                 events = dictionaryitem['events']
                 if isinstance(events, list):
                     for eventitem in events:
-                        tradeprice.setvalue( eventitem['price'] )
-                        if eventitem['makerSide'] == "ask" : tradetaker.setvalue( "paid for" )
-                        if eventitem['makerSide'] == "bid" : tradetaker.setvalue( "sold for" )
-                        logger.debug( f'{tradeprice} {pair[3:]} {tradetaker} {pair[:3]}. ' )
+                        tradeprice = eventitem['price'] 
+                        if eventitem['makerSide'] == "ask" : takeraction = "paid for"
+                        if eventitem['makerSide'] == "bid" : takeraction = "sold for"
+                        logger.debug( f'{tradeprice} {pair[3:]} {takeraction} {pair[:3]}. ' )
 
         if tradeprice: 
             if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : ws.close()
