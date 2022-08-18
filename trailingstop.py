@@ -29,7 +29,7 @@ from libraries.logger import logger
 from libraries.bidmonitor import anchoredrise
 from libraries.ordermanager import islive
 from libraries.frontrunner import bidorder
-from libraries.losspreventer import limitstop
+from libraries.stopper import askstoplimit
 from libraries.ordermanager import cancelorder
 from libraries.skimvalidator import confirmexecution
 from libraries.messenger import appalert as appalert
@@ -151,7 +151,7 @@ if 'filled' in poststatus.getvalue() :
     notification = notification + f'This stop limit order has a {sellprice} {pair[3:]} limit price to sell {size} {pair[:3]}. '
     notification = notification + f'Resulting in a {ratiogain:.2f}% gain if executed. '
     logger.debug ( f'{notification}' ) ; appalert ( f'{notification}' )
-    postresponse = limitstop( str(pair), str(size), str(stopprice), str(sellprice) )
+    postresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) )
     jsonresponse = postresponse.json()
     jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
     logger.debug ( jsondatadump )
@@ -180,7 +180,7 @@ if 'filled' in poststatus.getvalue() :
             orderstatus = cancelorder( jsonresponse['order_id'] )
 
             # Post updated stop-limit order.
-            postresponse = limitstop( str(pair), str(size), str(stopprice), str(sellprice) )
+            postresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) )
             jsonresponse = postresponse.json()
             jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
             logger.debug ( jsondatadump )

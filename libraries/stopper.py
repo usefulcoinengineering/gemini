@@ -15,7 +15,7 @@ from libraries.messenger import appalert as appalert
 import libraries.definer as definer
 import libraries.authenticator as authenticator
 
-def limitstop(
+def askstoplimit(
         pair: str,
         size: str,
         stop: str,
@@ -40,19 +40,5 @@ def limitstop(
 
     request = definer.restserver + endpoint
     response = requests.post(request, data = None, headers = headers['restheader'])
-    response = response.json()
-    datadump = json.dumps( response, sort_keys=True, indent=4, separators=(',', ': ') )
-
-    # Write the dump to logs.
-    logger.debug ( datadump )
- 
-    try:    
-        response["result"]
-
-    # Return response.
-    except KeyError as e:
-        return datadump
-
-    # Send result status and exit returning a boolean value of "True".
-    appalert ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
-    return False
+    
+    return response

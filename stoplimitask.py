@@ -21,7 +21,7 @@ from decimal import Decimal
 
 from libraries.logger import logger
 from libraries.pricegetter import maximumbid
-from libraries.losspreventer import limitstop
+from libraries.stopper import askstoplimit
 from libraries.messenger import appalert as appalert
 from libraries.definer import ticksizes as ticksizes
 
@@ -76,7 +76,7 @@ if stop.compare( roof ) == 1:
     sys.exit(1)
 
 # Get public market data on the lowest ask in the orderbook using the Gemini REST API.
-sale = limitstop( str(pair), str(size), str(stop), str(sell) )
+sale = askstoplimit( str(pair), str(size), str(stop), str(sell) )
 if sale:
     fragmentone = f'A stop limit ask order for {size} {pair[:3]} was submitted to the Gemini orderbook. '
     fragmenttwo = f'The stop price was set to {stop} {pair[3:]}. The sell price was set to {sell} {pair[3:]}.'
