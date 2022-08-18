@@ -32,13 +32,13 @@ def increasemonitor(
     def on_close( ws ) : logger.info( f'{ws} connection closed.' )
     def on_error( ws, error ) : logger.error( error )
     def on_message( ws, message ) : logger.debug( message )  
-
+              
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
     logger.debug( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
     ws = websocket.WebSocketApp( connection,
                                  on_open = on_open,
-                                 on_message = on_message,
+                                 on_close = on_close,
                                  on_error = on_error,
-                                 on_close = on_close )
+                                 on_message = on_message )
     ws.run_forever(sslopt={'cert_reqs': ssl.CERT_NONE})
