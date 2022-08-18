@@ -25,6 +25,7 @@ from libraries.logger import logger as logger
 # from libraries.messenger import appalert as appalert
 
 def on_message( ws, message ) : 
+    logger.info ( "probably just connected." )
     logger.info ( message )
     if message.json()['events'] == [] :
         logger.info ( "probably just connected." )
