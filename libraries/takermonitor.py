@@ -20,7 +20,7 @@ def increasemonitor(
         exit: str
     ) -> None:
 
-    urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair
+    urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair.lower()
     parameters = "?trades=true"
     connection = urlrequest + parameters
 
@@ -41,23 +41,29 @@ def increasemonitor(
         
         # Remove comment to debug with: logger.debug( message )
         
+        # Load update into a dictionary.
         dictionary = json.loads( message )
+
+        # Define events array/list.
         events = dictionary['events']
         if events == [] : 
             logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
         else:
-            # Capture the array of events to a list.
+            # Make pair uppercase.
+            pair = pair.upper()
+
+            # Verify the array of events is a list.
             # Iterate through each event in the update.
             if isinstance(events, list):
                 for event in events:
-                    tradeprice = event['price'] 
-                    trade = event['amount'] 
+                    tradeprice = Decimal( event['price'] )
+                    tradevalue = Decimal( event['amount'] * tradeprice).quantize( tradeprice )
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'{tradeprice} {pair[3:]} taken to quickly {takeraction} {pair[:3]} hoard by {trade} {pair[:3]} . '
+                    notification = f'{tradeprice} {pair[3:]} taken to quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
                     logger.debug( f'{notification}' )
                     if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : 
-                        notification = f'{exit} {pair[3:]} price level breached: {notification}. '
+                        notification = f'{exit} {pair[3:]} price level breached: {notification}'
                         logger.info( notification )
                         sendmessage( notification )
                         ws.close()
