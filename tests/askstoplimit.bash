@@ -16,12 +16,12 @@
 
 # Define default values.
 pair="ETHUSD"
-size="0.0001"
+size="0.0010"
 stop="0.0050"
 sell="0.0100"
 
 read -p "type hostname or press enter to continue with default [$pair]: " pair && pair=${pair:-ETHUSD}
-read -p "type hostname or press enter to continue with default [$size]: " size && size=${size:-0.0001}
+read -p "type hostname or press enter to continue with default [$size]: " size && size=${size:-0.0010}
 read -p "type hostname or press enter to continue with default [$stop]: " stop && stop=${stop:-0.0050}
 read -p "type hostname or press enter to continue with default [$sell]: " sell && sell=${sell:-0.0100}
 
