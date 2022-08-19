@@ -13,6 +13,6 @@
 
 pair="ETHUSD"
 
-read -p "type a replacement value or press enter to continue with default argument [$pair]: " pair && pair=${pair:-136457975606}
+read -p "type a replacement value or press enter to continue with default argument [$pair]: " pair && pair=${pair:-ETHUSD}
 
 python3 ../maximumbid.py $pair
