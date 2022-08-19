@@ -37,7 +37,7 @@ def increasemonitor(
     def on_open( ws ) : logger.info( f'{ws} connection opened.' )
     def on_close( ws, close_status_code, close_msg ) : logger.info( 'connection closed.' )
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
-    def on_message( ws, message, exit=exit ) : 
+    def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
         # Remove comment to debug with: logger.debug( message )
         
@@ -49,9 +49,6 @@ def increasemonitor(
         if events == [] : 
             logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
         else:
-            # Make pair uppercase.
-            pair = pair.upper()
-
             # Verify the array of events is a list.
             # Iterate through each event in the update.
             if isinstance(events, list):
