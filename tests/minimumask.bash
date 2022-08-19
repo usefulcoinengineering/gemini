@@ -11,4 +11,8 @@
 # Execution:
 # python3 ../minimumask.py ENSUSD
 
-python3 ../minimumask.py ENSUSD
+pair="ETHUSD"
+
+read -p "type a replacement value or press enter to continue with default argument [$pair]: " pair && pair=${pair:-ETHUSD}
+
+python3 ../minimumask.py $pair
