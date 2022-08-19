@@ -20,6 +20,7 @@ def decreasemonitor(
         exit: str
     ) -> None:
 
+    # Request trade data only.
     urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair.lower()
     parameters = "?trades=true"
     connection = urlrequest + parameters
@@ -81,6 +82,7 @@ def increasemonitor(
         exit: str
     ) -> None:
 
+    # Request trade data only.
     urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair.lower()
     parameters = "?trades=true"
     connection = urlrequest + parameters
