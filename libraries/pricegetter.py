@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 #
-# library name: informer.py
+# library name: pricegetter.py
 # library author: munair simpson
 # library created: 20220811
-# library purpose: retrieve market data.
+# library purpose: retrieve market data using the Gemini REST API.
 
 
 import requests
