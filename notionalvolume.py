@@ -18,14 +18,17 @@ from libraries.logger import logger
 from libraries.volumizer import notionalvolume
 
 # Submit request.
-logger.debug(f'Submitting request...')
-post = notionalvolume()
-data = post.json()
-dump = json.dumps( data, sort_keys=True, indent=4, separators=(',', ': ') )
+logger.debug ( f'Submitting request...' )
+postresponse = notionalvolume()
+
+# Remove comments to debug.
+jsonresponse = postresponse.json()
+jsondatadump = json.dumps( postresponse, sort_keys=True, indent=4, separators=(',', ': ') )
+logger.debug ( jsondatadump )
 
 # Format response.
-logger.info( f'Notional 30 day Trading Volume: {post.json()["notional_30d_volume"]:.2f} USD. ' )
-logger.info( f'Present API transaction fee: {post.json()["api_maker_fee_bps"]} basis points. ' )
+logger.info( f'Notional 30 day Trading Volume: {postresponse.json()["notional_30d_volume"]} USD. ' )
+logger.info( f'Present API transaction fee: {postresponse.json()["api_maker_fee_bps"]} basis points. ' )
 
 # Let the shell know we successfully made it this far!
 sys.exit(0)
