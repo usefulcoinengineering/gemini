@@ -83,6 +83,20 @@ datadump = json.dumps( response, sort_keys=True, indent=4, separators=(',', ': '
 logger.debug ( datadump )
 
 try:    
+    if response["is_live"] : 
+        fragmentone = f'A stop limit ask order for {size} {pair[:3]} was submitted to the Gemini orderbook. '
+        fragmenttwo = f'The stop price was set to {stop} {pair[3:]}. The sell price was set to {sell} {pair[3:]}.'
+        logger.info ( f'{fragmentone}{fragmenttwo}')
+        sendmessage ( f'{fragmentone}{fragmenttwo}')
+
+        # Exit 0
+        sys.exit(0)
+
+# Return response.
+except KeyError as e:
+    logger.warning ( f'KeyError: {e}' )
+
+try:    
     if response["result"] : sendmessage ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
 
 # Return response.
@@ -90,10 +104,3 @@ except KeyError as e:
     logger.critical ( f'KeyError: {e}' )
     sys.exit(1)
 
-fragmentone = f'A stop limit ask order for {size} {pair[:3]} was submitted to the Gemini orderbook. '
-fragmenttwo = f'The stop price was set to {stop} {pair[3:]}. The sell price was set to {sell} {pair[3:]}.'
-logger.info ( f'{fragmentone}{fragmenttwo}')
-sendmessage ( f'{fragmentone}{fragmenttwo}')
-
-# Exit 0
-sys.exit(0)
