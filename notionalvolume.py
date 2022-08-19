@@ -22,9 +22,9 @@ logger.debug ( f'Submitting request...' )
 postresponse = notionalvolume()
 
 # Remove comments to debug.
-jsonresponse = postresponse.json()
-jsondatadump = json.dumps( postresponse, sort_keys=True, indent=4, separators=(',', ': ') )
-logger.debug ( jsondatadump )
+# jsonresponse = postresponse.json()
+# jsondatadump = json.dumps( postresponse, sort_keys=True, indent=4, separators=(',', ': ') )
+# logger.debug ( jsondatadump )
 
 # Format response.
 logger.info( f'Notional 30 day Trading Volume: {postresponse.json()["notional_30d_volume"]} USD. ' )
