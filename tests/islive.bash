@@ -11,4 +11,8 @@
 # Execution:
 # python3 ../islive.py 136457975606
 
-python3 ../islive.py 136457975606
+order="136457975606"
+
+read -p "type a replacement value or press enter to continue with default argument [$order]: " order && order=${order:-136457975606}
+
+python3 ../islive.py $order
