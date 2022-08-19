@@ -16,7 +16,7 @@
 import sys
 
 from libraries.logger import logger
-from libraries.takermonitor import decreasemonitor
+from libraries.marketmonitor import pricedecrease
 
 # Set default trading pair and loop exit price in case a BASH wrapper has not been used.
 pair = "ETHUSD"
@@ -30,6 +30,6 @@ else :
     logger.warning ( f'incorrect number of command line arguments. using default values of a {exit} price level for {pair}...' )
 
 # Enter price monitor loop.
-orderstatus = decreasemonitor( pair=pair, exit=exit )
+orderstatus = pricedecrease( pair=pair, exit=exit )
 if orderstatus : sys.exit( 0 )
 else : sys.exit( 1 )

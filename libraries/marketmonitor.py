@@ -15,7 +15,7 @@ from decimal import Decimal
 from libraries.logger import logger as logger
 from libraries.messenger import sendmessage as sendmessage
 
-def decreasemonitor(
+def pricedecrease(
         pair: str,
         exit: str
     ) -> None:
@@ -77,7 +77,7 @@ def decreasemonitor(
                                  on_message = on_message )
     ws.run_forever(sslopt={'cert_reqs': ssl.CERT_NONE})
 
-def increasemonitor(
+def priceincrease(
         pair: str,
         exit: str
     ) -> None:
