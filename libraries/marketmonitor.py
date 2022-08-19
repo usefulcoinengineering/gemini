@@ -35,7 +35,7 @@ def pricedecrease(
 
 
     # Introduce function.
-    logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini drops below: {exit} {pair[3:]}')
+    logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini drops below: {exit:,.2f} {pair[3:]}')
 
     # Define websocket functions.
     def on_open( ws ) : logger.info( f'{ws} connection opened.' )
@@ -63,11 +63,11 @@ def pricedecrease(
                     tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'[{inadequacy:.2f}% off {exit} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                    notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
                     notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
                     logger.debug( f'{notification}' )
                     if exit.compare( tradeprice ) == 1 : 
-                        notification = f'{exit} {pair[3:]} price level breached: {notification}'
+                        notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
                         logger.info( notification )
                         sendmessage( notification )
                         ws.close()
@@ -102,7 +102,7 @@ def askfall(
 
 
     # Introduce function.
-    logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini drops below: {exit} {pair[3:]}')
+    logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini drops below: {exit:,.2f} {pair[3:]}')
 
     # Define websocket functions.
     def on_open( ws ) : logger.info( f'{ws} connection opened.' )
@@ -130,12 +130,12 @@ def askfall(
                     tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'[{inadequacy:.2f}% off {exit} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                    notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
                     notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
                     logger.debug( f'{notification}' )
                     if event['makerSide'] == "ask" :
                         if exit.compare( tradeprice ) == 1 : 
-                            notification = f'{exit} {pair[3:]} price level breached: {notification}'
+                            notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
                             logger.info( notification )
                             sendmessage( notification )
                             ws.close()
@@ -170,7 +170,7 @@ def priceincrease(
 
 
     # Introduce function.
-    logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini exceeds: {exit} {pair[3:]}')
+    logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini exceeds: {exit:,.2f} {pair[3:]}')
 
     # Define websocket functions.
     def on_open( ws ) : logger.info( f'{ws} connection opened.' )
@@ -198,11 +198,11 @@ def priceincrease(
                     tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'[{inadequacy:.2f}% off {exit} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                    notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
                     notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
                     logger.debug( f'{notification}' )
                     if tradeprice.compare( exit ) == 1 : 
-                        notification = f'{exit} {pair[3:]} price level breached: {notification}'
+                        notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
                         logger.info( notification )
                         sendmessage( notification )
                         ws.close()
@@ -237,7 +237,7 @@ def bidrise(
 
 
     # Introduce function.
-    logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini exceeds: {exit} {pair[3:]}')
+    logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini exceeds: {exit:,.2f} {pair[3:]}')
 
     # Define websocket functions.
     def on_open( ws ) : logger.info( f'{ws} connection opened.' )
@@ -265,12 +265,12 @@ def bidrise(
                     tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'[{inadequacy:.2f}% off {exit} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                    notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
                     notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
                     logger.debug( f'{notification}' )
                     if event['makerSide'] == "bid" : 
                         if tradeprice.compare( exit ) == 1 : 
-                            notification = f'{exit} {pair[3:]} price level breached: {notification}'
+                            notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
                             logger.info( notification )
                             sendmessage( notification )
                             ws.close()
