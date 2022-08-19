@@ -3,7 +3,7 @@
 # library name: volumizer.py
 # library author: munair simpson
 # library created: 20210307
-# library purpose: retrieve Gemini fees and notional volume (in USD terms) for the last 30 days across all pairs traded
+# library purpose: retrieve trading activity dependent data for the last 30 days across all pairs traded
 
 
 import requests
@@ -17,7 +17,9 @@ import libraries.authenticator as authenticator
 
 def notionalvolume() -> None:
 
-    # Get the USD denominated notional volume.
+    # Retrieve activity based data 
+    # like transaction fees and 
+    # trading volume (USD terms).
     endpoint = '/v1/notionalvolume'
     t = datetime.datetime.now()
     payload = {
