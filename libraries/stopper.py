@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-
+#
+# library name: stopper.py
+# library author: munair simpson
+# library created: 20220819
+# library purpose: submit a stop-limit order to the orderbook with the Gemini REST API
 
 import requests
-import ssl
-import json
 import datetime
 import time
 
