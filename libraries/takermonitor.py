@@ -76,7 +76,7 @@ def decreasemonitor(
                                  on_message = on_message )
     ws.run_forever(sslopt={'cert_reqs': ssl.CERT_NONE})
 
-    def increasemonitor(
+def increasemonitor(
         pair: str,
         exit: str
     ) -> None:
