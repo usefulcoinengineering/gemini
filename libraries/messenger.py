@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
-
+#
+# library name: messenger.py
+# library author: munair simpson
+# library created: 20220819
+# library purpose: continually monitor ask prices via Gemini's Websockets API until the exit threshold is breached.
+# library legacy: originally "dealseeker.py" because it waited on a fall from websocket session highs.
 
 import json
 import requests
 
-import libraries.credentials as credentials
 from libraries.logger import logger
+
+import libraries.credentials as credentials
 
 # Define alert function
 def sendmessage( message ):
