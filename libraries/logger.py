@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-
+#
+# library name: logger.py
+# library author: munair simpson
+# library created: 20220819
+# library purpose: write to logfile.
 
 import os
 import __main__
 import logging
-
 
 # Create custom logger
 logger = logging.getLogger('tradelogger')
