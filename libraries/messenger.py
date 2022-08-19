@@ -3,8 +3,7 @@
 # library name: messenger.py
 # library author: munair simpson
 # library created: 20220819
-# library purpose: continually monitor ask prices via Gemini's Websockets API until the exit threshold is breached.
-# library legacy: originally "dealseeker.py" because it waited on a fall from websocket session highs.
+# library purpose: send alert messages to a monitored Discord Server Channel using webhooks.
 
 import json
 import requests
