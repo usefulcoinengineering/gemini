@@ -11,4 +11,8 @@
 # Execution:
 # python3 ../cancelorder.py 136457975606
 
-python3 ../cancelorder.py 136457975606
+order="136457975606"
+
+read -p "type hostname or press enter to continue with default [$order]: " order && order=${order:-136457975606}
+
+python3 ../cancelorder.py $order
