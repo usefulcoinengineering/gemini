@@ -9,8 +9,6 @@
 
 import sys
 import json
-import requests
-import locale
 
 from libraries.logger import logger
 from libraries.volumizer import notionalvolume
