@@ -14,6 +14,6 @@
 message="\"Sending a test message from a BASH script that is a wrapper around a Python script (sendmessage.py).\""
 
 read -p "type a replacement value or press enter to continue with default argument [$message]: " message
-message=${message:-'Sending a test message from a BASH script that is a wrapper around a Python script (sendmessage.py).'}
+message=${message:-Sending a test message from a BASH script that is a wrapper around a Python script (sendmessage.py).}
 
 python3 ../sendmessage.py $message
