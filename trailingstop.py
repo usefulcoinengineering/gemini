@@ -142,7 +142,7 @@ if 'filled' in poststatus.getvalue() :
 
     # Open websocket connection. 
     # Wait for the trading price to rise to the exit price.
-    exitprice = bidrise( pair, exitprice )
+    bidrise( pair, exitprice )
 
     # Submit initial Gemini "stop-limit" order. 
     # If in doubt about what's going on, refer to documentation here: https://docs.gemini.com/rest-api/#new-order.
@@ -150,41 +150,32 @@ if 'filled' in poststatus.getvalue() :
     notification = notification + f'This stop limit order has a {sellprice} {pair[3:]} limit price to sell {size} {pair[:3]}. '
     notification = notification + f'Resulting in a {ratiogain:.2f}% gain if executed. '
     logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
-    postresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) )
-    jsonresponse = postresponse.json()
-    jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
-    logger.debug ( jsondatadump )
-
+    postresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
+    
     # Open loop.
     while True :
 
-        # Wait. Cancel. New.
-
         # If the stop limit order still active.
-        previousorder = postresponse.json()['order_id']
-        previousprice = postresponse.json()['price']
-        if islive( previousorder ) :
-
-            # Open websocket connection.
-            # Wait for bids to exceed exitprice.
-            exitprice = bidrise( pair, exitprice )
-
-            # Cancel outdated stop-limit order.
-            orderstatus = cancelorder( previousorder )
-
-            # Calculate new sell/stop prices.
-            stopprice = Decimal( exitprice * stopratio )
-            sellprice = Decimal( exitprice * sellratio )
+        if islive( postresponse['order_id'] ) :
+            
+            # Calculate new exit and resultant sell/stop prices.
+            exitprice = Decimal( exitprice * exitratio ).quantize( tick )
+            stopprice = Decimal( exitprice * stopratio ).quantize( tick )
+            sellprice = Decimal( exitprice * sellratio ).quantize( tick )
             # Note: "costprice" is no longer used to set stop and sell prices.
             # Note: The last transaction price exceeds the previous exit price creates the new exit price.
 
+            # Open websocket connection.
+            # Wait for bids to exceed exitprice.
+            bidrise( pair, exitprice )
+
+            # Cancel outdated stop-limit order.
+            orderstatus = cancelorder( postresponse['order_id'] )
+
             # Post updated stop-limit order.
-            notification = f'Cancelled {previousprice} {pair[3:]} stop sell. Submitting {sellprice} {pair[3:]} stop sell.'
+            notification = f'Cancelled {postresponse["order_id"]} {pair[3:]} stop sell. Submitting {sellprice} {pair[3:]} stop sell.'
             logger.debug ( notification )
-            postresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) )
-            jsonresponse = postresponse.json()
-            jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
-            logger.debug ( jsondatadump )
+            postresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
             continue
 
         else :
