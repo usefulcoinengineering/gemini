@@ -25,7 +25,5 @@ jsonresponse = notionalvolume().json()
 jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
 logger.debug ( jsondatadump )
 
-logger.info( f'Present API transaction fee: {jsonresponse["api_maker_fee_bps"]} basis points. ' )
-
 # Let the shell know we successfully made it this far!
 sys.exit(0)
