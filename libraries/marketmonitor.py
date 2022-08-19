@@ -64,7 +64,7 @@ def pricedecrease(
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
                     notification = f'[{inadequacy:.2f}% off {exit} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
-                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
+                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
                     logger.debug( f'{notification}' )
                     if exit.compare( tradeprice ) == 1 : 
                         notification = f'{exit} {pair[3:]} price level breached: {notification}'
@@ -131,7 +131,7 @@ def askfall(
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
                     notification = f'[{inadequacy:.2f}% off {exit} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
-                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
+                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
                     logger.debug( f'{notification}' )
                     if event['makerSide'] == "ask" :
                         if exit.compare( tradeprice ) == 1 : 
@@ -199,7 +199,7 @@ def priceincrease(
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
                     notification = f'[{inadequacy:.2f}% off {exit} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
-                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
+                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
                     logger.debug( f'{notification}' )
                     if tradeprice.compare( exit ) == 1 : 
                         notification = f'{exit} {pair[3:]} price level breached: {notification}'
@@ -266,7 +266,7 @@ def bidrise(
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
                     notification = f'[{inadequacy:.2f}% off {exit} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
-                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
+                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
                     logger.debug( f'{notification}' )
                     if event['makerSide'] == "bid" : 
                         if tradeprice.compare( exit ) == 1 : 
