@@ -7,7 +7,6 @@
 
 
 import requests
-import ssl
 import datetime
 import time
 
