@@ -30,9 +30,10 @@ from libraries.frontrunner import bidorder
 from libraries.stopper import askstoplimit
 from libraries.marketmonitor import bidrise
 from libraries.ordermanager import cancelorder
-from libraries.skimvalidator import confirmexecution
-from libraries.messenger import sendmessage as sendmessage
+from libraries.volumizer import notionalvolume
 from libraries.definer import ticksizes as ticksizes
+from libraries.closevalidator import confirmexecution
+from libraries.messenger import sendmessage as sendmessage
 
 # Set bid size in the base currency (BTC in this case).
 # This amount should exceed ~25 cents ['0.00001' is the minimum for BTCUSD].
@@ -63,7 +64,8 @@ if Decimal(stop).compare( Decimal(sell) ) == 1:
     sys.exit(1)
 
 # Determine Gemini API transaction fee.
-apifee = Decimal( definer.apitransactionfee )
+jsonresponse = notionalvolume().json()
+geminiapifee = jsonresponse["api_maker_fee_bps"]
 
 # Determine tick size.
 item = [ item['tick'] for item in ticksizes if item['currency'] == pair[:3] ]
@@ -71,32 +73,11 @@ tick = Decimal( item[0] )
 
 # Submit limit bid order and dump the JSON response in the logs.
 logger.debug ( f'Submitting {pair} frontrunning limit bid order.' )
-postresponse = bidorder( pair, size )
-jsonresponse = postresponse.json()
-jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
-logger.debug ( jsondatadump )
+jsonresponse = bidorder( pair, size ).json()
 
-# Define poststatus class used by the "confirmexecution" function.
-# Purpose: Stores the state of the orderid parameter upon exiting the websocket connection session.
-class Poststatus:
-    def __init__(self, state): self.__state = state
-    def getvalue(self): return self.__state
-    def setvalue(self, state): self.__state = state
-
-# Define orderprice class used by the "confirmexecution" function.
-# Purpose: Stores the state of the filled bid price parameter upon exiting the websocket connection session.
-class Orderprice:
-    def __init__(self, state): self.__state = state
-    def getvalue(self): return self.__state
-    def setvalue(self, state): self.__state = state
-
-# Initialize poststatus and orderprice values used by the "confirmexecution" function.
-poststatus = Poststatus('')
-orderprice = Orderprice('')
-
-# Open websocket connection.
-# Determine if the bid order was filled.
-confirmexecution( orderid = jsonresponse['order_id'], poststatus = poststatus, orderprice = orderprice )
+# Open websocket connection and block.
+# Confirm order "close" before continuing.
+confirmexecution( order = jsonresponse['order_id'] )
 if 'filled' in poststatus.getvalue() :
     costprice = Decimal( orderprice.getvalue() )
 
@@ -106,7 +87,7 @@ if 'filled' in poststatus.getvalue() :
     sell = Decimal(sell)
 
     # Calculate exit price.
-    exitratio = Decimal( 1 + stop + apifee )
+    exitratio = Decimal( 1 + stop + geminiapifee )
     exitprice = Decimal( costprice * exitratio ).quantize( tick )
     
     # Calculate stop price.
@@ -114,7 +95,7 @@ if 'filled' in poststatus.getvalue() :
     stopprice = Decimal( costprice * stopratio ).quantize( tick )
 
     # Calculate sell price.
-    sellratio = Decimal( 1 - sell - apifee )
+    sellratio = Decimal( 1 - sell - geminiapifee )
     sellprice = Decimal( costprice * sellratio ).quantize( tick )
 
     # Calculate quote gain.
@@ -156,7 +137,7 @@ if 'filled' in poststatus.getvalue() :
     while True :
 
         # If the stop limit order still active.
-        if islive( postresponse['order_id'] ) :
+        if islive( order = postresponse['order_id'] ) :
             
             # Calculate new exit and resultant sell/stop prices.
             exitprice = Decimal( exitprice * exitratio ).quantize( tick )
@@ -170,7 +151,7 @@ if 'filled' in poststatus.getvalue() :
             bidrise( pair, exitprice )
 
             # Cancel outdated stop-limit order.
-            orderstatus = cancelorder( postresponse['order_id'] )
+            orderstatus = cancelorder( order = postresponse['order_id'] )
 
             # Post updated stop-limit order.
             notification = f'Cancelled {postresponse["order_id"]} {pair[3:]} stop sell. Submitting {sellprice} {pair[3:]} stop sell.'
