@@ -54,7 +54,8 @@ def increasemonitor(
             if isinstance(events, list):
                 for event in events:
                     tradeprice = Decimal( event['price'] )
-                    tradevalue = Decimal( event['amount'] * tradeprice).quantize( tradeprice )
+                    tradevalue = Decimal( event['amount'] )
+                    tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
                     notification = f'{tradeprice} {pair[3:]} taken to quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
