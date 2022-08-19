@@ -25,4 +25,4 @@ read -p "type hostname or press enter to continue with default [$size]: " size &
 read -p "type hostname or press enter to continue with default [$stop]: " stop && stop=${stop:-$stopt}
 read -p "type hostname or press enter to continue with default [$sell]: " sell && sell=${sell:-$sell}
 
-python3 ../askstoplimit.py $pair $size $stop $sell
+# python3 ../askstoplimit.py $pair $size $stop $sell
