@@ -20,6 +20,9 @@ def pricedecrease(
         exit: str
     ) -> None:
 
+    # Cast as decimal.
+    exit = Decimal( exit )
+
     # Request trade data only.
     urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair.lower()
     parameters = "?trades=true"
@@ -56,12 +59,14 @@ def pricedecrease(
                 for event in events:
                     tradeprice = Decimal( event['price'] )
                     tradevalue = Decimal( event['amount'] )
+                    inadequacy = Decimal( 100 * ( tradeprice - exit ) / exit )
                     tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'{tradeprice} {pair[3:]} taken to quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
+                    notification = f'[{inadequacy:.2f}% off {exit} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
                     logger.debug( f'{notification}' )
-                    if Decimal( exit ).compare( tradeprice ) == 1 : 
+                    if exit.compare( tradeprice ) == 1 : 
                         notification = f'{exit} {pair[3:]} price level breached: {notification}'
                         logger.info( notification )
                         sendmessage( notification )
@@ -82,6 +87,9 @@ def askfall(
         exit: str
     ) -> None:
 
+    # Cast as decimal.
+    exit = Decimal( exit )
+
     # Request trade data only.
     urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair.lower()
     parameters = "?trades=true"
@@ -118,13 +126,15 @@ def askfall(
                 for event in events:
                     tradeprice = Decimal( event['price'] )
                     tradevalue = Decimal( event['amount'] )
+                    inadequacy = Decimal( 100 * ( tradeprice - exit ) / exit )
                     tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'{tradeprice} {pair[3:]} taken to quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
+                    notification = f'[{inadequacy:.2f}% off {exit} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
                     logger.debug( f'{notification}' )
                     if event['makerSide'] == "ask" :
-                        if Decimal( exit ).compare( tradeprice ) == 1 : 
+                        if exit.compare( tradeprice ) == 1 : 
                             notification = f'{exit} {pair[3:]} price level breached: {notification}'
                             logger.info( notification )
                             sendmessage( notification )
@@ -145,6 +155,9 @@ def priceincrease(
         exit: str
     ) -> None:
 
+    # Cast as decimal.
+    exit = Decimal( exit )
+    
     # Request trade data only.
     urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair.lower()
     parameters = "?trades=true"
@@ -181,12 +194,14 @@ def priceincrease(
                 for event in events:
                     tradeprice = Decimal( event['price'] )
                     tradevalue = Decimal( event['amount'] )
+                    inadequacy = Decimal( 100 * ( exit - tradeprice ) / exit )
                     tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'{tradeprice} {pair[3:]} taken to quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
+                    notification = f'[{inadequacy:.2f}% off {exit} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
                     logger.debug( f'{notification}' )
-                    if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : 
+                    if tradeprice.compare( exit ) == 1 : 
                         notification = f'{exit} {pair[3:]} price level breached: {notification}'
                         logger.info( notification )
                         sendmessage( notification )
@@ -207,6 +222,9 @@ def bidrise(
         exit: str
     ) -> None:
 
+    # Cast as decimal.
+    exit = Decimal( exit )
+
     # Request trade data only.
     urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair.lower()
     parameters = "?trades=true"
@@ -243,13 +261,15 @@ def bidrise(
                 for event in events:
                     tradeprice = Decimal( event['price'] )
                     tradevalue = Decimal( event['amount'] )
+                    inadequacy = Decimal( 100 * ( exit - tradeprice ) / exit )
                     tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                     if event['makerSide'] == "ask" : takeraction = "increase"
                     if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'{tradeprice} {pair[3:]} taken to quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
+                    notification = f'[{inadequacy:.2f}% off {exit} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue} {pair[3:]}. '
                     logger.debug( f'{notification}' )
                     if event['makerSide'] == "bid" : 
-                        if Decimal( tradeprice ).compare( Decimal(exit) ) == 1 : 
+                        if tradeprice.compare( exit ) == 1 : 
                             notification = f'{exit} {pair[3:]} price level breached: {notification}'
                             logger.info( notification )
                             sendmessage( notification )
