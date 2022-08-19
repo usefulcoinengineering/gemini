@@ -13,7 +13,6 @@
 
 message="\"Sending a test message from a BASH script that is a wrapper around a Python script (sendmessage.py).\""
 
-read -p "type a replacement value or press enter to continue with default argument [$message]: " message
-message=${message:-Sending a test message from a BASH script that is a wrapper around a Python script (sendmessage.py).}
+read -p "type a replacement value or press enter to continue with default argument [$message]: " message && message=${message:-sending_a_test_message_from_a_BASH_script}
 
 python3 ../sendmessage.py $message
