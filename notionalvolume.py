@@ -22,12 +22,12 @@ logger.debug ( f'Submitting request...' )
 jsonresponse = notionalvolume().json()
 
 # Remove comments to debug.
-# jsondatadump = json.dump( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
+jsondatadump = json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') )
 # logger.debug ( jsondatadump )
 
 # Format response.
 logger.info( f'Notional 30 day Trading Volume: {jsonresponse["notional_30d_volume"]} USD. ' )
-logger.info( f'Present API transaction fee: {jsonresponse["api_maker_fee_bps"]} basis points. ' )
+logger.info( f'Present API transaction fee: {jsonresponse["api_maker_fee_bps"]:.2f} basis points. ' )
 
 # Let the shell know we successfully made it this far!
 sys.exit(0)
