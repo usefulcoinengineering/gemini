@@ -25,10 +25,10 @@ from decimal import Decimal
 import libraries.definer as definer
 
 from libraries.logger import logger
-from libraries.bidmonitor import anchoredrise
 from libraries.ordermanager import islive
 from libraries.frontrunner import bidorder
 from libraries.stopper import askstoplimit
+from libraries.marketmonitor import bidrise
 from libraries.ordermanager import cancelorder
 from libraries.skimvalidator import confirmexecution
 from libraries.messenger import sendmessage as sendmessage
@@ -142,7 +142,7 @@ if 'filled' in poststatus.getvalue() :
 
     # Open websocket connection. 
     # Wait for the trading price to rise to the exit price.
-    exitprice = anchoredrise( pair, exitprice )
+    exitprice = bidrise( pair, exitprice )
 
     # Submit initial Gemini "stop-limit" order. 
     # If in doubt about what's going on, refer to documentation here: https://docs.gemini.com/rest-api/#new-order.
@@ -167,7 +167,7 @@ if 'filled' in poststatus.getvalue() :
 
             # Open websocket connection.
             # Wait for bids to exceed exitprice.
-            exitprice = anchoredrise( pair, exitprice )
+            exitprice = bidrise( pair, exitprice )
 
             # Cancel outdated stop-limit order.
             orderstatus = cancelorder( previousorder )
