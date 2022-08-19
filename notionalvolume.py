@@ -29,8 +29,8 @@ jsonresponse = notionalvolume().json()
 # Format Report.
 fragmentone = f'Notional 30 day Trading Volume: {jsonresponse["notional_30d_volume"]:,.2f} USD. '
 fragmenttwo = f'Present API transaction fee: {jsonresponse["api_maker_fee_bps"]} basis points.'
-logger.info = '{fragmentone}\n{fragmenttwo}'
-sendmessage ( '{fragmentone}\n{fragmenttwo}' )
+logger.info = f'{fragmentone}\n{fragmenttwo}'
+sendmessage ( f'{fragmentone}\n{fragmenttwo}' )
 
 # Let the shell know we successfully made it this far!
 sys.exit(0)
