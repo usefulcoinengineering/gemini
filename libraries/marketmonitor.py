@@ -70,7 +70,7 @@ def pricedecrease(
                         notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
                         logger.info( notification )
                         sendmessage( notification )
-                        ws.close() ; return tradeprice
+                        ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
@@ -138,7 +138,7 @@ def askfall(
                             notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
                             logger.info( notification )
                             sendmessage( notification )
-                            ws.close() ; return tradeprice
+                            ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
@@ -205,7 +205,7 @@ def priceincrease(
                         notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
                         logger.info( notification )
                         sendmessage( notification )
-                        ws.close() ; return tradeprice
+                        ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
@@ -273,7 +273,7 @@ def bidrise(
                             notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
                             logger.info( notification )
                             sendmessage( notification )
-                            ws.close() ; return tradeprice
+                            ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
