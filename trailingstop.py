@@ -19,7 +19,6 @@
 
 import sys
 import json
-import requests
 
 from decimal import Decimal
 
