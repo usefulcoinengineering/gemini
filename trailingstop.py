@@ -84,11 +84,7 @@ logger.debug ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=('
 
 # Open websocket connection and block.
 # Confirm order "close" before continuing.
-order = jsonresponse["order_id"]
-if not confirmexecution( order = order ) : 
-    criticalmessage = f'bid order not filled. please cancel manually and restart.'
-    logger.critical ( criticalmessage ) ; sendmessage ( criticalmessage )
-    sys.exit(1)
+confirmexecution( jsonresponse["order_id"] )
 
 # Define the trade cost price and cast it.
 costprice = Decimal( jsonresponse["price"] )
