@@ -59,7 +59,7 @@ def confirmexecution(
 
     # Construct payload.
     endpoint = '/v1/order/events'
-    nonce = time.time()
+    nonce = int(time.time()*1000)
     payload = {
         'request': endpoint,
         'nonce': nonce
