@@ -80,10 +80,7 @@ geminiapifee = Decimal( 0.0001 ) * Decimal ( jsonresponse["api_maker_fee_bps"] )
 logger.debug ( f'Submitting {pair} frontrunning limit bid order.' )
 jsonresponse = bidorder( pair, size ).json()
 try:
-    # logger.info ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
-    # If the order is unfilled. Open websocket and block. Confirm "close" before continuing.
-    if islive( jsonresponse["order_id"] ).json()["is_live"] : confirmexecution( jsonresponse["order_id"] )    
-    # if not jsonresponse["is_cancelled"] : confirmexecution( jsonresponse["order_id"] )  
+    if jsonresponse["is_cancelled"] : sys.exit(1)
 
 except KeyError as e:
     warningmessage = f'KeyError: {e} was not present in the response from the REST API server.'
@@ -91,6 +88,7 @@ except KeyError as e:
     try:    
         if jsonresponse["result"] : 
             sendmessage ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}' )
+            sys.exit(1)
 
     except KeyError as e:
         criticalmessage = f'KeyError: {e} was not present in the response from the REST API server.'
@@ -140,20 +138,24 @@ logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
 # Wait for the trading price to rise to the exit price.
 bidrise( pair, exitprice )
 
+# logger.info ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
+
+# If the order is not "closed" exit.
+if Decimal( islive( jsonresponse["order_id"] ).json()["remaining_amount"] ).compare( Decimal(0) ) == 0 : sys.exit(1) 
+
 # Submit initial Gemini "stop-limit" order. 
 # If in doubt about what's going on, refer to documentation here: https://docs.gemini.com/rest-api/#new-order.
 notification = f'Submitting initial stop-limit (ask) order with a {stopprice} {pair[3:]} stop. '
 notification = notification + f'This stop limit order has a {sellprice} {pair[3:]} limit price to sell {size} {pair[:3]}. '
 notification = notification + f'Resulting in a {ratiogain:.2f}% gain if executed. '
 logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
-postresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
+jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
 
 # Open loop.
 while True :
 
-    order = postresponse["order_id"]
     # If the stop limit order still active.
-    if islive( order = order ) :
+    if islive( jsonresponse["order_id"] ) :
         
         # Calculate new exit and resultant sell/stop prices.
         exitprice = Decimal( exitprice * exitratio ).quantize( tick )
@@ -167,13 +169,13 @@ while True :
         bidrise( pair, exitprice )
 
         # Cancel outdated stop-limit order.
-        cancelstatus = cancelorder( order = order )
+        cancelstatus = cancelorder( jsonresponse["order_id"] )
         if not cancelstatus.json()["is_cancelled"] : sendmessage ( "Unable to cancel order. Try manual cancel." )
 
         # Post updated stop-limit order.
-        notification = f'Cancelled {postresponse["order_id"]} {pair[3:]} stop sell. Submitting {sellprice} {pair[3:]} stop sell.'
+        notification = f'Cancelled {jsonresponse["order_id"]} {pair[3:]} stop sell. Submitting {sellprice} {pair[3:]} stop sell.'
         logger.debug ( notification )
-        postresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
+        jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
         continue
 
     else :
