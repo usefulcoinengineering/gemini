@@ -17,6 +17,7 @@
 # Execution:
 #   - Use the wrapper BASH script in the "strategies" directory.
 
+from distutils.log import debug
 import sys
 import json
 
@@ -146,7 +147,11 @@ bidrise( pair, exitprice )
 # logger.info ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
 
 # If the order is not "closed" exit.
-if Decimal( islive( jsonresponse["order_id"] ).json()["remaining_amount"] ).compare( Decimal(0) ) == 0 : sys.exit(1) 
+if Decimal( islive( jsonresponse["order_id"] ).json()["remaining_amount"] ).compare( Decimal(0) ) == 0 : 
+    infomessage = f'Bid order {jsonresponse["order_id"]} has not been completely filled. No point submitting an ask.'
+    logger.info ( f'{infomessage} Exiting...' )
+    sendmessage ( f'{infomessage} Exiting...' )
+    sys.exit(1) 
 
 # Submit initial Gemini "stop-limit" order. 
 # If in doubt about what's going on, refer to documentation here: https://docs.gemini.com/rest-api/#new-order.
