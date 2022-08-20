@@ -87,7 +87,8 @@ except KeyError as e:
     logger.warning ( warningmessage )
     try:    
         if jsonresponse["result"] : 
-            sendmessage ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}' )
+            criticalmessage = f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}'
+            logger.critical ( criticalmessage ) ; sendmessage ( criticalmessage )
             sys.exit(1)
 
     except KeyError as e:
