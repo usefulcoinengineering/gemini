@@ -58,8 +58,8 @@ def confirmexecution(
                     ws.close()
 
     # Construct payload.
-    endpoint = '/v1/order/events' + parameters
-    nonce = int(time.time()*1000)
+    endpoint = '/v1/order/events'
+    nonce = time.time()
     payload = {
         'request': endpoint,
         'nonce': nonce
