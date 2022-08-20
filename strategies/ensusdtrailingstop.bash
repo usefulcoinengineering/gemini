@@ -29,4 +29,4 @@
 #  python3 ../trailingstop.py ENSUSD 0.001 0.0050 0.0100
 # done
 
-python3 ../trailingstop.py ENSUSD 60 0.0050 0.0100
+python3 ../trailingstop.py ENSUSD 1 0.0050 0.0100
