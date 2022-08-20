@@ -5,12 +5,12 @@
 # library created: 20220816
 # library purpose: check order number specified is active on the orderbook (i.e. has remaining size and has not been canceled).
 
-
-import requests
+import sys
 import ssl
 import json
-import datetime
 import time
+import datetime
+import requests
 
 from decimal import Decimal
 
@@ -36,10 +36,21 @@ def islive(
     request = definer.restserver + endpoint
     
     response = requests.post(request, data = None, headers = headers['restheader'])
+    try:
+        if response.json()['is_live'] : logger.info( f'Order {order} is live on the Gemini orderbook. ' )
+        else : logger.info( f'Order {order} is NOT live on the Gemini orderbook. ' )
 
-    # Update logs.
-    if response.json()['is_live'] : logger.info( f'Order {order} is live on the Gemini orderbook. ' )
-    else : logger.info( f'Order {order} is NOT live on the Gemini orderbook. ' )
+    except KeyError as e:
+        warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
+        logger.warning ( f'{warningmessage} This implies that the order is no longer in the orderbook.' )
+        try:    
+            if response["result"] : 
+                logger.warning ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
+
+        except KeyError as e:
+            criticalmessage = f'KeyError: {e} was not present in the response from the REST API server.'
+            logger.critical ( f'Unexpecter error. {criticalmessage}' )
+            sys.exit(1)
 
     return response
 
@@ -59,9 +70,20 @@ def cancelorder(
     request = definer.restserver + endpoint
 
     response = requests.post(request, data = None, headers = headers['restheader'])
+    try:
+        if response.json()['is_cancelled'] : logger.info( f'{order} was cancelled. ' )
+        else : logger.info( f'unable to cancel {order}. ' )
 
-    # Update logs.
-    if response.json()['is_cancelled'] : logger.info( f'{order} was cancelled. ' )
-    else : logger.info( f'unable to cancel {order}. ' )
+    except KeyError as e:
+        warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
+        logger.warning ( f'{warningmessage} This implies that the order is no longer in the orderbook.' )
+        try:    
+            if response["result"] : 
+                logger.warning ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
+
+        except KeyError as e:
+            criticalmessage = f'KeyError: {e} was not present in the response from the REST API server.'
+            logger.critical ( f'Unexpecter error. {criticalmessage}' )
+            sys.exit(1)
 
     return response
