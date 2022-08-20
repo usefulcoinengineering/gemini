@@ -74,7 +74,7 @@ tick = Decimal( item[0] )
 
 # Determine Gemini API transaction fee.
 jsonresponse = notionalvolume().json()
-geminiapifee = jsonresponse["api_maker_fee_bps"]
+geminiapifee = Decimal( 0.0001 ) * Decimal ( jsonresponse["api_maker_fee_bps"] )
 
 # Submit limit bid order and dump the JSON response in the logs.
 logger.debug ( f'Submitting {pair} frontrunning limit bid order.' )
