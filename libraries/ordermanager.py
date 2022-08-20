@@ -44,8 +44,8 @@ def islive(
         warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
         logger.warning ( f'{warningmessage} This implies that the order is no longer in the orderbook.' )
         try:    
-            if response["result"] : 
-                logger.warning ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
+            if response.json()["result"] : 
+                logger.warning ( f'\"{response.json()["reason"]}\" {response.json()["result"]}: {response.json()["message"]}' )
 
         except KeyError as e:
             criticalmessage = f'KeyError: {e} was not present in the response from the REST API server.'
@@ -78,8 +78,8 @@ def cancelorder(
         warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
         logger.warning ( f'{warningmessage} This implies that the order is no longer in the orderbook.' )
         try:    
-            if response["result"] : 
-                logger.warning ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
+            if response.json()["result"] : 
+                logger.warning ( f'\"{response.json()["reason"]}\" {response.json()["result"]}: {response.json()["message"]}' )
 
         except KeyError as e:
             criticalmessage = f'KeyError: {e} was not present in the response from the REST API server.'
