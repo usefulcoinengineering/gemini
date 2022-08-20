@@ -64,7 +64,7 @@ sell = Decimal(sell)
 # Gemini requires this for stop ask orders:
 # The stop price must exceed the sell price.
 if stop.compare( sell ) == 1:
-    notification = f'The sell price discount {sell} cannot be larger than the stop price discount {stop}. '
+    notification = f'The sell price discount {sell*100}* cannot be larger than the stop price discount {stop*100}%. '
     logger.error ( f'{notification}' )
     sys.exit(1)
 
@@ -119,7 +119,7 @@ ratiogain = Decimal( 100 * sellprice * size / costprice / size - 100 ).quantize(
 # Validate "stop price".
 if stopprice.compare( costprice ) == 1:
     # Make sure that the "stop price" is below the purchase price (i.e. "cost price").
-    notification = f'The stop price {stop} {pair[3:]} cannot be larger than the purchase price of {costprice} {pair[3:]}. '
+    notification = f'The stop price {stop:,.2f} {pair[3:]} cannot exceed the purchase price of {costprice:,.2f} {pair[3:]}. '
     logger.error ( f'{notification}' ) ; sendmessage ( f'{notification}' ) ; sys.exit(1)
 
 # Record parameters to logs.
@@ -132,7 +132,7 @@ logger.debug ( f'ratio gain: {ratiogain:.2f}%' )
 
 # Explain the opening a websocket connection.
 # Also explain the wait for an increase in the latest transaction prices beyond the "exitprice".
-notification = f'Waiting for the trading price of {pair[:3]} to increase {Decimal(stop)*100}% to {exitprice} {pair[3:]}. '
+notification = f'Waiting for the trading price of {pair[:3]} to rise {Decimal(stop)*100}% to {exitprice:,.2f} {pair[3:]}. '
 logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
 
 # Open websocket connection. 
@@ -146,9 +146,9 @@ if Decimal( islive( jsonresponse["order_id"] ).json()["remaining_amount"] ).comp
 
 # Submit initial Gemini "stop-limit" order. 
 # If in doubt about what's going on, refer to documentation here: https://docs.gemini.com/rest-api/#new-order.
-notification = f'Submitting initial stop-limit (ask) order with a {stopprice} {pair[3:]} stop. '
-notification = notification + f'This stop limit order has a {sellprice} {pair[3:]} limit price to sell {size} {pair[:3]}. '
-notification = notification + f'Resulting in a {ratiogain:.2f}% gain if executed. '
+notification = f'Submitting initial stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop. '
+notification = notification + f'This stop limit order has a {sellprice:,.2f} {pair[3:]} limit price to sell {size} {pair[:3]}. '
+notification = notification + f'Resulting in a {ratiogain:,.2f}% gain if executed. '
 logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
 jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
 
@@ -174,7 +174,7 @@ while True :
         if not cancelstatus.json()["is_cancelled"] : sendmessage ( "Unable to cancel order. Try manual cancel." )
 
         # Post updated stop-limit order.
-        notification = f'Cancelled {jsonresponse["order_id"]} {pair[3:]} stop sell. Submitting {sellprice} {pair[3:]} stop sell.'
+        notification = f'Cancelled {jsonresponse["order_id"]} {pair[3:]} stop sell. Submitting {sellprice:,.2f} {pair[3:]} stop sell.'
         logger.debug ( notification )
         jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
         continue
@@ -186,9 +186,9 @@ while True :
         ratiogain = Decimal( 100 * sellprice * size / costprice / size - 100 )
 
         # log profits and report them via Discord alert.
-        clause0 = f'There was a {ratiogain:.2f}% profit/loss of {quotegain} {pair[3:]} '
-        clause1 = f'from the sale of {size} {pair[:3]} at {Decimal(sellprice * size)} {pair[3:]} '
-        clause2 = f'which cost {Decimal(costprice * size)} {pair[3:]} to acquire.'
+        clause0 = f'There was a {ratiogain:,.2f}% profit/loss of {quotegain:,.2f} {pair[3:]} '
+        clause1 = f'from the sale of {size} {pair[:3]} at {Decimal(sellprice * size):,.2f} {pair[3:]} '
+        clause2 = f'which cost {Decimal(costprice * size):,.2f} {pair[3:]} to acquire.'
         message = f'{clause0}{clause1}{clause2}'
         logger.info ( message ) ; sendmessage ( message )
         break
