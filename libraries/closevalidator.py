@@ -8,6 +8,7 @@
 import ssl
 import json
 import time
+import datetime
 import websocket
 
 from decimal import Decimal
@@ -58,8 +59,9 @@ def confirmexecution(
                     ws.close()
 
     # Construct payload.
+    t = datetime.datetime.now()
     endpoint = '/v1/order/events'
-    nonce = time.time()
+    nonce = str(int(time.mktime(t.timetuple())*1000))
     payload = {
         'request': endpoint,
         'nonce': nonce
