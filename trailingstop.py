@@ -79,7 +79,8 @@ geminiapifee = jsonresponse["api_maker_fee_bps"]
 # Submit limit bid order and dump the JSON response in the logs.
 logger.debug ( f'Submitting {pair} frontrunning limit bid order.' )
 jsonresponse = bidorder( pair, size ).json()
-# Uncomment to debug: logger.debug ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
+# Uncomment to debug:
+logger.debug ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
 
 # Open websocket connection and block.
 # Confirm order "close" before continuing.
