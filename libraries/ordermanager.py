@@ -36,10 +36,9 @@ def islive(
     request = definer.restserver + endpoint
     
     response = requests.post(request, data = None, headers = headers['restheader'])
-    response = Decimal( response.json()['is_live'] )
 
     # Update logs.
-    if response : logger.debug( f'Order {order} is live on the Gemini orderbook. ' )
+    if response.json()['is_live'] : logger.debug( f'Order {order} is live on the Gemini orderbook. ' )
     else : logger.debug( f'Order {order} is NOT live on the Gemini orderbook. ' )
 
     return response
