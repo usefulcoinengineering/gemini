@@ -79,12 +79,11 @@ geminiapifee = Decimal( 0.0001 ) * Decimal ( jsonresponse["api_maker_fee_bps"] )
 # Submit limit bid order and dump the JSON response in the logs.
 logger.debug ( f'Submitting {pair} frontrunning limit bid order.' )
 jsonresponse = bidorder( pair, size ).json()
-# Uncomment to debug:
-logger.debug ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
+# Uncomment to debug: logger.debug ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
 
 # Open websocket connection and block.
 # Confirm order "close" before continuing.
-confirmexecution( jsonresponse["order_id"] )
+if not jsonresponse["is_cancelled"] : confirmexecution( jsonresponse["order_id"] )
 
 # Define the trade cost price and cast it.
 costprice = Decimal( jsonresponse["price"] )
