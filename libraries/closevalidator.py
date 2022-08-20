@@ -7,11 +7,13 @@
 
 import ssl
 import json
+import time
 import websocket
 
 from decimal import Decimal
 
 from libraries.logger import logger as logger
+import libraries.authenticator as authenticator
 from libraries.messenger import sendmessage as sendmessage
 
 def confirmexecution(
@@ -54,6 +56,15 @@ def confirmexecution(
                     logger.info( notification )
                     sendmessage( notification )
                     ws.close()
+
+    # Construct payload.
+    endpoint = '/v1/order/events' + parameters
+    nonce = int(time.time()*1000)
+    payload = {
+        'request': endpoint,
+        'nonce': nonce
+    }
+    header = authenticator.authenticate(payload)
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
@@ -62,5 +73,6 @@ def confirmexecution(
                                  on_open = on_open,
                                  on_close = on_close,
                                  on_error = on_error,
-                                 on_message = on_message )
+                                 on_message = on_message,
+                                 header = header['sockheader'] )
     ws.run_forever(sslopt={'cert_reqs': ssl.CERT_NONE})
