@@ -180,10 +180,14 @@ while True :
 
         # Cancel outdated stop-limit order.
         cancelstatus = cancelorder( jsonresponse["order_id"] )
-        if not cancelstatus.json()["is_cancelled"] : sendmessage ( "Unable to cancel order. Try manual cancel." )
+        if not cancelstatus.json()["is_cancelled"] : 
+            infomessage = f'Unable to cancel order {cancelstatus.json()["order_id"]}. Manual intervention required. '
+            logger.info ( infomessage )
+            sendmessage ( infomessage )
 
         # Post updated stop-limit order.
-        notification = f'Cancelled {jsonresponse["order_id"]} {pair[3:]} stop sell. Submitting {sellprice:,.2f} {pair[3:]} stop sell.'
+        notification = f'Cancelled {cancelstatus.json()["price"]} {pair[3:]} stop sell order {cancelstatus.json()["order_id"]}. '
+        notification = f'Submitting stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell.'
         logger.debug ( notification )
         jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
         continue
