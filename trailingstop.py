@@ -88,8 +88,8 @@ order = jsonresponse["order_id"]
 if confirmexecution( order = order ) : pass
 else: logger.critical ( f'bid order not filled.' ) ; sendmessage ( f'bid order not filled.' )
 
-# Define the trade cost price.
-costprice = jsonresponse["price"]
+# Define the trade cost price and cast it.
+costprice = Decimal( jsonresponse["price"] )
 
 # Calculate exit price.
 exitratio = Decimal( 1 + stop + geminiapifee )
