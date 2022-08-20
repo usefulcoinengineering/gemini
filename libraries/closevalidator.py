@@ -57,7 +57,7 @@ def confirmexecution(
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
-    logger.debug( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
+    logger.debug( f'Establishing websocket connection to monitor "closed" status of order {order}.' )
     ws = websocket.WebSocketApp( connection,
                                  on_open = on_open,
                                  on_close = on_close,
