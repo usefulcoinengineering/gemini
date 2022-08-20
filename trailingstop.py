@@ -76,11 +76,9 @@ tick = Decimal( item[0] )
 jsonresponse = notionalvolume().json()
 geminiapifee = Decimal( 0.0001 ) * Decimal ( jsonresponse["api_maker_fee_bps"] )
 
-# Submit limit bid order and dump the JSON response in the logs.
+# Submit limit bid order, report response, and verify submission.
 logger.debug ( f'Submitting {pair} frontrunning limit bid order.' )
 jsonresponse = bidorder( pair, size ).json()
-# Uncomment to debug: logger.debug ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
-
 try:    
     if not jsonresponse["is_cancelled"] : 
         sendmessage ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
@@ -98,9 +96,8 @@ except KeyError as e:
         sendmessage ( f'Unexpecter error. Unsuccessful bid order submission. {criticalmessage}' )
         sys.exit(1)
 
-# Open websocket connection and block.
-# Confirm order "close" before continuing.
-confirmexecution( jsonresponse["order_id"] )
+# If the order is unfilled. Open websocket and block. Confirm "close" before continuing.
+if islive( "order_id" ).json()["is_live"] : confirmexecution( jsonresponse["order_id"] )
 
 # Define the trade cost price and cast it.
 costprice = Decimal( jsonresponse["price"] )
