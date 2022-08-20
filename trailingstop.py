@@ -89,6 +89,7 @@ try:
 except KeyError as e:
     logger.warning ( f'KeyError: {e}' )
     sendmessage ( "unsuccessful bid order submission." )
+    sys.exit(1)
 
 try:    
     if jsonresponse["result"] : 
