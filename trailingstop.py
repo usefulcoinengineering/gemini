@@ -76,6 +76,10 @@ tick = Decimal( item[0] )
 jsonresponse = notionalvolume().json()
 geminiapifee = Decimal( 0.0001 ) * Decimal ( jsonresponse["api_maker_fee_bps"] )
 
+# Submit limit bid order, report response, and verify submission.
+logger.debug ( f'Submitting {pair} frontrunning limit bid order.' )
+jsonresponse = bidorder( pair, size ).json()
+
 # Define the trade cost price and cast it.
 costprice = Decimal( jsonresponse["price"] )
 
