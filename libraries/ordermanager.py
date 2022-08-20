@@ -38,8 +38,8 @@ def islive(
     response = requests.post(request, data = None, headers = headers['restheader'])
 
     # Update logs.
-    if response.json()['is_live'] : logger.debug( f'Order {order} is live on the Gemini orderbook. ' )
-    else : logger.debug( f'Order {order} is NOT live on the Gemini orderbook. ' )
+    if response.json()['is_live'] : logger.info( f'Order {order} is live on the Gemini orderbook. ' )
+    else : logger.info( f'Order {order} is NOT live on the Gemini orderbook. ' )
 
     return response
 
@@ -61,7 +61,7 @@ def cancelorder(
     response = requests.post(request, data = None, headers = headers['restheader'])
 
     # Update logs.
-    if response.json()['is_cancelled'] : logger.debug( f'{order} was cancelled. ' )
-    else : logger.debug( f'unable to cancel {order}. ' )
+    if response.json()['is_cancelled'] : logger.info( f'{order} was cancelled. ' )
+    else : logger.info( f'unable to cancel {order}. ' )
 
     return response
