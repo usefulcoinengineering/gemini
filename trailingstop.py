@@ -97,7 +97,7 @@ except KeyError as e:
         sys.exit(1)
 
 # If the order is unfilled. Open websocket and block. Confirm "close" before continuing.
-if islive( "order_id" ).json()["is_live"] : confirmexecution( jsonresponse["order_id"] )
+if islive( jsonresponse["order_id"] ).json()["is_live"] : confirmexecution( jsonresponse["order_id"] )
 
 # Define the trade cost price and cast it.
 costprice = Decimal( jsonresponse["price"] )
