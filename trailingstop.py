@@ -83,7 +83,21 @@ jsonresponse = bidorder( pair, size ).json()
 
 # Open websocket connection and block.
 # Confirm order "close" before continuing.
-if not jsonresponse["is_cancelled"] : confirmexecution( jsonresponse["order_id"] )
+try:    
+    if not jsonresponse["is_cancelled"] : confirmexecution( jsonresponse["order_id"] )
+
+except KeyError as e:
+    logger.warning ( f'KeyError: {e}' )
+    sendmessage ( "unsuccessful bid order submission." )
+
+try:    
+    if jsonresponse["result"] : 
+        sendmessage ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}' )
+
+except KeyError as e:
+    logger.critical ( f'KeyError: {e}' )
+    sendmessage ( "unexpecter error. unsuccessful bid order submission." )
+    sys.exit(1)
 
 # Define the trade cost price and cast it.
 costprice = Decimal( jsonresponse["price"] )
