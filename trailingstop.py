@@ -81,6 +81,10 @@ logger.debug ( f'Submitting {pair} frontrunning limit bid order.' )
 jsonresponse = bidorder( pair, size ).json()
 try:
     if jsonresponse["is_cancelled"] : sys.exit(1)
+    else:
+        infomessage = f'Order {jsonresponse["order_id"]} is active and booked.'
+        logger.info ( infomessage )
+        sendmessage ( infomessage )
 
 except KeyError as e:
     warningmessage = f'KeyError: {e} was not present in the response from the REST API server.'
