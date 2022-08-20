@@ -81,24 +81,24 @@ logger.debug ( f'Submitting {pair} frontrunning limit bid order.' )
 jsonresponse = bidorder( pair, size ).json()
 # Uncomment to debug: logger.debug ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
 
-# Open websocket connection and block.
-# Confirm order "close" before continuing.
 try:    
-    if not jsonresponse["is_cancelled"] : confirmexecution( jsonresponse["order_id"] )
+    if not jsonresponse["is_cancelled"] : 
+        sendmessage ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
 
 except KeyError as e:
     logger.warning ( f'KeyError: {e}' )
-    sendmessage ( "unsuccessful bid order submission." )
-    sys.exit(1)
+    try:    
+        if jsonresponse["result"] : 
+            sendmessage ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}' )
 
-try:    
-    if jsonresponse["result"] : 
-        sendmessage ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}' )
+    except KeyError as e:
+        logger.critical ( f'KeyError: {e}' )
+        sendmessage ( "unexpecter error. unsuccessful bid order submission." )
+        sys.exit(1)
 
-except KeyError as e:
-    logger.critical ( f'KeyError: {e}' )
-    sendmessage ( "unexpecter error. unsuccessful bid order submission." )
-    sys.exit(1)
+# Open websocket connection and block.
+# Confirm order "close" before continuing.
+confirmexecution( jsonresponse["order_id"] )
 
 # Define the trade cost price and cast it.
 costprice = Decimal( jsonresponse["price"] )
