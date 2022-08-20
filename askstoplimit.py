@@ -84,7 +84,7 @@ response = askstoplimit( str(pair), str(size), str(stop), str(sell) ).json()
 
 try:    
     if response["is_live"] : 
-        fragmentone = f'A stop limit ask order for {size} {pair[:3]} was submitted to the Gemini orderbook. '
+        fragmentone = f'Order {response["order_id"]} for {size} {pair[:3]} was submitted to the Gemini orderbook. '
         fragmenttwo = f'The stop price was set to {stop} {pair[3:]}. The sell price was set to {sell} {pair[3:]}.'
         logger.info ( f'{fragmentone}{fragmenttwo}')
         sendmessage ( f'{fragmentone}{fragmenttwo}')
