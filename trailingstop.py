@@ -86,14 +86,16 @@ try:
         sendmessage ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
 
 except KeyError as e:
-    logger.warning ( f'KeyError: {e}' )
+    warningmessage = f'KeyError: {e} was not present in the response from the REST API server.'
+    logger.warning ( warningmessage )
     try:    
         if jsonresponse["result"] : 
             sendmessage ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}' )
 
     except KeyError as e:
-        logger.critical ( f'KeyError: {e}' )
-        sendmessage ( "unexpecter error. unsuccessful bid order submission." )
+        criticalmessage = f'KeyError: {e} was not present in the response from the REST API server.'
+        logger.critical ( f'Unexpecter error. Unsuccessful bid order submission. {criticalmessage}' )
+        sendmessage ( f'Unexpecter error. Unsuccessful bid order submission. {criticalmessage}' )
         sys.exit(1)
 
 # Open websocket connection and block.
