@@ -26,7 +26,7 @@ from decimal import Decimal
 
 from libraries.logger import logger
 from libraries.ordermanager import islive
-from libraries.frontrunner import bidorder
+from libraries.spreadkiller import bidorder
 from libraries.stopper import askstoplimit
 from libraries.marketmonitor import bidrise
 from libraries.ordermanager import cancelorder
