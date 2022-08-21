@@ -73,8 +73,7 @@ item = [ item['tick'] for item in ticksizes if item['currency'] == pair[:3] ]
 tick = Decimal( item[0] )
 
 # Determine Gemini API transaction fee.
-jsonresponse = notionalvolume().json()
-geminiapifee = Decimal( 0.0001 ) * Decimal ( jsonresponse["api_maker_fee_bps"] )
+geminiapifee = Decimal( 0.0001 ) * Decimal ( notionalvolume().json()["api_maker_fee_bps"] )
 
 # You could put the try-except logic in a while loop to keep trying until there's success.
 # But keep debugging for now.
