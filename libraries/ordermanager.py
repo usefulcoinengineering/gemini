@@ -55,20 +55,5 @@ def cancelorder(
     request = definer.restserver + endpoint
 
     response = requests.post(request, data = None, headers = headers['restheader'])
-    try:
-        if response.json()['is_cancelled'] : logger.info( f'{order} was cancelled. ' )
-        else : logger.info( f'unable to cancel {order}. ' )
-
-    except KeyError as e:
-        warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
-        logger.warning ( f'{warningmessage} This implies that the order is no longer in the orderbook.' )
-        try:    
-            if response.json()["result"] : 
-                logger.warning ( f'\"{response.json()["reason"]}\" {response.json()["result"]}: {response.json()["message"]}' )
-
-        except KeyError as e:
-            criticalmessage = f'KeyError: {e} was not present in the response from the REST API server.'
-            logger.critical ( f'Unexpecter error. {criticalmessage}' )
-            sys.exit(1)
 
     return response
