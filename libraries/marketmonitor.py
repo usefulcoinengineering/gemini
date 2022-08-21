@@ -38,8 +38,8 @@ def pricedecrease(
     logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini drops below: {exit:,.2f} {pair[3:]}')
 
     # Define websocket functions.
-    def on_open( ws ) : logger.info( f'{ws} connection opened.' )
-    def on_close( ws, close_status_code, close_msg ) : logger.info( 'connection closed.' )
+    def on_open( ws ) : logger.debug( f'{ws} connection opened.' )
+    def on_close( ws, close_status_code, close_msg ) : logger.debug( 'connection closed.' )
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
 
@@ -48,36 +48,36 @@ def pricedecrease(
         dictionary = json.loads( message )
 
         # Display heartbeat
-        if dictionary["type"] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary["socket_sequence"]}' )
+        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary[ "socket_sequence" ]}' )
         else :
             
             # Define events array/list.
-            events = dictionary['events']
+            events = dictionary[ 'events' ]
             if events == [] : 
-                logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
+                logger.debug( f'No update events. Perhaps this is the initial response from Gemini: {message} ' )
             else:
                 # Verify the array of events is a list.
                 # Iterate through each event in the update.
                 if isinstance(events, list):
                     for event in events:
-                        tradeprice = Decimal( event['price'] )
-                        tradevalue = Decimal( event['amount'] )
+                        tradeprice = Decimal( event[ 'price' ] )
+                        tradevalue = Decimal( event[ 'amount' ] )
                         inadequacy = Decimal( 100 * ( tradeprice - exit ) / exit )
                         tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                         if event['makerSide'] == "ask" : takeraction = "increase"
                         if event['makerSide'] == "bid" : takeraction = "decrease"
-                        notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
-                        notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
-                        logger.debug( f'{notification}' )
+                        infomessage = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                        infomessage = infomessage + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
+                        logger.info ( f'{infomessage}' )
                         if exit.compare( tradeprice ) == 1 : 
-                            notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
-                            logger.info( notification )
-                            sendmessage( notification )
+                            infomessage = f'{exit:,.2f} {pair[3:]} price level breached: {infomessage}'
+                            logger.info( infomessage )
+                            sendmessage( infomessage )
                             ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
-    logger.debug( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
+    logger.info ( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
     ws = websocket.WebSocketApp( connection,
                                  on_open = on_open,
                                  on_close = on_close,
@@ -108,8 +108,8 @@ def askfall(
     logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini drops below: {exit:,.2f} {pair[3:]}')
 
     # Define websocket functions.
-    def on_open( ws ) : logger.info( f'{ws} connection opened.' )
-    def on_close( ws, close_status_code, close_msg ) : logger.info( 'connection closed.' )
+    def on_open( ws ) : logger.debug( f'{ws} connection opened.' )
+    def on_close( ws, close_status_code, close_msg ) : logger.debug( 'connection closed.' )
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
@@ -118,37 +118,37 @@ def askfall(
         dictionary = json.loads( message )
 
         # Display heartbeat
-        if dictionary["type"] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary["socket_sequence"]}' )
+        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary[ "socket_sequence" ]}' )
         else :
 
             # Define events array/list.
-            events = dictionary['events']
+            events = dictionary[ 'events' ]
             if events == [] : 
-                logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
+                logger.debug( f'No update events. Perhaps this is the initial response from Gemini: {message} ' )
             else:
                 # Verify the array of events is a list.
                 # Iterate through each event in the update.
                 if isinstance(events, list):
                     for event in events:
-                        tradeprice = Decimal( event['price'] )
-                        tradevalue = Decimal( event['amount'] )
+                        tradeprice = Decimal( event[ 'price' ] )
+                        tradevalue = Decimal( event[ 'amount' ] )
                         inadequacy = Decimal( 100 * ( tradeprice - exit ) / exit )
                         tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                         if event['makerSide'] == "ask" : takeraction = "increase"
                         if event['makerSide'] == "bid" : takeraction = "decrease"
-                        notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
-                        notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
-                        logger.debug( f'{notification}' )
+                        infomessage = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                        infomessage = infomessage + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
+                        logger.info ( f'{infomessage}' )
                         if event['makerSide'] == "ask" :
                             if exit.compare( tradeprice ) == 1 : 
-                                notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
-                                logger.info( notification )
-                                sendmessage( notification )
+                                infomessage = f'{exit:,.2f} {pair[3:]} price level breached: {infomessage}'
+                                logger.info( infomessage )
+                                sendmessage( infomessage )
                                 ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
-    logger.debug( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
+    logger.info ( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
     ws = websocket.WebSocketApp( connection,
                                  on_open = on_open,
                                  on_close = on_close,
@@ -179,8 +179,8 @@ def priceincrease(
     logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini exceeds: {exit:,.2f} {pair[3:]}')
 
     # Define websocket functions.
-    def on_open( ws ) : logger.info( f'{ws} connection opened.' )
-    def on_close( ws, close_status_code, close_msg ) : logger.info( 'connection closed.' )
+    def on_open( ws ) : logger.debug( f'{ws} connection opened.' )
+    def on_close( ws, close_status_code, close_msg ) : logger.debug( 'connection closed.' )
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
@@ -189,36 +189,36 @@ def priceincrease(
         dictionary = json.loads( message )
 
         # Display heartbeat
-        if dictionary["type"] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary["socket_sequence"]}' )
+        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary[ "socket_sequence" ]}' )
         else :
 
             # Define events array/list.
-            events = dictionary['events']
+            events = dictionary[ 'events' ]
             if events == [] : 
-                logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
+                logger.debug( f'No update events. Perhaps this is the initial response from Gemini: {message} ' )
             else:
                 # Verify the array of events is a list.
                 # Iterate through each event in the update.
                 if isinstance(events, list):
                     for event in events:
-                        tradeprice = Decimal( event['price'] )
-                        tradevalue = Decimal( event['amount'] )
+                        tradeprice = Decimal( event[ 'price' ] )
+                        tradevalue = Decimal( event[ 'amount' ] )
                         inadequacy = Decimal( 100 * ( exit - tradeprice ) / exit )
                         tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                         if event['makerSide'] == "ask" : takeraction = "increase"
                         if event['makerSide'] == "bid" : takeraction = "decrease"
-                        notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
-                        notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
-                        logger.debug( f'{notification}' )
+                        infomessage = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                        infomessage = infomessage + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
+                        logger.info ( f'{infomessage}' )
                         if tradeprice.compare( exit ) == 1 : 
-                            notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
-                            logger.info( notification )
-                            sendmessage( notification )
+                            infomessage = f'{exit:,.2f} {pair[3:]} price level breached: {infomessage}'
+                            logger.info( infomessage )
+                            sendmessage( infomessage )
                             ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
-    logger.debug( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
+    logger.info ( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
     ws = websocket.WebSocketApp( connection,
                                  on_open = on_open,
                                  on_close = on_close,
@@ -249,8 +249,8 @@ def bidrise(
     logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini exceeds: {exit:,.2f} {pair[3:]}')
 
     # Define websocket functions.
-    def on_open( ws ) : logger.info( f'{ws} connection opened.' )
-    def on_close( ws, close_status_code, close_msg ) : logger.info( 'connection closed.' )
+    def on_open( ws ) : logger.debug( f'{ws} connection opened.' )
+    def on_close( ws, close_status_code, close_msg ) : logger.debug( 'connection closed.' )
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
@@ -259,37 +259,37 @@ def bidrise(
         dictionary = json.loads( message )
 
         # Display heartbeat
-        if dictionary["type"] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary["socket_sequence"]}' )
+        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary[ "socket_sequence" ]}' )
         else :
 
             # Define events array/list.
-            events = dictionary['events']
+            events = dictionary[ 'events' ]
             if events == [] : 
-                logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
+                logger.debug( f'No update events. Perhaps this is the initial response from Gemini: {message} ' )
             else:
                 # Verify the array of events is a list.
                 # Iterate through each event in the update.
                 if isinstance(events, list):
                     for event in events:
-                        tradeprice = Decimal( event['price'] )
-                        tradevalue = Decimal( event['amount'] )
+                        tradeprice = Decimal( event[ 'price' ] )
+                        tradevalue = Decimal( event[ 'amount' ] )
                         inadequacy = Decimal( 100 * ( exit - tradeprice ) / exit )
                         tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                         if event['makerSide'] == "ask" : takeraction = "increase"
                         if event['makerSide'] == "bid" : takeraction = "decrease"
-                        notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
-                        notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
-                        logger.debug( f'{notification}' )
+                        infomessage = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                        infomessage = infomessage + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
+                        logger.info ( f'{infomessage}' )
                         if event['makerSide'] == "bid" : 
                             if tradeprice.compare( exit ) == 1 : 
-                                notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
-                                logger.info( notification )
-                                sendmessage( notification )
+                                infomessage = f'{exit:,.2f} {pair[3:]} price level breached: {infomessage}'
+                                logger.info( infomessage )
+                                sendmessage( infomessage )
                                 ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
-    logger.debug( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
+    logger.info ( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
     ws = websocket.WebSocketApp( connection,
                                  on_open = on_open,
                                  on_close = on_close,
