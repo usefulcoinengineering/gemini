@@ -63,7 +63,8 @@ def anchoredrise (
 
     # Construct payload.
     request = definer.sockserver + '/v2/marketdata'
-    nonce = int(time.time()*1000)
+    t = datetime.datetime.now()
+    nonce = str(int(time.mktime(t.timetuple())*1000))
     payload = {
         'request': request,
         'nonce': nonce

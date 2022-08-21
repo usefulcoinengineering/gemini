@@ -63,8 +63,9 @@ def floatingfall (
     subscriptionrequest = f'{{"type": "subscribe","subscriptions":[{{"name":"l2","symbols":["{pair}"]}}]}}'
 
     # Construct payload.
+    t = datetime.datetime.now()
     request = definer.sockserver + '/v2/marketdata'
-    nonce = int(time.time()*1000)
+    nonce = str(int(time.mktime(t.timetuple())*1000))
     payload = {
         'request': request,
         'nonce': nonce
@@ -164,8 +165,9 @@ def anchoredfall (
     subscriptionrequest = f'{{"type": "subscribe","subscriptions":[{{"name":"l2","symbols":["{pair}"]}}]}}'
 
     # Construct payload.
+    t = datetime.datetime.now()
     request = definer.sockserver + '/v2/marketdata'
-    nonce = int(time.time()*1000)
+    nonce = str(int(time.mktime(t.timetuple())*1000))
     payload = {
         'request': request,
         'nonce': nonce
