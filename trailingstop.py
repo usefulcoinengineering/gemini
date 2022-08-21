@@ -109,7 +109,7 @@ except KeyError as e:
         sys.exit(1)
 
 # Confirm order execution.
-confirmexecution( jsonresponse["order_id"] )
+# confirmexecution( jsonresponse["order_id"] )
 
 # Define the trade cost price and cast it.
 costprice = Decimal( jsonresponse["price"] )
