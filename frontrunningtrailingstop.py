@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# script name: trailingstop.py
+# script name: frontrunningtrailingstop.py
 # script author: munair simpson
 # script created: 20220816
 # script purpose: buy the specified asset then sell it using a highest bid trailing stop-limit ask.
@@ -23,8 +23,6 @@ import json
 import time
 
 from decimal import Decimal
-
-import libraries.definer as definer
 
 from libraries.logger import logger
 from libraries.ordermanager import islive
