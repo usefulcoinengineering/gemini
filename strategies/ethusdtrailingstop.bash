@@ -29,4 +29,4 @@
 #  python3 ../trailingstop.py ETHUSD 0.001 0.0050 0.0100
 # done
 
-python3 ../trailingstop.py ETHUSD 0.001 0.0050 0.0100
+python3 ../trailingstop.py ETHUSD 0.001 0.0025 0.0050
