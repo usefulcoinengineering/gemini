@@ -166,23 +166,24 @@ while True :
     time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
     
     try:
-        jsonresponse = islive( jsonresponse["order_id"] ).json() # Post REST API call to determine order's status.
+        orderstatus = islive( jsonresponse["order_id"] ).json() # Post REST API call to determine order's status.
     except Exception as e:
         logger.info ( f'Unable to retrieve order status. Error: {e}' )
         continue # Keep trying to get information on the order's status infinitely.
     try:
-        if jsonresponse['is_live'] : 
-            logger.info( f'Bid order {jsonresponse["order_id"]} is live on the Gemini orderbook. ' )
+        if orderstatus['is_live'] : 
+            logger.info( f'Bid order {orderstatus["order_id"]} is live on the Gemini orderbook. ' )
             continue # Keep retrieving information on the order's status infinitely.
         else : 
-            logger.info( f'Bid order {jsonresponse["order_id"]} is NOT live on the Gemini orderbook. ' )
+            logger.info( f'Bid order {orderstatus["order_id"]} is NOT live on the Gemini orderbook. ' )
+            jsonresponse = orderstatus # Assign orderstatus to the jsonresponse used subsequently.
             break # Break out of the while loop because the subroutine ran successfully.
     except KeyError as e:
         warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
         logger.warning ( f'{warningmessage} Something went wrong.. Checking for an error message...' )
         try:    
-            if jsonresponse["result"] : 
-                logger.warning ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}' )
+            if orderstatus["result"] : 
+                logger.warning ( f'\"{orderstatus["reason"]}\" {orderstatus["result"]}: {orderstatus["message"]}' )
                 continue
         except KeyError as e:
             criticalmessage = f'KeyError: {e} was also not present in the response from the REST API server.'
@@ -216,23 +217,24 @@ while True :
         time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
         
         try:
-            jsonresponse = islive( jsonresponse["order_id"] ).json() # Post REST API call to determine order's status.
+            orderstatus = islive( jsonresponse["order_id"] ).json() # Post REST API call to determine order's status.
         except Exception as e:
             logger.info ( f'Unable to retrieve order status. Error: {e}' )
             continue # Keep trying to get information on the order's status infinitely.
         try:
-            if jsonresponse['is_live'] : 
-                logger.info( f'Bid order {jsonresponse["order_id"]} is live on the Gemini orderbook. ' )
+            if orderstatus['is_live'] : 
+                logger.info( f'Bid order {orderstatus["order_id"]} is live on the Gemini orderbook. ' )
                 continue # Keep retrieving information on the order's status infinitely.
             else : 
-                logger.info( f'Bid order {jsonresponse["order_id"]} is NOT live on the Gemini orderbook. ' )
+                logger.info( f'Bid order {orderstatus["order_id"]} is NOT live on the Gemini orderbook. ' )
+                jsonresponse = orderstatus # Assign orderstatus to the jsonresponse used subsequently.
                 break # Break out of the while loop because the subroutine ran successfully.
         except KeyError as e:
             warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
             logger.warning ( f'{warningmessage} Something went wrong.. Checking for an error message...' )
             try:    
-                if jsonresponse["result"] : 
-                    logger.warning ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}' )
+                if orderstatus["result"] : 
+                    logger.warning ( f'\"{orderstatus["reason"]}\" {orderstatus["result"]}: {orderstatus["message"]}' )
                     continue
             except KeyError as e:
                 criticalmessage = f'KeyError: {e} was also not present in the response from the REST API server.'
@@ -268,23 +270,24 @@ while True :
             time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
         
             try:
-                jsonresponse = cancelorder( jsonresponse["order_id"] ).json() # Post REST API call to cancel previous order.
+                cancellationstatus = cancelorder( jsonresponse["order_id"] ).json() # Post REST API call to cancel previous order.
             except Exception as e:
                 logger.info ( f'Unable to cancel order. Error: {e}' )
                 continue # Keep trying to get information on the order's status infinitely.
             try:
-                if jsonresponse['is_live'] : 
-                    logger.info( f'Stop limit order {jsonresponse["order_id"]} is live on the Gemini orderbook. ' )
+                if cancellationstatus['is_live'] : 
+                    logger.info( f'Stop limit order {cancellationstatus["order_id"]} is live on the Gemini orderbook. ' )
                     continue # Keep tring to cancel the order infinitely.
                 else : 
-                    logger.info( f'Stop limit order {jsonresponse["order_id"]} is NOT live on the Gemini orderbook. ' )
+                    logger.info( f'Stop limit order {cancellationstatus["order_id"]} is NOT live on the Gemini orderbook. ' )
+                    jsonresponse = cancellationstatus # Assign orderstatus to the jsonresponse used subsequently.
                     break # Break out of the while loop because the subroutine ran successfully.
             except KeyError as e:
                 warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
                 logger.warning ( f'{warningmessage} Something went wrong.. Checking for an error message...' )
                 try:    
-                    if jsonresponse["result"] : 
-                        logger.warning ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}' )
+                    if cancellationstatus["result"] : 
+                        logger.warning ( f'\"{cancellationstatus["reason"]}\" {cancellationstatus["result"]}: {cancellationstatus["message"]}' )
                         continue
                 except KeyError as e:
                     criticalmessage = f'KeyError: {e} was also not present in the response from the REST API server.'
