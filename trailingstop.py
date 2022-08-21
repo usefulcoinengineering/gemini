@@ -20,6 +20,7 @@
 from distutils.log import debug
 import sys
 import json
+import time
 
 from decimal import Decimal
 
@@ -161,11 +162,12 @@ while True :
 # Loop.
 while True :
     try:
-        jsonresponse = islive( jsonresponse["order_id"] ).json()
-        break
+        jsonresponse = islive( jsonresponse["order_id"] ).json() # Post REST API call to determine order's status.
     except Exception as e:
         logger.info ( f'Unable to get information on {jsonresponse["remaining_amount"]}. Error: {e}' )
-        continue
+        time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
+        continue # Keep trying to get information on the order's status infinitely.
+    break # Break out of the while loop because the subroutine ran successfully.
 
 # If the order is not "closed" exit.
 if Decimal( jsonresponse["remaining_amount"] ).compare( Decimal(0) ) == 1 : 
@@ -195,11 +197,12 @@ while True :
     # Loop.
     while True :
         try:
-            jsonresponse = islive( jsonresponse["order_id"] ).json()
-            break
+            jsonresponse = islive( jsonresponse["order_id"] ).json() # Post REST API call to determine order's status.
         except Exception as e:
             logger.info ( f'Unable to get information on {jsonresponse["remaining_amount"]}. Error: {e}' )
-            continue
+            time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
+            continue # Keep trying to get information on the order's status infinitely.
+        break # Break out of the while loop because the subroutine ran successfully.
 
     # If the stop limit order still active.
     if Decimal( jsonresponse["remaining_amount"] ).compare( Decimal(0) ) == 1 : 
@@ -225,24 +228,33 @@ while True :
             break # Break out of the while loop because the subroutine ran successfully.
 
 
-        # Cancel outdated stop-limit order.
-        cancelstatus = cancelorder( jsonresponse["order_id"] )
-        if not cancelstatus.json()["is_cancelled"] : 
-            infomessage = f'Unable to cancel order {cancelstatus.json()["order_id"]}. Manual intervention required. '
+        while True :
+            try:
+                # Cancel outdated stop-limit order.
+                cancelstatus = cancelorder( jsonresponse["order_id"] ).json() # Post REST API call to cancel previous order.
+            except Exception as e:
+                logger.info ( f'Unable to cancel order {jsonresponse["order_id"]}. Error: {e}' )
+                time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
+                continue # Keep trying to get information on the order's status infinitely.
+            break # Break out of the while loop because the subroutine ran successfully.
+
+        if not jsonresponse["is_cancelled"] : 
+            infomessage = f'Unable to cancel order {jsonresponse["order_id"]}. Manual intervention required. '
             logger.info ( infomessage )
             sendmessage ( infomessage )
 
         while True :
             # Post updated stop-limit order.
-            notification = f'Cancelled {cancelstatus.json()["price"]} {pair[3:]} stop sell order {cancelstatus.json()["order_id"]}. '
+            notification = f'Cancelled {jsonresponse["price"]} {pair[3:]} stop sell order {jsonresponse["order_id"]}. '
             notification = f'Submitting stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell.'
             logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
             try:
                 jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
             except Exception as e:
                 logger.info ( f'Unable to get information on {jsonresponse["remaining_amount"]}. Error: {e}' )
-                continue
-            break
+                time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
+                continue # Keep trying to post stop limit order infinitely.
+            break # Break out of the while loop because the subroutine ran successfully.
         continue
 
     else :
