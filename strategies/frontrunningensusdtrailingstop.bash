@@ -29,4 +29,4 @@
 #  python3 ../frontrunningtrailingstop.py ENSUSD 0.001 0.0050 0.0100
 # done
 
-python3 ../frontrunningtrailingstop.py ENSUSD 1 0.0025 0.0050
+python3 ../frontrunningtrailingstop.py ENSUSD 1 0.0013 0.0076
