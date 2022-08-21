@@ -42,15 +42,15 @@ def pricedecrease(
     def on_close( ws, close_status_code, close_msg ) : logger.info( 'connection closed.' )
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
-        
-        # Display heartbeat
-        if message.json()["type"] == "heartbeat" : logger.debug ( f'heartbeat: {message.json()["socket_sequence"]}' )
-        else :
-            # Remove comment to debug with: logger.debug( message )
-            
-            # Load update into a dictionary.
-            dictionary = json.loads( message )
 
+        # Remove comment to debug with: logger.debug( message )
+        # Load update into a dictionary.
+        dictionary = json.loads( message )
+
+        # Display heartbeat
+        if dictionary["type"] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary["socket_sequence"]}' )
+        else :
+            
             # Define events array/list.
             events = dictionary['events']
             if events == [] : 
@@ -113,13 +113,13 @@ def askfall(
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
+        # Remove comment to debug with: logger.debug( message )
+        # Load update into a dictionary.
+        dictionary = json.loads( message )
+
         # Display heartbeat
-        if message.json()["type"] == "heartbeat" : logger.debug ( f'heartbeat: {message.json()["socket_sequence"]}' )
+        if dictionary["type"] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary["socket_sequence"]}' )
         else :
-            # Remove comment to debug with: logger.debug( message )
-            
-            # Load update into a dictionary.
-            dictionary = json.loads( message )
 
             # Define events array/list.
             events = dictionary['events']
@@ -184,13 +184,13 @@ def priceincrease(
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
+        # Remove comment to debug with: logger.debug( message )
+        # Load update into a dictionary.
+        dictionary = json.loads( message )
+
         # Display heartbeat
-        if message.json()["type"] == "heartbeat" : logger.debug ( f'heartbeat: {message.json()["socket_sequence"]}' )
+        if dictionary["type"] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary["socket_sequence"]}' )
         else :
-            # Remove comment to debug with: logger.debug( message )
-            
-            # Load update into a dictionary.
-            dictionary = json.loads( message )
 
             # Define events array/list.
             events = dictionary['events']
@@ -254,13 +254,13 @@ def bidrise(
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
+        # Remove comment to debug with: logger.debug( message )
+        # Load update into a dictionary.
+        dictionary = json.loads( message )
+
         # Display heartbeat
-        if message.json()["type"] == "heartbeat" : logger.debug ( f'heartbeat: {message.json()["socket_sequence"]}' )
+        if dictionary["type"] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary["socket_sequence"]}' )
         else :
-            # Remove comment to debug with: logger.debug( message )
-            
-            # Load update into a dictionary.
-            dictionary = json.loads( message )
 
             # Define events array/list.
             events = dictionary['events']
