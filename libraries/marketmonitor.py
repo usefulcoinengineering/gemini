@@ -25,7 +25,7 @@ def pricedecrease(
 
     # Request trade data only.
     urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair.lower()
-    parameters = "?trades=true"
+    parameters = "?trades=true&heartbeat=true"
     connection = urlrequest + parameters
 
     close_status_code = 'OK'
@@ -43,6 +43,10 @@ def pricedecrease(
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
+        # Display heartbeat
+        if message.json()["type"] == "heartbeat" : 
+            logger.debug ( f'heartbeat: {message.json()["sequence"]}' )
+            continue
         # Remove comment to debug with: logger.debug( message )
         
         # Load update into a dictionary.
@@ -92,7 +96,7 @@ def askfall(
 
     # Request trade data only.
     urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair.lower()
-    parameters = "?trades=true"
+    parameters = "?trades=true&heartbeat=true"
     connection = urlrequest + parameters
 
     close_status_code = 'OK'
@@ -110,6 +114,10 @@ def askfall(
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
+        # Display heartbeat
+        if message.json()["type"] == "heartbeat" : 
+            logger.debug ( f'heartbeat: {message.json()["sequence"]}' )
+            continue
         # Remove comment to debug with: logger.debug( message )
         
         # Load update into a dictionary.
@@ -160,7 +168,7 @@ def priceincrease(
     
     # Request trade data only.
     urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair.lower()
-    parameters = "?trades=true"
+    parameters = "?trades=true&heartbeat=true"
     connection = urlrequest + parameters
 
     close_status_code = 'OK'
@@ -178,6 +186,10 @@ def priceincrease(
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
+        # Display heartbeat
+        if message.json()["type"] == "heartbeat" : 
+            logger.debug ( f'heartbeat: {message.json()["sequence"]}' )
+            continue
         # Remove comment to debug with: logger.debug( message )
         
         # Load update into a dictionary.
@@ -227,7 +239,7 @@ def bidrise(
 
     # Request trade data only.
     urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair.lower()
-    parameters = "?trades=true"
+    parameters = "?trades=true&heartbeat=true"
     connection = urlrequest + parameters
 
     close_status_code = 'OK'
@@ -245,6 +257,10 @@ def bidrise(
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
+        # Display heartbeat
+        if message.json()["type"] == "heartbeat" : 
+            logger.debug ( f'heartbeat: {message.json()["sequence"]}' )
+            continue
         # Remove comment to debug with: logger.debug( message )
         
         # Load update into a dictionary.
