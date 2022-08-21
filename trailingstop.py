@@ -89,7 +89,7 @@ try:
     # logger.info ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
     if jsonresponse["is_cancelled"] : sys.exit(1)
     else:
-        infomessage = f'Order {jsonresponse["order_id"]} is active and booked.'
+        infomessage = f'Bid order {jsonresponse["order_id"]} is active and booked.'
         logger.info ( infomessage )
         sendmessage ( infomessage )
 
