@@ -137,12 +137,12 @@ if stopprice.compare( costprice ) == 1:
     logger.error ( f'{notification}' ) ; sendmessage ( f'{notification}' ) ; sys.exit(1)
 
 # Record parameters to logs.
-logger.debug ( f'cost price: {costprice}' )
-logger.debug ( f'exit price: {exitprice}' )
-logger.debug ( f'stop price: {stopprice}' )
-logger.debug ( f'sell price: {sellprice}' )
-logger.debug ( f'quote gain: {quotegain} {pair[3:]}' )
-logger.debug ( f'ratio gain: {ratiogain:.2f}%' )
+logger.debug ( f'Cost Price: {costprice}' )
+logger.debug ( f'Exit Price: {exitprice}' )
+logger.debug ( f'Stop Price: {stopprice}' )
+logger.debug ( f'Sell Price: {sellprice}' )
+logger.debug ( f'Quote Gain: {quotegain} {pair[3:]}' )
+logger.debug ( f'Ratio Gain: {ratiogain:.2f}%' )
 
 # Explain the opening a websocket connection.
 # Also explain the wait for an increase in the latest transaction prices beyond the "exitprice".
