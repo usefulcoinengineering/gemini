@@ -5,9 +5,6 @@
 # library created: 20220816
 # library purpose: check order number specified is active on the orderbook (i.e. has remaining size and has not been canceled).
 
-import sys
-import ssl
-import json
 import time
 import datetime
 import requests
