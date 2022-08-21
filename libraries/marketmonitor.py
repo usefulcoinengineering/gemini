@@ -44,37 +44,36 @@ def pricedecrease(
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
         # Display heartbeat
-        if message.json()["type"] == "heartbeat" : 
-            logger.debug ( f'heartbeat: {message.json()["sequence"]}' )
-            continue
-        # Remove comment to debug with: logger.debug( message )
-        
-        # Load update into a dictionary.
-        dictionary = json.loads( message )
+        if message.json()["type"] == "heartbeat" : logger.debug ( f'heartbeat: {message.json()["socket_sequence"]}' )
+        else :
+            # Remove comment to debug with: logger.debug( message )
+            
+            # Load update into a dictionary.
+            dictionary = json.loads( message )
 
-        # Define events array/list.
-        events = dictionary['events']
-        if events == [] : 
-            logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
-        else:
-            # Verify the array of events is a list.
-            # Iterate through each event in the update.
-            if isinstance(events, list):
-                for event in events:
-                    tradeprice = Decimal( event['price'] )
-                    tradevalue = Decimal( event['amount'] )
-                    inadequacy = Decimal( 100 * ( tradeprice - exit ) / exit )
-                    tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
-                    if event['makerSide'] == "ask" : takeraction = "increase"
-                    if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
-                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
-                    logger.debug( f'{notification}' )
-                    if exit.compare( tradeprice ) == 1 : 
-                        notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
-                        logger.info( notification )
-                        sendmessage( notification )
-                        ws.close()
+            # Define events array/list.
+            events = dictionary['events']
+            if events == [] : 
+                logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
+            else:
+                # Verify the array of events is a list.
+                # Iterate through each event in the update.
+                if isinstance(events, list):
+                    for event in events:
+                        tradeprice = Decimal( event['price'] )
+                        tradevalue = Decimal( event['amount'] )
+                        inadequacy = Decimal( 100 * ( tradeprice - exit ) / exit )
+                        tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
+                        if event['makerSide'] == "ask" : takeraction = "increase"
+                        if event['makerSide'] == "bid" : takeraction = "decrease"
+                        notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                        notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
+                        logger.debug( f'{notification}' )
+                        if exit.compare( tradeprice ) == 1 : 
+                            notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
+                            logger.info( notification )
+                            sendmessage( notification )
+                            ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
@@ -115,38 +114,37 @@ def askfall(
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
         # Display heartbeat
-        if message.json()["type"] == "heartbeat" : 
-            logger.debug ( f'heartbeat: {message.json()["sequence"]}' )
-            continue
-        # Remove comment to debug with: logger.debug( message )
-        
-        # Load update into a dictionary.
-        dictionary = json.loads( message )
+        if message.json()["type"] == "heartbeat" : logger.debug ( f'heartbeat: {message.json()["socket_sequence"]}' )
+        else :
+            # Remove comment to debug with: logger.debug( message )
+            
+            # Load update into a dictionary.
+            dictionary = json.loads( message )
 
-        # Define events array/list.
-        events = dictionary['events']
-        if events == [] : 
-            logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
-        else:
-            # Verify the array of events is a list.
-            # Iterate through each event in the update.
-            if isinstance(events, list):
-                for event in events:
-                    tradeprice = Decimal( event['price'] )
-                    tradevalue = Decimal( event['amount'] )
-                    inadequacy = Decimal( 100 * ( tradeprice - exit ) / exit )
-                    tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
-                    if event['makerSide'] == "ask" : takeraction = "increase"
-                    if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
-                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
-                    logger.debug( f'{notification}' )
-                    if event['makerSide'] == "ask" :
-                        if exit.compare( tradeprice ) == 1 : 
-                            notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
-                            logger.info( notification )
-                            sendmessage( notification )
-                            ws.close()
+            # Define events array/list.
+            events = dictionary['events']
+            if events == [] : 
+                logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
+            else:
+                # Verify the array of events is a list.
+                # Iterate through each event in the update.
+                if isinstance(events, list):
+                    for event in events:
+                        tradeprice = Decimal( event['price'] )
+                        tradevalue = Decimal( event['amount'] )
+                        inadequacy = Decimal( 100 * ( tradeprice - exit ) / exit )
+                        tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
+                        if event['makerSide'] == "ask" : takeraction = "increase"
+                        if event['makerSide'] == "bid" : takeraction = "decrease"
+                        notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                        notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
+                        logger.debug( f'{notification}' )
+                        if event['makerSide'] == "ask" :
+                            if exit.compare( tradeprice ) == 1 : 
+                                notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
+                                logger.info( notification )
+                                sendmessage( notification )
+                                ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
@@ -187,37 +185,36 @@ def priceincrease(
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
         # Display heartbeat
-        if message.json()["type"] == "heartbeat" : 
-            logger.debug ( f'heartbeat: {message.json()["sequence"]}' )
-            continue
-        # Remove comment to debug with: logger.debug( message )
-        
-        # Load update into a dictionary.
-        dictionary = json.loads( message )
+        if message.json()["type"] == "heartbeat" : logger.debug ( f'heartbeat: {message.json()["socket_sequence"]}' )
+        else :
+            # Remove comment to debug with: logger.debug( message )
+            
+            # Load update into a dictionary.
+            dictionary = json.loads( message )
 
-        # Define events array/list.
-        events = dictionary['events']
-        if events == [] : 
-            logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
-        else:
-            # Verify the array of events is a list.
-            # Iterate through each event in the update.
-            if isinstance(events, list):
-                for event in events:
-                    tradeprice = Decimal( event['price'] )
-                    tradevalue = Decimal( event['amount'] )
-                    inadequacy = Decimal( 100 * ( exit - tradeprice ) / exit )
-                    tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
-                    if event['makerSide'] == "ask" : takeraction = "increase"
-                    if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
-                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
-                    logger.debug( f'{notification}' )
-                    if tradeprice.compare( exit ) == 1 : 
-                        notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
-                        logger.info( notification )
-                        sendmessage( notification )
-                        ws.close()
+            # Define events array/list.
+            events = dictionary['events']
+            if events == [] : 
+                logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
+            else:
+                # Verify the array of events is a list.
+                # Iterate through each event in the update.
+                if isinstance(events, list):
+                    for event in events:
+                        tradeprice = Decimal( event['price'] )
+                        tradevalue = Decimal( event['amount'] )
+                        inadequacy = Decimal( 100 * ( exit - tradeprice ) / exit )
+                        tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
+                        if event['makerSide'] == "ask" : takeraction = "increase"
+                        if event['makerSide'] == "bid" : takeraction = "decrease"
+                        notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                        notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
+                        logger.debug( f'{notification}' )
+                        if tradeprice.compare( exit ) == 1 : 
+                            notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
+                            logger.info( notification )
+                            sendmessage( notification )
+                            ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
@@ -258,38 +255,37 @@ def bidrise(
     def on_message( ws, message, pair=pair.upper(), exit=exit ) : 
         
         # Display heartbeat
-        if message.json()["type"] == "heartbeat" : 
-            logger.debug ( f'heartbeat: {message.json()["sequence"]}' )
-            continue
-        # Remove comment to debug with: logger.debug( message )
-        
-        # Load update into a dictionary.
-        dictionary = json.loads( message )
+        if message.json()["type"] == "heartbeat" : logger.debug ( f'heartbeat: {message.json()["socket_sequence"]}' )
+        else :
+            # Remove comment to debug with: logger.debug( message )
+            
+            # Load update into a dictionary.
+            dictionary = json.loads( message )
 
-        # Define events array/list.
-        events = dictionary['events']
-        if events == [] : 
-            logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
-        else:
-            # Verify the array of events is a list.
-            # Iterate through each event in the update.
-            if isinstance(events, list):
-                for event in events:
-                    tradeprice = Decimal( event['price'] )
-                    tradevalue = Decimal( event['amount'] )
-                    inadequacy = Decimal( 100 * ( exit - tradeprice ) / exit )
-                    tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
-                    if event['makerSide'] == "ask" : takeraction = "increase"
-                    if event['makerSide'] == "bid" : takeraction = "decrease"
-                    notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
-                    notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
-                    logger.debug( f'{notification}' )
-                    if event['makerSide'] == "bid" : 
-                        if tradeprice.compare( exit ) == 1 : 
-                            notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
-                            logger.info( notification )
-                            sendmessage( notification )
-                            ws.close()
+            # Define events array/list.
+            events = dictionary['events']
+            if events == [] : 
+                logger.debug( f'no update events. perhaps this is the initial response from Gemini: {message} ' )
+            else:
+                # Verify the array of events is a list.
+                # Iterate through each event in the update.
+                if isinstance(events, list):
+                    for event in events:
+                        tradeprice = Decimal( event['price'] )
+                        tradevalue = Decimal( event['amount'] )
+                        inadequacy = Decimal( 100 * ( exit - tradeprice ) / exit )
+                        tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
+                        if event['makerSide'] == "ask" : takeraction = "increase"
+                        if event['makerSide'] == "bid" : takeraction = "decrease"
+                        notification = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                        notification = notification + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
+                        logger.debug( f'{notification}' )
+                        if event['makerSide'] == "bid" : 
+                            if tradeprice.compare( exit ) == 1 : 
+                                notification = f'{exit:,.2f} {pair[3:]} price level breached: {notification}'
+                                logger.info( notification )
+                                sendmessage( notification )
+                                ws.close()
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
