@@ -108,6 +108,9 @@ except KeyError as e:
         sendmessage ( f'Unexpecter error. Unsuccessful bid order submission. {criticalmessage}' )
         sys.exit(1)
 
+# Confirm order execution.
+confirmexecution( jsonresponse["order_id"] )
+
 # Define the trade cost price and cast it.
 costprice = Decimal( jsonresponse["price"] )
 
