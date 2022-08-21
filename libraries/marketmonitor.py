@@ -48,7 +48,7 @@ def pricedecrease(
         dictionary = json.loads( message )
 
         # Display heartbeat
-        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary[ "socket_sequence" ]}' )
+        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'Heartbeat: {dictionary[ "socket_sequence" ]}' )
         else :
             
             # Define events array/list.
@@ -118,7 +118,7 @@ def askfall(
         dictionary = json.loads( message )
 
         # Display heartbeat
-        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary[ "socket_sequence" ]}' )
+        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'Heartbeat: {dictionary[ "socket_sequence" ]}' )
         else :
 
             # Define events array/list.
@@ -189,7 +189,7 @@ def priceincrease(
         dictionary = json.loads( message )
 
         # Display heartbeat
-        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary[ "socket_sequence" ]}' )
+        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'Heartbeat: {dictionary[ "socket_sequence" ]}' )
         else :
 
             # Define events array/list.
@@ -259,7 +259,7 @@ def bidrise(
         dictionary = json.loads( message )
 
         # Display heartbeat
-        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'heartbeat: {dictionary[ "socket_sequence" ]}' )
+        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'Heartbeat: {dictionary[ "socket_sequence" ]}' )
         else :
 
             # Define events array/list.
