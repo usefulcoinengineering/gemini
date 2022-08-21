@@ -54,7 +54,7 @@ def pricedecrease(
             # Define events array/list.
             events = dictionary[ 'events' ]
             if events == [] : 
-                logger.debug( f'No update events. Perhaps this is the initial response from Gemini: {message} ' )
+                logger.debug( f'No update events. Received: {message}  ' )
             else:
                 # Verify the array of events is a list.
                 # Iterate through each event in the update.
@@ -124,7 +124,7 @@ def askfall(
             # Define events array/list.
             events = dictionary[ 'events' ]
             if events == [] : 
-                logger.debug( f'No update events. Perhaps this is the initial response from Gemini: {message} ' )
+                logger.debug( f'No update events. Received: {message}  ' )
             else:
                 # Verify the array of events is a list.
                 # Iterate through each event in the update.
@@ -195,7 +195,7 @@ def priceincrease(
             # Define events array/list.
             events = dictionary[ 'events' ]
             if events == [] : 
-                logger.debug( f'No update events. Perhaps this is the initial response from Gemini: {message} ' )
+                logger.debug( f'No update events. Received: {message}  ' )
             else:
                 # Verify the array of events is a list.
                 # Iterate through each event in the update.
@@ -265,7 +265,7 @@ def bidrise(
             # Define events array/list.
             events = dictionary[ 'events' ]
             if events == [] : 
-                logger.debug( f'No update events. Perhaps this is the initial response from Gemini: {message} ' )
+                logger.debug( f'No update events. Received: {message}  ' )
             else:
                 # Verify the array of events is a list.
                 # Iterate through each event in the update.
