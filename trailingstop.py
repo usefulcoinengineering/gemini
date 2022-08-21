@@ -189,10 +189,10 @@ while True :
         notification = notification + f'Resulting in a {ratiogain:,.2f}% gain if executed. '
         logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
         jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
-        break
     except Exception as e:
-        logger.info ( f'Unable to get information on {jsonresponse["remaining_amount"]}. Error: {e}' )
-        continue
+        logger.info ( f'Unable to get information on {jsonresponse["executed_amount"]}. Error: {e}' )
+        continue # Keep trying to submit ask stop limit order.
+    break # Break out of the while loop because the subroutine ran successfully.
 
 # Loop.
 while True :
