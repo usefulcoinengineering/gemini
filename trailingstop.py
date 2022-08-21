@@ -164,7 +164,7 @@ while True :
 
 # Loop.
 while True :
-    if runbefore : runbefore = True ; time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
+    time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
     try:
         jsonresponse = islive( jsonresponse["order_id"] ).json() # Post REST API call to determine order's status.
     except Exception as e:
