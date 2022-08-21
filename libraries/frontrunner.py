@@ -43,9 +43,9 @@ def bidorder(
     quantity = str( Decimal( size ).quantize( bump ) )
 
     # Update logs.
-    logger.debug(f'bidprice: {bidprice}')
-    logger.debug(f'offering: {offering}')
-    logger.debug(f'quantity: {quantity}')
+    logger.debug(f'Bidprice: {bidprice}')
+    logger.debug(f'Offering: {offering}')
+    logger.debug(f'Quantity: {quantity}')
 
     # Construct buy order payload.
     # Use 'options': ['maker-or-cancel'] for post only orders.
@@ -100,9 +100,9 @@ def quotabid(
     quantity = str( Decimal( notional / Decimal(offering) ).quantize( bump ) )
 
     # Update logs.
-    logger.debug(f'bidprice: {bidprice}')
-    logger.debug(f'offering: {offering}')
-    logger.debug(f'quantity: {quantity}')
+    logger.debug(f'Bidprice: {bidprice}')
+    logger.debug(f'Offering: {offering}')
+    logger.debug(f'Quantity: {quantity}')
 
     # Construct buy order payload.
     # Use 'options': ['maker-or-cancel'] for post only orders.
@@ -149,9 +149,9 @@ def askorder(
     quantity = str( Decimal( size ).quantize( bump ) )
 
     # Update logs.
-    logger.debug(f'askprice: {askprice}')
-    logger.debug(f'offering: {offering}')
-    logger.debug(f'quantity: {quantity}')
+    logger.debug(f'Askprice: {askprice}')
+    logger.debug(f'Offering: {offering}')
+    logger.debug(f'Quantity: {quantity}')
 
     # Construct buy order payload.
     # Use 'options': ['maker-or-cancel'] for post only orders.
@@ -206,9 +206,9 @@ def quotaask(
     quantity = str( Decimal( notional / Decimal(offering) ).quantize( bump ) )
 
     # Update logs.
-    logger.debug(f'askprice: {askprice}')
-    logger.debug(f'offering: {offering}')
-    logger.debug(f'quantity: {quantity}')
+    logger.debug(f'Askprice: {askprice}')
+    logger.debug(f'Offering: {offering}')
+    logger.debug(f'Quantity: {quantity}')
 
     # Construct buy order payload.
     # Use 'options': ['maker-or-cancel'] for post only orders.
