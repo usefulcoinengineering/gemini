@@ -164,20 +164,30 @@ while True :
 
 # Loop.
 while True :
+    if runbefore : runbefore = True ; time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
     try:
         jsonresponse = islive( jsonresponse["order_id"] ).json() # Post REST API call to determine order's status.
     except Exception as e:
-        logger.info ( f'Unable to get information on {jsonresponse["remaining_amount"]}. Error: {e}' )
-        time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
+        logger.info ( f'Unable to retrieve order status. Error: {e}' )
         continue # Keep trying to get information on the order's status infinitely.
-    break # Break out of the while loop because the subroutine ran successfully.
-
-# If the order is not "closed" exit.
-if Decimal( jsonresponse["remaining_amount"] ).compare( Decimal(0) ) == 1 : 
-    infomessage = f'Bid order {jsonresponse["order_id"]} has not been completely filled. No point submitting an ask.'
-    logger.info ( f'{infomessage} Exiting...' )
-    sendmessage ( f'{infomessage} Exiting...' )
-    sys.exit(1) 
+    try:
+        if jsonresponse['is_live'] : 
+            logger.info( f'Bid order {jsonresponse["order_id"]} is live on the Gemini orderbook. ' )
+            continue # Keep retrieving information on the order's status infinitely.
+        else : 
+            logger.info( f'Bid order {jsonresponse["order_id"]} is NOT live on the Gemini orderbook. ' )
+            break # Break out of the while loop because the subroutine ran successfully.
+    except KeyError as e:
+        warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
+        logger.warning ( f'{warningmessage} Something went wrong.. Checking for an error message...' )
+        try:    
+            if jsonresponse["result"] : 
+                logger.warning ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}' )
+                continue
+        except KeyError as e:
+            criticalmessage = f'KeyError: {e} was also not present in the response from the REST API server.'
+            logger.critical ( f'Unexpecter error. {criticalmessage}' ) ; sendmessage ( f'Unexpecter error. {criticalmessage}' )
+            continue
 
 # Loop.
 while True :
