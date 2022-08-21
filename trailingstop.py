@@ -77,10 +77,15 @@ tick = Decimal( item[0] )
 jsonresponse = notionalvolume().json()
 geminiapifee = Decimal( 0.0001 ) * Decimal ( jsonresponse["api_maker_fee_bps"] )
 
-# Submit limit bid order, report response, and verify submission.
-logger.debug ( f'Submitting {pair} frontrunning limit bid order.' )
-jsonresponse = bidorder( pair, size ).json()
+# You could put the try-except logic in a while loop to keep trying until there's success.
+# But keep debugging for now.
 try:
+    # Submit limit bid order, report response, and verify submission.
+    logger.debug ( f'Submitting {pair} frontrunning limit bid order.' )
+    jsonresponse = bidorder( pair, size ).json()
+
+    # To debug remove comment character below:
+    # logger.info ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
     if jsonresponse["is_cancelled"] : sys.exit(1)
     else:
         infomessage = f'Order {jsonresponse["order_id"]} is active and booked.'
@@ -140,32 +145,64 @@ logger.debug ( f'ratio gain: {ratiogain:.2f}%' )
 notification = f'Waiting for the trading price of {pair[:3]} to rise {Decimal(stop)*100}% to {exitprice:,.2f} {pair[3:]}. '
 logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
 
-# Open websocket connection. 
-# Wait for the trading price to rise to the exit price.
-bidrise( pair, exitprice )
+# Loop.
+while True :
 
-# logger.info ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
+    try: 
+        # Open websocket connection. 
+        bidrise( pair, exitprice ) # Wait for the trading price to rise to the exit price.
+    except Exception as e:
+        # Report exception.
+        notification = f'The websocket connection monitoring {pair} prices probably failed. '
+        logger.debug ( '{notification} Let\'s reestablish the connection and try again!' )
+        continue # Restart while loop logic.
+    break # Break out of the while loop because the subroutine ran successfully.
+
+# Loop.
+while True :
+    try:
+        jsonresponse = islive( jsonresponse["order_id"] ).json()
+        break
+    except Exception as e:
+        logger.info ( f'Unable to get information on {jsonresponse["remaining_amount"]}. Error: {e}' )
+        continue
 
 # If the order is not "closed" exit.
-if Decimal( islive( jsonresponse["order_id"] ).json()["remaining_amount"] ).compare( Decimal(0) ) == 0 : 
+if Decimal( jsonresponse["remaining_amount"] ).compare( Decimal(0) ) == 1 : 
     infomessage = f'Bid order {jsonresponse["order_id"]} has not been completely filled. No point submitting an ask.'
     logger.info ( f'{infomessage} Exiting...' )
     sendmessage ( f'{infomessage} Exiting...' )
     sys.exit(1) 
 
-# Submit initial Gemini "stop-limit" order. 
-# If in doubt about what's going on, refer to documentation here: https://docs.gemini.com/rest-api/#new-order.
-notification = f'Submitting initial stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop. '
-notification = notification + f'This stop limit order has a {sellprice:,.2f} {pair[3:]} limit price to sell {size} {pair[:3]}. '
-notification = notification + f'Resulting in a {ratiogain:,.2f}% gain if executed. '
-logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
-jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
+# Loop.
+while True :
+    try:
+        # Submit initial Gemini "stop-limit" order. 
+        # If in doubt about what's going on, refer to documentation here: https://docs.gemini.com/rest-api/#new-order.
+        notification = f'Submitting initial stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop. '
+        notification = notification + f'This stop limit order has a {sellprice:,.2f} {pair[3:]} limit price to sell {size} {pair[:3]}. '
+        notification = notification + f'Resulting in a {ratiogain:,.2f}% gain if executed. '
+        logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
+        jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
+        break
+    except Exception as e:
+        logger.info ( f'Unable to get information on {jsonresponse["remaining_amount"]}. Error: {e}' )
+        continue
 
-# Open loop.
+# Loop.
 while True :
 
+    # Loop.
+    while True :
+        try:
+            jsonresponse = islive( jsonresponse["order_id"] ).json()
+            break
+        except Exception as e:
+            logger.info ( f'Unable to get information on {jsonresponse["remaining_amount"]}. Error: {e}' )
+            continue
+
     # If the stop limit order still active.
-    if islive( jsonresponse["order_id"] ) :
+    if Decimal( jsonresponse["remaining_amount"] ).compare( Decimal(0) ) == 1 : 
         
         # Calculate new exit and resultant sell/stop prices.
         exitprice = Decimal( exitprice * exitratio ).quantize( tick )
@@ -174,9 +211,19 @@ while True :
         # Note: "costprice" is no longer used to set stop and sell prices.
         # Note: The last transaction price exceeds the previous exit price creates the new exit price.
 
-        # Open websocket connection.
-        # Wait for bids to exceed exitprice.
-        bidrise( pair, exitprice )
+        # Loop.
+        while True :
+
+            try: 
+                # Open websocket connection. 
+                bidrise( pair, exitprice ) # Wait for the trading price to rise to the exit price.
+            except Exception as e:
+                # Report exception.
+                notification = f'The websocket connection monitoring {pair} prices probably failed. '
+                logger.debug ( '{notification} Let\'s reestablish the connection and try again!' )
+                continue # Restart while loop logic.
+            break # Break out of the while loop because the subroutine ran successfully.
+
 
         # Cancel outdated stop-limit order.
         cancelstatus = cancelorder( jsonresponse["order_id"] )
@@ -185,11 +232,17 @@ while True :
             logger.info ( infomessage )
             sendmessage ( infomessage )
 
-        # Post updated stop-limit order.
-        notification = f'Cancelled {cancelstatus.json()["price"]} {pair[3:]} stop sell order {cancelstatus.json()["order_id"]}. '
-        notification = f'Submitting stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell.'
-        logger.debug ( notification )
-        jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
+        while True :
+            # Post updated stop-limit order.
+            notification = f'Cancelled {cancelstatus.json()["price"]} {pair[3:]} stop sell order {cancelstatus.json()["order_id"]}. '
+            notification = f'Submitting stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell.'
+            logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
+            try:
+                jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
+            except Exception as e:
+                logger.info ( f'Unable to get information on {jsonresponse["remaining_amount"]}. Error: {e}' )
+                continue
+            break
         continue
 
     else :
