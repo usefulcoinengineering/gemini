@@ -136,7 +136,7 @@ def askfall(
                         tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                         if event['makerSide'] == "ask" : takeraction = "increase"
                         if event['makerSide'] == "bid" : takeraction = "decrease"
-                        infomessage = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                        infomessage = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice:,.2f} {pair[3:]} price taken to '
                         infomessage = infomessage + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
                         logger.info ( f'{infomessage}' )
                         if event['makerSide'] == "ask" :
@@ -207,7 +207,7 @@ def priceincrease(
                         tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                         if event['makerSide'] == "ask" : takeraction = "increase"
                         if event['makerSide'] == "bid" : takeraction = "decrease"
-                        infomessage = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                        infomessage = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice:,.2f} {pair[3:]} price taken to '
                         infomessage = infomessage + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
                         logger.info ( f'{infomessage}' )
                         if tradeprice.compare( exit ) == 1 : 
@@ -277,7 +277,7 @@ def bidrise(
                         tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                         if event['makerSide'] == "ask" : takeraction = "increase"
                         if event['makerSide'] == "bid" : takeraction = "decrease"
-                        infomessage = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice} {pair[3:]} price taken to '
+                        infomessage = f'[{inadequacy:.2f}% off {exit:,.2f} {pair[3:]}] {tradeprice:,.2f} {pair[3:]} price taken to '
                         infomessage = infomessage + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
                         logger.info ( f'{infomessage}' )
                         if event['makerSide'] == "bid" : 
