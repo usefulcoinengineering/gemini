@@ -58,9 +58,9 @@ stop = Decimal( last * (1 - stop) ).quantize( tick )
 sell = Decimal( last * (1 - sell) ).quantize( tick )
 
 # Record prices in logfile.
-logger.debug ( f'Last price: {last}' )
-logger.debug ( f'Stop price: {stop}' )
-logger.debug ( f'Sell price: {sell}' )
+logger.debug ( f'Last Price: {last}' )
+logger.debug ( f'Stop Price: {stop}' )
+logger.debug ( f'Sell Price: {sell}' )
 
 # Make sure that the "sell price" is less than "stop price" as required by Gemini.
 if Decimal(sell).compare( Decimal(stop) ) == 1:
