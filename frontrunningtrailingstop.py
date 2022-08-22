@@ -135,17 +135,17 @@ if stopprice.compare( costprice ) == 1:
     logger.error ( f'{notification}' ) ; sendmessage ( f'{notification}' ) ; sys.exit(1)
 
 # Record parameters to logs.
-logger.debug ( f'Cost Price: {costprice}' )
-logger.debug ( f'Exit Price: {exitprice}' )
-logger.debug ( f'Stop Price: {stopprice}' )
-logger.debug ( f'Sell Price: {sellprice}' )
-logger.debug ( f'Quote Gain: {quotegain} {pair[3:]}' )
-logger.debug ( f'Ratio Gain: {ratiogain:.2f}%' )
+logger.info ( f'Cost Price: {costprice}' )
+logger.info ( f'Exit Price: {exitprice}' )
+logger.info ( f'Stop Price: {stopprice}' )
+logger.info ( f'Sell Price: {sellprice}' )
+logger.info ( f'Quote Gain: {quotegain} {pair[3:]}' )
+logger.info ( f'Ratio Gain: {ratiogain:.2f}%' )
 
 # Explain the opening a websocket connection.
 # Also explain the wait for an increase in the latest transaction prices beyond the "exitprice".
-notification = f'Waiting for the trading price of {pair[:3]} to rise {Decimal(stop)*100}% to {exitprice:,.2f} {pair[3:]}. '
-logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
+infomessage = f'Waiting for the trading price of {pair[:3]} to rise {Decimal(stop)*100}% to {exitprice:,.2f} {pair[3:]}. '
+logger.info ( f'{infomessage}' ) ; sendmessage ( f'{infomessage}' )
 
 # Loop.
 while True :
@@ -252,6 +252,10 @@ while True :
         # Note: "costprice" is no longer used to set stop and sell prices.
         # Note: The last transaction price exceeds the previous exit price creates the new exit price.
 
+        # Recalculate quote gain.
+        quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
+        ratiogain = Decimal( 100 * sellprice * size / costprice / size - 100 )
+
         # Loop.
         while True :
 
@@ -306,13 +310,14 @@ while True :
             if highestbid.compare( stopprice ) == 1:
 
                 # Post updated stop-limit order.
-                notification = f'Cancelled {jsonresponse["price"]} {pair[3:]} stop sell order {jsonresponse["order_id"]}. '
-                notification = f'Submitting stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell.'
-                logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
+                infomessage = f'Cancelled {jsonresponse["price"]} {pair[3:]} stop sell order {jsonresponse["order_id"]}. '
+                infomessage = infomessage + f'Submitting stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell.'
+                infomessage = infomessage + f'There will be an unrealized {ratiogain:,.2f}% profit/loss of {quotegain:,.2f} {pair[3:]} '
+                logger.info ( f'{infomessage}' ) ; sendmessage ( f'{infomessage}' )
                 try:
                     jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
                 except Exception as e:
-                    logger.info ( f'Unable to get information on the stop-limit order cancellation request. Error: {e}' )
+                    logger.debug ( f'Unable to get information on the stop-limit order cancellation request. Error: {e}' )
                     continue # Keep trying to post stop limit order infinitely.
                 break # Break out of the while loop because the subroutine ran successfully.
             
