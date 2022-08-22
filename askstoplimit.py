@@ -21,7 +21,7 @@ from decimal import Decimal
 
 from libraries.logger import logger
 from libraries.stopper import askstoplimit
-from libraries.pricegetter import maximumbid
+from libraries.pricegetter import ticker
 from libraries.definer import ticksizes as ticksizes
 from libraries.messenger import sendmessage as sendmessage
 
@@ -45,22 +45,22 @@ item = [ item['tick'] for item in ticksizes if item['currency'] == pair[:3] ]
 tick = Decimal( item[0] )
 
 # Get the highest bid in the orderbook.
-roof = maximumbid( pair )
+last = ticker( pair )["bid"]
 
 # JSON not found.
 # Response is a price.
 # Cast decimal prices.
-roof = Decimal( roof )
+last = Decimal( last )
 stop = Decimal( stop )
 sell = Decimal( sell )
 
-stop = Decimal( roof * (1 - stop) ).quantize( tick )
-sell = Decimal( roof * (1 - sell) ).quantize( tick )
+stop = Decimal( last * (1 - stop) ).quantize( tick )
+sell = Decimal( last * (1 - sell) ).quantize( tick )
 
 # Record prices in logfile.
-logger.debug ( f'roofdump: {roof}' )
-logger.debug ( f'stopdump: {stop}' )
-logger.debug ( f'selldump: {sell}' )
+logger.debug ( f'Last price: {last}' )
+logger.debug ( f'Stop price: {stop}' )
+logger.debug ( f'Sell price: {sell}' )
 
 # Make sure that the "sell price" is less than "stop price" as required by Gemini.
 if Decimal(sell).compare( Decimal(stop) ) == 1:
@@ -68,9 +68,9 @@ if Decimal(sell).compare( Decimal(stop) ) == 1:
     logger.debug ( f'{notice}' )
     sys.exit(1)
 
-# Make sure that the "sell price" and the "stop price" are below the market price (ceiling/roof).
-if stop.compare( roof ) == 1:
-    notice = f'The stop price {stop} {pair[3:]} cannot be larger than the market price ~{roof} {pair[3:]}. '
+# Make sure that the "sell price" and the "stop price" are below the market price (ceiling/last).
+if stop.compare( last ) == 1:
+    notice = f'The stop price {stop} {pair[3:]} cannot be larger than the market price ~{last} {pair[3:]}. '
     logger.debug ( f'{notice}' )
     sys.exit(1)
 

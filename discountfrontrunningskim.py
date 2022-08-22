@@ -19,7 +19,7 @@ from decimal import Decimal
 import libraries.definer as definer
 
 from libraries.logger import logger
-from libraries.pricegetter import maximumbid
+from libraries.pricegetter import ticker
 from libraries.askmonitor import floatingfall
 from libraries.frontrunner import bidorder
 from libraries.liquiditymaker import askorder
@@ -64,7 +64,7 @@ sendmessage ( f'{fragmentone}{fragmenttwo}')
 deal = floatingfall( pair, drop )
 
 # Get public market data on the highest bid in the orderbook using the Gemini REST API.
-cost = maximumbid( pair )
+cost = ticker( pair )["bid"]
 
 # Make sure that the highest deal price is less than the highest bid (i.e. "cost" exceeds "deal").
 # Without this check it is possible to submit a frontrunning bid that exceeds required discount.
