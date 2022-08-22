@@ -317,10 +317,11 @@ while True :
             if highestbid.compare( stopprice ) == 1:
 
                 # Post updated stop-limit order.
-                infomessage = f'Cancelled {jsonresponse["price"]} {pair[3:]} stop sell order {jsonresponse["order_id"]}. '
-                infomessage = infomessage + f'Submitting stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell.'
-                infomessage = infomessage + f'There will be an unrealized {ratiogain:,.2f}% profit/loss of {quotegain:,.2f} {pair[3:]} '
-                logger.info ( f'{infomessage}' ) ; sendmessage ( f'{infomessage}' )
+                logger.info = f'Cancelled {jsonresponse["price"]} {pair[3:]} stop sell order {jsonresponse["order_id"]}. '
+                logger.info = f'Submitting stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell. '
+                logger.info = f'There will be an unrealized (i.e. "ratio gain") {ratiogain:,.2f}% profit/loss of {quotegain:,.2f} {pair[3:]} '
+                sendmessage ( f'Submitting {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell limit order. ' )
+                sendmessage ( f'That would realize {quotegain:,.2f} {pair[3:]} [i.e. return {ratiogain:,.2f}%]. ' )
                 try:
                     jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
                 except Exception as e:
