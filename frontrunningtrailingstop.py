@@ -17,7 +17,6 @@
 # Execution:
 #   - Use the wrapper BASH script in the "strategies" directory.
 
-from distutils.log import debug
 import sys
 import json
 import time
@@ -113,7 +112,7 @@ except KeyError as e:
 costprice = Decimal( jsonresponse["price"] )
 
 # Calculate exit price.
-exitratio = Decimal( 1 + stop + geminiapifee )
+exitratio = Decimal( 1 + sell + geminiapifee )
 exitprice = Decimal( costprice * exitratio ).quantize( tick )
 
 # Calculate stop price.
