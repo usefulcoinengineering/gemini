@@ -222,11 +222,11 @@ while True :
             continue # Keep trying to get information on the order's status infinitely.
         try:
             if orderstatus['is_live'] : 
-                logger.info( f'Stop limit order {orderstatus["order_id"]} is live on the Gemini orderbook. ' )
+                logger.info( f'Initial stop limit order {orderstatus["order_id"]} is live on the Gemini orderbook. ' )
                 jsonresponse = orderstatus # Assign orderstatus to the jsonresponse used subsequently.
                 break # Break out of the while loop because we want to reset the stop order as prices rise.
             else : 
-                logger.info( f'Stop limit order {orderstatus["order_id"]} is NOT live on the Gemini orderbook. ' )
+                logger.info( f'Initial stop limit order {orderstatus["order_id"]} is NOT live on the Gemini orderbook. ' )
                 jsonresponse = orderstatus # Assign orderstatus to the jsonresponse used subsequently.
                 break # Break out of the while loop because the subroutine ran successfully.
         except KeyError as e:
@@ -280,7 +280,6 @@ while True :
                     continue # Keep tring to cancel the order infinitely.
                 else : 
                     logger.info( f'Stop limit order {cancellationstatus["order_id"]} is NOT live on the Gemini orderbook. ' )
-                    jsonresponse = cancellationstatus # Assign orderstatus to the jsonresponse used subsequently.
                     break # Break out of the while loop because the subroutine ran successfully.
             except KeyError as e:
                 warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
