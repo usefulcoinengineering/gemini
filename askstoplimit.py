@@ -95,7 +95,7 @@ try:
 # Return response.
 except KeyError as e:
     logger.warning ( f'KeyError: {e}' )
-    sendmessage ( "unsuccessful stop limit order submission." )
+    sendmessage ( "Unsuccessful stop limit order submission." )
 
 try:    
     if response["result"] : sendmessage ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
@@ -103,6 +103,6 @@ try:
 # Return response.
 except KeyError as e:
     logger.critical ( f'KeyError: {e}' )
-    sendmessage ( "unexpecter error. unsuccessful stop limit order submission." )
+    sendmessage ( "Unexpecter error. Unsuccessful stop limit order submission." )
     sys.exit(1)
 
