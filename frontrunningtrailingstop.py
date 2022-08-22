@@ -296,7 +296,7 @@ while True :
 
         while True :
             # Post updated stop-limit order.
-            notification = f'Cancelled {jsonresponse["price"]:,.2f} {pair[3:]} stop sell order {jsonresponse["order_id"]}. '
+            notification = f'Cancelled {jsonresponse["price"]} {pair[3:]} stop sell order {jsonresponse["order_id"]}. '
             notification = f'Submitting stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell.'
             logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
             try:
