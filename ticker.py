@@ -16,6 +16,7 @@
 
 import sys
 import time
+import json
 
 from libraries.logger import logger
 from libraries.pricegetter import ticker
@@ -42,7 +43,7 @@ while True:
         continue
     break
 
-logger.info ( tickerjson )
+logger.info ( json.dumps( tickerjson, sort_keys=True, indent=4, separators=(',', ': ') ) )
 
 # Let the shell know we successfully made it this far!
 sys.exit(0)
