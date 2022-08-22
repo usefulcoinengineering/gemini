@@ -29,6 +29,7 @@ from libraries.ordermanager import islive
 from libraries.frontrunner import bidorder
 from libraries.stopper import askstoplimit
 from libraries.marketmonitor import bidrise
+from libraries.pricegetter import maximumbid
 from libraries.ordermanager import cancelorder
 from libraries.volumizer import notionalvolume
 from libraries.definer import ticksizes as ticksizes
@@ -294,17 +295,29 @@ while True :
                     continue
 
         while True :
-            # Post updated stop-limit order.
-            notification = f'Cancelled {jsonresponse["price"]} {pair[3:]} stop sell order {jsonresponse["order_id"]}. '
-            notification = f'Submitting stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell.'
-            logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
-            try:
-                jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
-            except Exception as e:
-                logger.info ( f'Unable to get information on the stop-limit order cancellation request. Error: {e}' )
-                time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
-                continue # Keep trying to post stop limit order infinitely.
-            break # Break out of the while loop because the subroutine ran successfully.
+
+            # Get highest bid price.
+            # You can only sell for less.
+            highestbid = maximumbid( pair )
+
+            # Validate "stop price".
+            # Make sure that the bids exceed it.
+            # Otherwise the order wont be accepted.
+            if highestbid.compare( stopprice ) == 1:
+
+                # Post updated stop-limit order.
+                notification = f'Cancelled {jsonresponse["price"]} {pair[3:]} stop sell order {jsonresponse["order_id"]}. '
+                notification = f'Submitting stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell.'
+                logger.debug ( f'{notification}' ) ; sendmessage ( f'{notification}' )
+                try:
+                    jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
+                except Exception as e:
+                    logger.info ( f'Unable to get information on the stop-limit order cancellation request. Error: {e}' )
+                    continue # Keep trying to post stop limit order infinitely.
+                break # Break out of the while loop because the subroutine ran successfully.
+            
+            time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
+
         continue
 
     else :
