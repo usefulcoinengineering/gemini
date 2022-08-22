@@ -222,10 +222,10 @@ while True :
             continue # Keep trying to get information on the order's status infinitely.
         try:
             if orderstatus['is_live'] : 
-                logger.info( f'Bid order {orderstatus["order_id"]} is live on the Gemini orderbook. ' )
+                logger.info( f'Stop limit order {orderstatus["order_id"]} is live on the Gemini orderbook. ' )
                 continue # Keep retrieving information on the order's status infinitely.
             else : 
-                logger.info( f'Bid order {orderstatus["order_id"]} is NOT live on the Gemini orderbook. ' )
+                logger.info( f'Stop limit order {orderstatus["order_id"]} is NOT live on the Gemini orderbook. ' )
                 jsonresponse = orderstatus # Assign orderstatus to the jsonresponse used subsequently.
                 break # Break out of the while loop because the subroutine ran successfully.
         except KeyError as e:
