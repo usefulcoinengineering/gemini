@@ -223,7 +223,8 @@ while True :
         try:
             if orderstatus['is_live'] : 
                 logger.info( f'Stop limit order {orderstatus["order_id"]} is live on the Gemini orderbook. ' )
-                continue # Keep retrieving information on the order's status infinitely.
+                jsonresponse = orderstatus # Assign orderstatus to the jsonresponse used subsequently.
+                break # Break out of the while loop because we want to reset the stop order as prices rise.
             else : 
                 logger.info( f'Stop limit order {orderstatus["order_id"]} is NOT live on the Gemini orderbook. ' )
                 jsonresponse = orderstatus # Assign orderstatus to the jsonresponse used subsequently.
