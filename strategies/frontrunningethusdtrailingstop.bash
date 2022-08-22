@@ -29,4 +29,4 @@
 #  python3 ../frontrunningtrailingstop.py ETHUSD 0.001 0.0050 0.0100
 # done
 
-python3 ../frontrunningtrailingstop.py ETHUSD 0.0010 0.0013 0.0037
+python3 ../frontrunningtrailingstop.py ETHUSD 0.1000 0.0013 0.0076
