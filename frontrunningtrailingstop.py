@@ -242,7 +242,7 @@ while True :
                 continue
 
     # If the stop limit order still active.
-    if Decimal( jsonresponse["remaining_amount"] ).compare( Decimal(0) ) == 1 : 
+    if jsonresponse["is_live"] : 
         
         # Calculate new exit and resultant sell/stop prices.
         exitprice = Decimal( exitprice * exitratio ).quantize( tick )
@@ -302,7 +302,7 @@ while True :
             try:
                 jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
             except Exception as e:
-                logger.info ( f'Unable to get information on {jsonresponse["remaining_amount"]}. Error: {e}' )
+                logger.info ( f'Unable to get information on the stop-limit order cancellation request. Error: {e}' )
                 time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
                 continue # Keep trying to post stop limit order infinitely.
             break # Break out of the while loop because the subroutine ran successfully.
