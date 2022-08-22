@@ -25,11 +25,11 @@ import time
 from decimal import Decimal
 
 from libraries.logger import logger
+from libraries.pricegetter import ticker
 from libraries.ordermanager import islive
 from libraries.frontrunner import bidorder
 from libraries.stopper import askstoplimit
 from libraries.marketmonitor import bidrise
-from libraries.pricegetter import maximumbid
 from libraries.ordermanager import cancelorder
 from libraries.volumizer import notionalvolume
 from libraries.definer import ticksizes as ticksizes
@@ -300,9 +300,17 @@ while True :
 
         while True :
 
-            # Get highest bid price.
-            # You can only sell for less.
-            highestbid = maximumbid( pair )
+            while True:
+                try:
+                    # Get highest bid price.
+                    # You can only sell for less.
+                    highestbid = Decimal( ticker( pair )["bid"] )
+                except Exception as e:
+                    logger.debug( f'An exception occured when trying to retrieve the price ticker. Error: {e}' )
+                    time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
+                    continue
+                break
+
 
             # Validate "stop price".
             # Make sure that the bids exceed it.

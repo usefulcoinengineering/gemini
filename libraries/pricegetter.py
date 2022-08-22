@@ -17,59 +17,15 @@ from libraries.messenger import sendmessage as sendmessage
 import libraries.definer as definer
 import libraries.authenticator as authenticator
 
-def maximumbid(
+def ticker(
         pair: str
     ) -> None:
 
-    # Get the highest bid in the orderbook.
+    # Get the latest prices and trading volumes.
     endpoint = '/v1/pubticker/' + pair
-    response = requests.get( definer.restserver + endpoint )
-    response = response.json()
-    datadump = json.dumps( response, sort_keys=True, indent=4, separators=(',', ': ') )
+    response = requests.get( definer.restserver + endpoint ).json()
 
-    # Write the dump to logs.
-    logger.debug ( datadump )
+    # Uncomment to write the response to logs: 
+    logger.debug ( json.dumps( response, sort_keys=True, indent=4, separators=(',', ': ') ) )
  
-    try:    
-        response["result"]
-
-    # No response error..
-    except KeyError as e:
-        # Update logs and return bid price as a string.
-        bidprice = Decimal( response["bid"] )
-        logger.debug( f'bidprice: {bidprice}' )
-        return str(bidprice)
-
-    # Send error alert and exit returning a boolean value of "False".
-    sendmessage ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
-    return False
-
-    
-
-def minimumask(
-        pair: str
-    ) -> None:
-
-    # Get the lowest ask in the orderbook.
-    endpoint = '/v1/pubticker/' + pair
-    response = requests.get( definer.restserver + endpoint )
-    response = response.json()
-    datadump = json.dumps( response, sort_keys=True, indent=4, separators=(',', ': ') )
-    
-    
-    # Write the dump to logs.
-    logger.debug ( datadump )
-
-    try:    
-        response["result"]
-
-    # No response error..
-    except KeyError as e:
-        # Update logs and return ask price as a string.
-        askprice = Decimal( response["ask"] )
-        logger.debug( f'askprice: {askprice}' )
-        return str(askprice)
-
-    # Send error alert and exit returning a boolean value of "False".
-    sendmessage ( f'\"{response["reason"]}\" {response["result"]}: {response["message"]}' )
-    return False
+    return response
