@@ -26,6 +26,6 @@ def ticker(
     response = requests.get( definer.restserver + endpoint ).json()
 
     # Uncomment to write the response to logs: 
-    logger.debug ( json.dumps( response, sort_keys=True, indent=4, separators=(',', ': ') ) )
+    # logger.debug ( json.dumps( response, sort_keys=True, indent=4, separators=(',', ': ') ) )
  
     return response
