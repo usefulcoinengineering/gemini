@@ -77,10 +77,8 @@ if stop.compare( last ) == 1:
 # Submit stop sell order to the orderbook using the Gemini REST API.
 response = askstoplimit( str(pair), str(size), str(stop), str(sell) ).json()
 
-# To debug: 
-# Write the dump to logs.
-# datadump = json.dumps( response, sort_keys=True, indent=4, separators=(',', ': ') )
-# logger.debug ( datadump )
+# Remove comments to debug: 
+# logger.debug ( json.dumps( response, sort_keys=True, indent=4, separators=(',', ': ') ) )
 
 try:    
     if response["is_live"] : 
