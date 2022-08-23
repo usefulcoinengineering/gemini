@@ -167,7 +167,7 @@ while True :
     try:
         orderstatus = islive( jsonresponse["order_id"] ).json() # Post REST API call to determine order's status.
     except Exception as e:
-        logger.info ( f'Unable to retrieve order status. Error: {e}' )
+        logger.info ( f'Unable to retrieve bid order status. Error: {e}' )
         continue # Keep trying to get information on the order's status infinitely.
     try:
         if orderstatus['is_live'] : 
@@ -205,6 +205,7 @@ while True :
     except Exception as e:
         logger.info ( f'Unable to get information on ask stop limit order. Error: {e}' )
         continue # Keep trying to submit ask stop limit order.
+    logger.debug ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
     break # Break out of the while loop because the subroutine ran successfully.
 
 # Loop.
@@ -218,7 +219,7 @@ while True :
         try:
             orderstatus = islive( jsonresponse["order_id"] ).json() # Post REST API call to determine order's status.
         except Exception as e:
-            logger.info ( f'Unable to retrieve order status. Error: {e}' )
+            logger.info ( f'Unable to retrieve stop limit order status. Error: {e}' )
             continue # Keep trying to get information on the order's status infinitely.
         try:
             if orderstatus['is_live'] : 
