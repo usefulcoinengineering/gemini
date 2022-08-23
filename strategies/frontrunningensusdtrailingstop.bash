@@ -20,6 +20,9 @@
 # Testing
 # python3 ../frontrunningtrailingstop.py ENSUSD 0.001 0.0050 0.0100
 
+# Trailing Skimmer
+# python3 ../frontrunningtrailingstop.py ENSUSD 60 0.01376 0.01378
+
 # Gemini's API Transaction Fee
 # Presently: 20 basis points (or '0.0020').
 # Premium Impact: Always add 0.0020 to the premium desired (in order to offset the fee for selling).
@@ -29,4 +32,4 @@
 #  python3 ../frontrunningtrailingstop.py ENSUSD 0.001 0.0050 0.0100
 # done
 
-python3 ../frontrunningtrailingstop.py ENSUSD 1 0.0013 0.0076
+python3 ../frontrunningtrailingstop.py ENSUSD 1 0.01376 0.01378
