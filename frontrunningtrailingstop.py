@@ -117,11 +117,11 @@ exitprice = Decimal( costprice * exitratio ).quantize( tick )
 
 # Calculate stop price.
 stopratio = Decimal( 1 - stop )
-stopprice = Decimal( costprice * stopratio ).quantize( tick )
+stopprice = Decimal( exitprice * stopratio ).quantize( tick )
 
 # Calculate sell price.
 sellratio = Decimal( 1 - sell - geminiapifee )
-sellprice = Decimal( costprice * sellratio ).quantize( tick )
+sellprice = Decimal( exitprice * sellratio ).quantize( tick )
 
 # Calculate quote gain.
 quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
@@ -245,6 +245,9 @@ while True :
     # If the stop limit order still active.
     if jsonresponse["is_live"] : 
         
+        # Lower the exit ratio to lock gains faster.
+        exitratio = Decimal( 1 + stop + geminiapifee )
+
         # Calculate new exit and resultant sell/stop prices.
         exitprice = Decimal( exitprice * exitratio ).quantize( tick )
         stopprice = Decimal( exitprice * stopratio ).quantize( tick )
