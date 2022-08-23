@@ -144,7 +144,7 @@ logger.info ( f'Ratio Gain: {ratiogain:.2f}%' )
 # Explain the opening a websocket connection.
 # Also explain the wait for an increase in the prices sellers are willing to take to rise above the "exitprice".
 infomessage = f'Waiting for sellers to take {exitprice:,.2f} {pair[3:]} to rid themselves of {pair[:3]} '
-infomessage = infomessage + f'[i.e. rise {Decimal( sell + geminiapifee ) * 100}%]. '
+infomessage = infomessage + f'[i.e. rise {Decimal( sell + geminiapifee ) * 100:,.2f}%]. '
 logger.info ( f'{infomessage}' ) ; sendmessage ( f'{infomessage}' )
 
 # Loop.
