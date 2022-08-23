@@ -142,8 +142,9 @@ logger.info ( f'Quote Gain: {quotegain} {pair[3:]}' )
 logger.info ( f'Ratio Gain: {ratiogain:.2f}%' )
 
 # Explain the opening a websocket connection.
-# Also explain the wait for an increase in the latest transaction prices beyond the "exitprice".
-infomessage = f'Waiting for the trading price of {pair[:3]} to rise {Decimal(stop)*100}% to {exitprice:,.2f} {pair[3:]}. '
+# Also explain the wait for an increase in the prices sellers are willing to take to rise above the "exitprice".
+infomessage = f'Waiting for sellers to take {exitprice:,.2f} {pair[3:]} to rid themselves of {pair[:3]} '
+infomessage = infomessage + f'[i.e. rise {Decimal( sell + geminiapifee ) * 100}%]. '
 logger.info ( f'{infomessage}' ) ; sendmessage ( f'{infomessage}' )
 
 # Loop.
@@ -151,7 +152,7 @@ while True :
 
     try: 
         # Open websocket connection. 
-        bidrise( pair, exitprice ) # Wait for the trading price to rise to the exit price.
+        bidrise( pair, exitprice ) # Wait for the price sellers take to rise to the exit price.
     except Exception as e:
         # Report exception.
         notification = f'The websocket connection monitoring {pair} prices probably failed. '
@@ -252,8 +253,8 @@ while True :
         exitprice = Decimal( exitprice * exitratio ).quantize( tick )
         stopprice = Decimal( exitprice * stopratio ).quantize( tick )
         sellprice = Decimal( exitprice * sellratio ).quantize( tick )
-        # Note: "costprice" is no longer used to set stop and sell prices.
-        # Note: The last transaction price exceeds the previous exit price creates the new exit price.
+        # Note: "costprice" is no longer the basis of the new exit price (and thus stop and sell prices).
+        # Note: The last transaction price exceeds the previous exit price and creates the new exit price.
 
         # Recalculate quote gain.
         quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
@@ -264,7 +265,7 @@ while True :
 
             try: 
                 # Open websocket connection. 
-                bidrise( pair, exitprice ) # Wait for the trading price to rise to the exit price.
+                bidrise( pair, exitprice ) # Wait for the price sellers take to rise to the exit price.
             except Exception as e:
                 # Report exception.
                 notification = f'The websocket connection monitoring {pair} prices probably failed. '
