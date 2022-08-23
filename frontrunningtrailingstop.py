@@ -128,9 +128,9 @@ quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
 ratiogain = Decimal( 100 * sellprice * size / costprice / size - 100 ).quantize( tick )
 
 # Validate "stop price".
-if stopprice.compare( costprice ) == 1:
+if stopprice.compare( exitprice ) == 1:
     # Make sure that the "stop price" is below the purchase price (i.e. "cost price").
-    notification = f'The stop price {stop:,.2f} {pair[3:]} cannot exceed the purchase price of {costprice:,.2f} {pair[3:]}. '
+    notification = f'The stop order price {stopprice:,.2f} {pair[3:]} cannot exceed the future market price of {exitprice:,.2f} {pair[3:]}. '
     logger.error ( f'{notification}' ) ; sendmessage ( f'{notification}' ) ; sys.exit(1)
 
 # Record parameters to logs.
