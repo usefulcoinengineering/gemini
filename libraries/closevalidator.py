@@ -47,17 +47,15 @@ def confirmexecution(
 
         # Display heartbeat
         if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'Heartbeat: {dictionary[ "socket_sequence" ]}' )
-        else :
-
-            if isinstance(dictionary, list):
-                for closedevent in dictionary:
-                    if closedevent['order_id'] == order : 
-                        notification = f'Completed the {closedevent["order_type"]} {closedevent["side"]}ing of '
-                        notification = notification + f'{closedevent["executed_amount"]} {closedevent["symbol"].upper()[:3]} '
-                        notification = notification + f'for {closedevent["price"]:,.2f} {closedevent["symbol"][3:]}. '
-                        logger.info( notification )
-                        sendmessage( notification )
-                        ws.close()
+        if isinstance(dictionary, list):
+            for closedevent in dictionary:
+                if closedevent['order_id'] == order : 
+                    notification = f'Completed the {closedevent["order_type"]} {closedevent["side"]}ing of '
+                    notification = notification + f'{closedevent["executed_amount"]} {closedevent["symbol"].upper()[:3]} '
+                    notification = notification + f'for {closedevent["price"]:,.2f} {closedevent["symbol"][3:]}. '
+                    logger.info( notification )
+                    sendmessage( notification )
+                    ws.close()
 
     # Construct payload.
     t = datetime.datetime.now()
