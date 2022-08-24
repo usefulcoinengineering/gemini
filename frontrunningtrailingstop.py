@@ -53,7 +53,7 @@ if len(sys.argv) == 5:
     stop = sys.argv[3]
     sell = sys.argv[4]
 else: 
-    logger.warning ( f'incorrect number of command line arguments. using default values for {pair} trailing...' )
+    logger.warning ( f'Incorrect number of command line arguments. Using default values for {pair} trailing...' )
 
 # Cast decimals.
 size = Decimal(size)
