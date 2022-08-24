@@ -48,7 +48,7 @@ def confirmexecution(
         # Display heartbeat
         if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'Heartbeat: {dictionary[ "socket_sequence" ]}' )
         if isinstance(dictionary, list):
-            logger.debug( dictionary )
+            logger.debug( dictionary[0] )
             for closedevent in dictionary:
                 # logger.debug( closedevent )
                 if closedevent['order_id'] == order : 
