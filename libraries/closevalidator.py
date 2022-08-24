@@ -49,6 +49,7 @@ def confirmexecution(
         if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'Heartbeat: {dictionary[ "socket_sequence" ]}' )
         if isinstance(dictionary, list):
             for closedevent in dictionary:
+                logger.debug( closedevent )
                 if closedevent['order_id'] == order : 
                     notification = f'Completed the {closedevent["order_type"]} {closedevent["side"]}ing of '
                     notification = notification + f'{closedevent["executed_amount"]} {closedevent["symbol"].upper()[:3]} '
