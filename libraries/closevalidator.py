@@ -47,15 +47,14 @@ def confirmexecution(
 
         # Check arrays for order.
         if isinstance(dictionary, list):
-            logger.debug( dictionary )
             for closedevent in dictionary:
-                # logger.debug( closedevent )
+                logger.debug( closedevent )
                 if closedevent['order_id'] == order : 
-                    notification = f'Completed the {closedevent["order_type"]} {closedevent["side"]}ing of '
-                    notification = notification + f'{closedevent["executed_amount"]} {closedevent["symbol"].upper()[:3]} '
-                    notification = notification + f'for {closedevent["price"]:,.2f} {closedevent["symbol"][3:]}. '
-                    logger.info( notification )
-                    sendmessage( notification )
+                    infomessage = f'Completed the {closedevent["order_type"]} {closedevent["side"]}ing of '
+                    infomessage = infomessage + f'{closedevent["executed_amount"]} {closedevent["symbol"].upper()[:3]} '
+                    infomessage = infomessage + f'for {closedevent["price"]:,.2f} {closedevent["symbol"][3:]}. '
+                    logger.info( infomessage )
+                    sendmessage( infomessage )
                     ws.close()
         else: 
             # Display heartbeat
