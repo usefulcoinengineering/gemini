@@ -98,7 +98,7 @@ try :
 
     else:
         infomessage = f'Bid order {jsonresponse["order_id"]} for {jsonresponse["remaining_amount"]} {jsonresponse["symbol"].upper()[:3]} '
-        infomessage = f'at {jsonresponse["price"]} {jsonresponse["symbol"].upper()[3:]} is active and booked. '
+        infomessage = infomessage + f'at {jsonresponse["price"]} {jsonresponse["symbol"].upper()[3:]} is active and booked. '
         logger.info ( infomessage )
         sendmessage ( infomessage )
 
