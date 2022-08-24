@@ -40,24 +40,24 @@ def confirmexecution(
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, order=order ) : 
         
-        # Remove comment to debug with: 
-        logger.debug( message )
+        # Remove comment to debug with: logger.debug( message )
         
         # Load update into a dictionary.
-        closedevents = json.loads( message )
+        dictionary = json.loads( message )
 
-        # Verify the array of events is a list.
-        # Iterate through each event in the update.
-        if isinstance(closedevents, list):
-            for closedevent in closedevents:
-                closedorder = Decimal( closedevent['order_id'] )
-                if closedorder == order : 
-                    notification = f'Completed the {closedevent["order_type"]} {closedevent["side"]}ing of '
-                    notification = notification + f'{closedevent["executed_amount"]} {closedevent["executed_amount"][:3]} '
-                    notification = notification + f'for {closedevent["price"]:,.2f} {closedevent["executed_amount"][3:]}. '
-                    logger.info( notification )
-                    sendmessage( notification )
-                    ws.close()
+        # Display heartbeat
+        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'Heartbeat: {dictionary[ "socket_sequence" ]}' )
+        else :
+
+            if isinstance(dictionary, list):
+                for closedevent in dictionary:
+                    if closedevent['order_id'] == order : 
+                        notification = f'Completed the {closedevent["order_type"]} {closedevent["side"]}ing of '
+                        notification = notification + f'{closedevent["executed_amount"]} {closedevent["symbol"].upper()[:3]} '
+                        notification = notification + f'for {closedevent["price"]:,.2f} {closedevent["symbol"][3:]}. '
+                        logger.info( notification )
+                        sendmessage( notification )
+                        ws.close()
 
     # Construct payload.
     t = datetime.datetime.now()
