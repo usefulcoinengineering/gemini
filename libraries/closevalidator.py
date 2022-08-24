@@ -48,10 +48,11 @@ def confirmexecution(
         # Check arrays for order.
         if isinstance(dictionary, list):
             for closedevent in dictionary:
-                if closedevent.json()['order_id'] == order : 
-                    infomessage = f'Completed the {closedevent.json()["order_type"]} {closedevent.json()["side"]}ing of '
-                    infomessage = infomessage + f'{closedevent.json()["executed_amount"]} {closedevent.json()["symbol"].upper()[:3]} '
-                    infomessage = infomessage + f'for {closedevent.json()["price"]:,.2f} {closedevent.json()["symbol"][3:]}. '
+                logger.debug( closedevent['order_id'] )
+                if closedevent['order_id'] == order : 
+                    infomessage = f'Completed the {closedevent["order_type"]} {closedevent["side"]}ing of '
+                    infomessage = infomessage + f'{closedevent["executed_amount"]} {closedevent["symbol"].upper()[:3]} '
+                    infomessage = infomessage + f'for {closedevent["price"]:,.2f} {closedevent["symbol"][3:]}. '
                     logger.info( infomessage )
                     sendmessage( infomessage )
                     ws.close()
