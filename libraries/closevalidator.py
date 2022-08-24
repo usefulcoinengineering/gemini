@@ -40,7 +40,8 @@ def confirmexecution(
     def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
     def on_message( ws, message, order=order ) : 
         
-        # Remove comment to debug with: logger.debug( message )
+        # Remove comment to debug with: 
+        logger.debug( message )
         
         # Load update into a dictionary.
         closedevents = json.loads( message )
