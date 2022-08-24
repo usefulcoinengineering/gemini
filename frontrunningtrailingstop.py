@@ -261,7 +261,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
         except Exception as e:
             # Report exception.
             notification = f'The websocket connection blocking on {pair} price bounds probably failed. '
-            logger.debug ( '{notification} Let\'s reestablish the connection and try again!' )
+            logger.debug ( f'{notification} Let\'s reestablish the connection and try again!' )
             continue # Restart while loop logic.
         break # Break out of the while loop because the subroutine ran successfully.
 
