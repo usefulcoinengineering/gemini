@@ -297,3 +297,82 @@ def bidrise(
                                  on_message = on_message )
     ws.run_forever(sslopt={'cert_reqs': ssl.CERT_NONE})
 
+def blockpricerange(
+        pair: str,
+        upperbound: str,
+        lowerbound: str
+    ) -> None:
+
+    # Cast as decimals.
+    upperbound = Decimal( upperbound )
+    lowerbound = Decimal( lowerbound )
+
+    # Request trade data only.
+    urlrequest = "wss://api.gemini.com/v1/marketdata/" + pair.lower()
+    parameters = "?trades=true&heartbeat=true"
+    connection = urlrequest + parameters
+
+    close_status_code = 'OK'
+    close_msg = f'{connection} connection closed.'
+    # Close connection arguments.
+    # Reference: https://pypi.org/project/websocket-client/#:~:text=ws%2C%20close_status_code%2C%20close_msg.
+
+
+    # Introduce function.
+    logger.info(f'Looping until the latest {pair[:3]} transaction price on Gemini exceeds: {upperbound:,.2f} {pair[3:]}')
+
+    # Define websocket functions.
+    def on_open( ws ) : logger.debug( f'{ws} connection opened.' )
+    def on_close( ws, close_status_code, close_msg ) : logger.debug( 'connection closed.' )
+    def on_error( ws, errormessage ) : logger.error( f'{ws} connection error: {errormessage}' )
+    def on_message( ws, message, pair=pair.upper(), upperbound=upperbound ) : 
+        
+        # Remove comment to debug with: logger.debug( message )
+        # Load update into a dictionary.
+        dictionary = json.loads( message )
+
+        # Display heartbeat
+        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'Heartbeat: {dictionary[ "socket_sequence" ]}' )
+        else :
+
+            # Define events array/list.
+            events = dictionary[ 'events' ]
+            if events == [] : 
+                logger.debug( f'No update events. Received: {message}  ' )
+            else:
+                # Verify the array of events is a list.
+                # Iterate through each event in the update.
+                if isinstance(events, list):
+                    for event in events:
+                        tradeprice = Decimal( event[ 'price' ] )
+                        tradevalue = Decimal( event[ 'amount' ] )
+                        inadequacy = Decimal( 100 * ( upperbound - tradeprice ) / upperbound )
+                        tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
+                        if event['makerSide'] == "ask" : takeraction = "increase"
+                        if event['makerSide'] == "bid" : takeraction = "decrease"
+                        infomessage = f'[{inadequacy:.2f}% off {upperbound:,.2f} {pair[3:]}] {tradeprice:,.2f} {pair[3:]} price taken to '
+                        infomessage = infomessage + f'quickly {takeraction} {pair[:3]} hoard by {tradevalue:,.2f} {pair[3:]}. '
+                        logger.info ( f'{infomessage}' )
+                        if event['makerSide'] == "ask" : 
+                            if lowerbound.compare( tradeprice ) == 1 : 
+                                infomessage = f'{lowerbound:,.2f} {pair[3:]} lower price boundary breached: {infomessage}'
+                                logger.info( infomessage )
+                                sendmessage( infomessage )
+                                ws.close()
+                        if event['makerSide'] == "bid" : 
+                            if tradeprice.compare( upperbound ) == 1 : 
+                                infomessage = f'{upperbound:,.2f} {pair[3:]} upper price boundary breached: {infomessage}'
+                                logger.info( infomessage )
+                                sendmessage( infomessage )
+                                ws.close()
+            
+    # Establish websocket connection.
+    # Connection is public. Public connection require neither headers nor authentication.
+    logger.info ( f'Establishing websocket connection to monitor {pair[:3]} prices in {pair[3:]} terms.' )
+    ws = websocket.WebSocketApp( connection,
+                                 on_open = on_open,
+                                 on_close = on_close,
+                                 on_error = on_error,
+                                 on_message = on_message )
+    ws.run_forever(sslopt={'cert_reqs': ssl.CERT_NONE})
+
