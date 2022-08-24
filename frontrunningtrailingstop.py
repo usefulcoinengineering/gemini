@@ -386,7 +386,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
         try:
             orderstatus = islive( jsonresponse["order_id"] ).json() # Post REST API call to determine order's status.
         except Exception as e:
-            logger.info ( f'Unable to retrieve stop limit order status. Error: {e}' )
+            logger.info ( f'Unable to retrieve stop limit order status. ' )
             continue # Keep trying to get information on the order's status infinitely.
         try:
             if orderstatus['is_live'] : 
