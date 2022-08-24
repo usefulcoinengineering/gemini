@@ -50,6 +50,7 @@ def confirmexecution(
             for closedevent in dictionary:
                 if closedevent['order_id'] == order : 
                     infomessage = f'Completed the {closedevent["order_type"]} {closedevent["side"]}ing of '
+                    infomessage = infomessage + f'{closedevent["executed_amount"]} {closedevent["symbol"].upper()[:3]} '
                     logger.info( infomessage )
                     sendmessage( infomessage )
                     ws.close()
