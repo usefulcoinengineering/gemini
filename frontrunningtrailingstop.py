@@ -75,16 +75,25 @@ tick = Decimal( item[0] )
 # Determine Gemini API transaction fee.
 geminiapifee = Decimal( 0.0001 ) * Decimal ( notionalvolume().json()["api_maker_fee_bps"] )
 
-# You could put the try-except logic in a while loop to keep trying until there's success.
-# But keep debugging for now.
-try:
-    # Submit limit bid order, report response, and verify submission.
-    logger.debug ( f'Submitting {pair} frontrunning limit bid order.' )
+# Submit limit bid order, report response, and verify submission.
+logger.debug ( f'Submitting {pair} frontrunning limit bid order.' )
+try :
     jsonresponse = bidorder( pair, size ).json()
+except Exception as e :
+    # Report exception.
+    notification = f'While trying to submit a frontrunning limit bid order the follow error occurred: {e} '
+    logger.debug ( '{notification} Let\'s exit. Please try rerunning the code!' )
+    sys.exit(1) # Exit. Continue no further.
 
-    # To debug remove comment character below:
-    # logger.info ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
-    if jsonresponse["is_cancelled"] : sys.exit(1)
+# To debug remove comment character below:
+# logger.info ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
+
+try :
+    if jsonresponse["is_cancelled"] : 
+        notification = f'Bid order {jsonresponse["order_id"]} was cancelled. '
+        logger.debug ( '{notification} Let\'s exit. Please try rerunning the code!' )
+        sys.exit(1) # Exit. Continue no further.
+
     else:
         infomessage = f'Bid order {jsonresponse["order_id"]} is active and booked.'
         logger.info ( infomessage )
@@ -99,10 +108,9 @@ except KeyError as e:
             logger.critical ( criticalmessage ) ; sendmessage ( criticalmessage )
             sys.exit(1)
 
-    except KeyError as e:
-        criticalmessage = f'KeyError: {e} was not present in the response from the REST API server.'
+    except Exception as e:
+        criticalmessage = f'Exception: {e} '
         logger.critical ( f'Unexpecter error. Unsuccessful bid order submission. {criticalmessage}' )
-        sendmessage ( f'Unexpecter error. Unsuccessful bid order submission. {criticalmessage}' )
         sys.exit(1)
 
 # Confirm order execution.
