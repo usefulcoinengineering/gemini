@@ -224,20 +224,8 @@ while True : # Block until order status has been determined.
 # Loop.
 while True : # Block until prices rise (then cancel and resubmit stop limit order) or block until a stop limit ask order was "closed". 
 
-    # Report gain if order "closed".
-    if not jsonresponse["is_live"] : 
-
-        # Recalculate quote gain.
-        quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
-        ratiogain = Decimal( 100 * sellprice * size / costprice / size - 100 )
-
-        # Report profit/loss.
-        clause0 = f'There was a {ratiogain:,.2f}% profit/loss of {quotegain:,.2f} {pair[3:]} '
-        clause1 = f'from the sale of {size} {pair[:3]} at {Decimal(sellprice * size):,.2f} {pair[3:]} '
-        clause2 = f'which cost {Decimal(costprice * size):,.2f} {pair[3:]} to acquire.'
-        message = f'{clause0}{clause1}{clause2}'
-        logger.info ( message ) ; sendmessage ( message )
-        break
+    # Break out of loop if order "closed".
+    if not jsonresponse["is_live"] : break
 
     # Lower the exit ratio to lock gains faster.
     exitratio = Decimal( 1 + stop + geminiapifee )
@@ -278,7 +266,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
 
     # Continue at the start of the loop.
     # [To check if stop limit was closed.]
-    if lowestask.compare( sellprice ) == 1: continue
+    if lowestask.compare( sellprice ) == 1: break
 
     # Loop.
     while True : # Block until existing stop order is cancelled. 
@@ -329,7 +317,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
         # Validate "stop price".
         # Make sure that the bids exceed it.
         # Otherwise the order wont be accepted.
-        if highestbid.compare( stopprice ) == 1:
+        if highestbid.compare( exitprice ) == 1:
 
             # Post updated stop-limit order.
             logger.info = f'Cancelled {jsonresponse["price"]} {pair[3:]} stop sell order {jsonresponse["order_id"]}. '
@@ -343,37 +331,37 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
                 logger.debug ( f'Unable to get information on the stop-limit order cancellation request. Error: {e}' )
                 time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
                 continue # Keep trying to post stop limit order infinitely.
-            break # Break out of the while loop because the subroutine ran successfully.
-        
-    # Loop.
-    while True : # Block until order status has been determined. 
-
-        time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
-        
-        try:
-            orderstatus = islive( jsonresponse["order_id"] ).json() # Post REST API call to determine order's status.
-        except Exception as e:
-            logger.info ( f'Unable to retrieve stop limit order status. ' )
-            continue # Keep trying to get information on the order's status infinitely.
-        try:
-            if orderstatus['is_live'] : 
-                logger.info( f'Updated stop limit order {orderstatus["order_id"]} is live on the Gemini orderbook. ' )
-                jsonresponse = orderstatus # Assign orderstatus to the jsonresponse used subsequently.
-                break # Break out of the while loop because we want to reset the stop order as prices rise.
-            else : 
-                logger.info( f'Updated stop limit order {orderstatus["order_id"]} is NOT live on the Gemini orderbook. ' )
-                jsonresponse = orderstatus # Assign orderstatus to the jsonresponse used subsequently.
-                break # Break out of the while loop because the subroutine ran successfully.
-        except KeyError as e:
-            warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
-            logger.warning ( f'{warningmessage} Something went wrong.. Checking for an error message...' )
-            try:    
-                if orderstatus["result"] : 
-                    logger.warning ( f'\"{orderstatus["reason"]}\" {orderstatus["result"]}: {orderstatus["message"]}' )
+            try:
+                if orderstatus['is_live'] : 
+                    logger.info( f'Updated stop limit order {orderstatus["order_id"]} is live on the Gemini orderbook. ' )
+                    jsonresponse = orderstatus # Assign orderstatus to the jsonresponse used subsequently.
+                    break # Break out of the while loop because we want to reset the stop order as prices rise.
+                else : 
+                    logger.info( f'Updated stop limit order {orderstatus["order_id"]} is NOT live on the Gemini orderbook. ' )
+                    jsonresponse = orderstatus # Assign orderstatus to the jsonresponse used subsequently.
+                    break # Break out of the while loop because the subroutine ran successfully.
+            except KeyError as e:
+                warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
+                logger.warning ( f'{warningmessage} Something went wrong.. Checking for an error message...' )
+                try:    
+                    if orderstatus["result"] : 
+                        logger.warning ( f'\"{orderstatus["reason"]}\" {orderstatus["result"]}: {orderstatus["message"]}' )
+                        continue
+                except Exception as e:
+                    criticalmessage = f'Exception: {e} '
+                    logger.critical ( f'Unexpecter error. {criticalmessage}' ) ; sendmessage ( f'Unexpecter error. {criticalmessage}' )
                     continue
-            except Exception as e:
-                criticalmessage = f'Exception: {e} '
-                logger.critical ( f'Unexpecter error. {criticalmessage}' ) ; sendmessage ( f'Unexpecter error. {criticalmessage}' )
+
+# Recalculate quote gain.
+quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
+ratiogain = Decimal( 100 * sellprice * size / costprice / size - 100 )
+
+# Report profit/loss.
+clause0 = f'There was a {ratiogain:,.2f}% profit/loss of {quotegain:,.2f} {pair[3:]} '
+clause1 = f'from the sale of {size} {pair[:3]} at {Decimal(sellprice * size):,.2f} {pair[3:]} '
+clause2 = f'which cost {Decimal(costprice * size):,.2f} {pair[3:]} to acquire.'
+message = f'{clause0}{clause1}{clause2}'
+logger.info ( message ) ; sendmessage ( message )
 
 # Let the shell know we successfully made it this far!
 sys.exit(0)
