@@ -51,6 +51,7 @@ def confirmexecution(
                 if closedevent['order_id'] == order : 
                     infomessage = f'Completed the {closedevent["order_type"]} {closedevent["side"]}ing of '
                     infomessage = infomessage + f'{closedevent["executed_amount"]} {closedevent["symbol"].upper()[:3]} '
+                    infomessage = infomessage + f'for {closedevent["price"]:,.2f} {closedevent["symbol"].upper()[3:]}. '
                     logger.info( infomessage )
                     sendmessage( infomessage )
                     ws.close()
