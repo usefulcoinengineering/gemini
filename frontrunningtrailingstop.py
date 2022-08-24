@@ -9,10 +9,11 @@
 # Strategy Outline:
 #  1. Buy BTC (by default) almost at the market price using the REST API (with a frontrunning USD bid).
 #  2. Open a websocket connection and wait for confirmation that submitted bid order was filled.
-#  3. Capture the price of the exexuted order and use it to calculate the last price that should trip the submission of a stop-limit order.
-#  4. Monitor last price data in trade messages and do nothing until the transaction price exceeds the trip price.
-#  5. On the first occassion that last price exceeds the trip price submit a stop-limit order to market sell when the "stop" is reached.
-#  6. Whenever last price exceeds the session high update/adjust the stop-limit order upwards.
+#  3. Capture the price of the executed order and use it to calculate the last price that should trip the submission of a stop-limit order.
+#  4. Monitor last price data until the transaction price exceeds the price target. 
+#  5. Submit the initial stop limit order to sell BTC. If this order fills, exit. Otherwise, monitor prices for increases.
+#  6. On the occasion that last price exceeds a new price target, cancel the old stop limit order and submit an updated stop-limit order to sell when the new price target is reached.
+#  7. On the occasion that monitored ask prices indicate that the existing stop limit order should close, stop monitoring prices and exit.
 #
 # Execution:
 #   - Use the wrapper BASH script in the "strategies" directory.
