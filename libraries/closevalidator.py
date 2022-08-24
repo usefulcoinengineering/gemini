@@ -45,10 +45,9 @@ def confirmexecution(
         # Load update into a dictionary.
         dictionary = json.loads( message )
 
-        # Display heartbeat
-        if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'Heartbeat: {dictionary[ "socket_sequence" ]}' )
+        # Check arrays for order.
         if isinstance(dictionary, list):
-            logger.debug( dictionary[0] )
+            logger.debug( dictionary )
             for closedevent in dictionary:
                 # logger.debug( closedevent )
                 if closedevent['order_id'] == order : 
@@ -58,6 +57,9 @@ def confirmexecution(
                     logger.info( notification )
                     sendmessage( notification )
                     ws.close()
+        else: 
+            # Display heartbeat
+            if dictionary[ 'type' ] == "heartbeat" : logger.debug ( f'Heartbeat: {dictionary[ "socket_sequence" ]}' )
 
     # Construct payload.
     t = datetime.datetime.now()
