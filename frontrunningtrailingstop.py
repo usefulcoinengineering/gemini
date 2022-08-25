@@ -335,20 +335,20 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
                 time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
                 continue # Keep trying to post stop limit order infinitely.
             try:
-                if orderstatus['is_live'] : 
-                    logger.info( f'Updated stop limit order {orderstatus["order_id"]} is live on the Gemini orderbook. ' )
-                    jsonresponse = orderstatus # Assign orderstatus to the jsonresponse used subsequently.
+                if jsonresponse['is_live'] : 
+                    logger.info( f'Updated stop limit order {jsonresponse["order_id"]} is live on the Gemini orderbook. ' )
+                    jsonresponse = jsonresponse # Assign jsonresponse to the jsonresponse used subsequently.
                     break # Break out of the while loop because we want to reset the stop order as prices rise.
                 else : 
-                    logger.info( f'Updated stop limit order {orderstatus["order_id"]} is NOT live on the Gemini orderbook. ' )
-                    jsonresponse = orderstatus # Assign orderstatus to the jsonresponse used subsequently.
+                    logger.info( f'Updated stop limit order {jsonresponse["order_id"]} is NOT live on the Gemini orderbook. ' )
+                    jsonresponse = jsonresponse # Assign jsonresponse to the jsonresponse used subsequently.
                     break # Break out of the while loop because the subroutine ran successfully.
             except KeyError as e:
                 warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
                 logger.warning ( f'{warningmessage} Something went wrong.. Checking for an error message...' )
                 try:    
-                    if orderstatus["result"] : 
-                        logger.warning ( f'\"{orderstatus["reason"]}\" {orderstatus["result"]}: {orderstatus["message"]}' )
+                    if jsonresponse["result"] : 
+                        logger.warning ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}' )
                         continue
                 except Exception as e:
                     criticalmessage = f'Exception: {e} '
