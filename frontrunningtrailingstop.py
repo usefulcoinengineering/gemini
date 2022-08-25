@@ -337,22 +337,20 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
             try:
                 if jsonresponse['is_live'] : 
                     logger.info( f'Updated stop limit order {jsonresponse["order_id"]} is live on the Gemini orderbook. ' )
-                    jsonresponse = jsonresponse # Assign jsonresponse to the jsonresponse used subsequently.
-                    break # Break out of the while loop because we want to reset the stop order as prices rise.
+                    break # Break out of the while loop because the stop order was executed and we now want to block until prices rise.
                 else : 
                     logger.info( f'Updated stop limit order {jsonresponse["order_id"]} is NOT live on the Gemini orderbook. ' )
-                    jsonresponse = jsonresponse # Assign jsonresponse to the jsonresponse used subsequently.
                     break # Break out of the while loop because the subroutine ran successfully.
             except KeyError as e:
                 warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
-                logger.warning ( f'{warningmessage} Something went wrong.. Checking for an error message...' )
+                logger.warning ( f'{warningmessage} Something went wrong.. Checking for an error message... ' )
                 try:    
                     if jsonresponse["result"] : 
-                        logger.warning ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}' )
+                        logger.warning ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]} ' )
                         continue
                 except Exception as e:
                     criticalmessage = f'Exception: {e} '
-                    logger.critical ( f'Unexpecter error. {criticalmessage}' ) ; sendmessage ( f'Unexpecter error. {criticalmessage}' )
+                    logger.critical ( f'Unexpecter error. {criticalmessage} ' ) ; sendmessage ( f'Unexpecter error. {criticalmessage} ' )
                     continue
 
 # Recalculate quote gain.
