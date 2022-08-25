@@ -254,19 +254,22 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
             continue # Restart while loop logic.
         break # Break out of the while loop because the subroutine ran successfully.
 
-    while True: # Block until present lowest ask price information is attained. 
+    while True: # Block until the latest price information is attained. 
         try:
-            # Get lowest ask price.
-            lowestask = Decimal( ticker( pair )["ask"] )
+            # Get prices in JSON.
+            tickerjson = ticker( pair )
         except Exception as e:
-            logger.debug( f'An exception occured when trying to retrieve the price ticker. Error: {e}' )
+            logger.debug ( f'An exception occured when trying to retrieve the price ticker. Error: {e}' )
             time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
             continue
         break
 
-    # Continue at the start of the loop.
-    # [To check if stop limit was closed.]
-    if lowestask.compare( sellprice ) == 1: break
+    # Check if stop limit was closed.
+    # If order closed break out of loop.
+    lowestask = Decimal( tickerjson["ask"] )
+    if lowestask.compare( sellprice ) == 1: 
+        logger.debug ( f'Ask prices have fallen below the ask price of the stop limit order {jsonresponse["order_id"]}. ' )
+        break # The stop limit order should have been executed.
 
     # Loop.
     while True : # Block until existing stop order is cancelled. 
