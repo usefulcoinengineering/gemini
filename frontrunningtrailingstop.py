@@ -246,7 +246,8 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
 
         try: 
             # Open websocket connection. 
-            blockpricerange ( pair, exitprice, sellprice ) # Block until out of bid price bounds.
+            # Block until out of bid price bounds (work backwards to get previous stop order's sell price).
+            blockpricerange ( pair, exitprice, Decimal( sellratio * exitprice / exitratio ).quantize( tick ) )
         except Exception as e:
             # Report exception.
             notification = f'The websocket connection blocking on {pair} price bounds probably failed. '
@@ -267,7 +268,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
     # Check if stop limit was closed.
     # If order closed break out of loop.
     lowestask = Decimal( tickerjson["ask"] )
-    if lowestask.compare( sellprice ) == 1: 
+    if lowestask.compare( Decimal( sellratio * exitprice / exitratio ).quantize( tick ) ) == 1: 
         logger.debug ( f'Ask prices have fallen below the ask price of the stop limit order {jsonresponse["order_id"]}. ' )
         break # The stop limit order should have been executed.
 
