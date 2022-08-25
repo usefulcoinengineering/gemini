@@ -340,18 +340,18 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
                     break # Break out of the while loop because the stop order was executed and we now want to block until prices rise.
                 else : 
                     logger.info( f'Updated stop limit order {jsonresponse["order_id"]} is NOT live on the Gemini orderbook. ' )
-                    break # Break out of the while loop because the subroutine ran successfully.
+                    continue # Keep trying to post stop limit order infinitely.
             except KeyError as e:
                 warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
                 logger.warning ( f'{warningmessage} Something went wrong.. Checking for an error message... ' )
                 try:    
                     if jsonresponse["result"] : 
                         logger.warning ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]} ' )
-                        continue
+                        continue # Keep trying to post stop limit order infinitely.
                 except Exception as e:
                     criticalmessage = f'Exception: {e} '
                     logger.critical ( f'Unexpecter error. {criticalmessage} ' ) ; sendmessage ( f'Unexpecter error. {criticalmessage} ' )
-                    continue
+                    continue # Keep trying to post stop limit order infinitely.
 
 # Recalculate quote gain.
 quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
