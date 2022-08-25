@@ -29,4 +29,6 @@
 #  python3 ../frontrunningtrailingstop.py ETHUSD 0.001 0.0050 0.0100
 # done
 
-python3 ../frontrunningtrailingstop.py ETHUSD 0.00100 0.001376 0.001378
+while [[ True ]]; do
+    python3 ../frontrunningtrailingstop.py ETHUSD 0.00100 0.001376 0.001378
+done
