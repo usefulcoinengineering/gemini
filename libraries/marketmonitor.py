@@ -347,7 +347,7 @@ def blockpricerange(
                         tradeprice = Decimal( event[ 'price' ] )
                         tradevalue = Decimal( event[ 'amount' ] )
                         amountless = Decimal( 100 * ( upperbound - tradeprice ) / upperbound )
-                        amountmore = Decimal( 100 * ( tradeprice - lowerbound ) / lowerbound - 1 )
+                        amountmore = Decimal( 100 * ( tradeprice - lowerbound ) / lowerbound )
                         tradevalue = Decimal( tradevalue * tradeprice ).quantize( tradeprice )
                         if event['makerSide'] == "ask" : takeraction = "increase"
                         if event['makerSide'] == "bid" : takeraction = "decrease"
