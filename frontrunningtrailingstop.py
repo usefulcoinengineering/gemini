@@ -265,12 +265,14 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
             continue
         break
 
-    # Check if stop limit was closed.
-    # If order closed break out of loop.
+    # Check if lower bound breached.
+    # If so, the stop order will "close".
     lowestask = Decimal( tickerjson["ask"] )
-    if lowestask.compare( Decimal( sellratio * exitprice / exitratio ).quantize( tick ) ) == 1: 
-        sellprice = Decimal( sellratio * exitprice / exitratio ).quantize( tick ) # The sell price is that of the previous order.
+    if exitprice.compare( lowestask ) == 1: 
+        # Set the sell price to that of the stop order last submitted.
+        sellprice = Decimal( sellratio * exitprice / exitratio ).quantize( tick ) 
         logger.debug ( f'Ask prices have fallen below the ask price of the stop limit order {jsonresponse["order_id"]}. ' )
+        logger.debug ( f'The stop order at {sellprice} {pair[3:]} should have been completely filled and now "closed". ' )
         break # The stop limit order should have been executed.
 
     # Loop.
