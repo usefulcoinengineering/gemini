@@ -340,10 +340,10 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
                 continue # Keep trying to post stop limit order infinitely.
             try:
                 if jsonresponse['is_live'] : 
-                    logger.info( f'Updated stop limit order {jsonresponse["order_id"]} is live on the Gemini orderbook. ' )
+                    logger.info( f'Updated stop limit order is live on the Gemini orderbook. ' )
                     break # Break out of the while loop because the stop order was executed and we now want to block until prices rise.
                 else : 
-                    logger.info( f'Updated stop limit order {jsonresponse["order_id"]} is NOT live on the Gemini orderbook. ' )
+                    logger.info( f'Updated stop limit order is NOT live on the Gemini orderbook. ' )
                     continue # Keep trying to post stop limit order infinitely.
             except KeyError as e:
                 warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
