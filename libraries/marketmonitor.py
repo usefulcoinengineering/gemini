@@ -358,13 +358,13 @@ def blockpricerange(
                         logger.info ( f'{infomessage}' )
                         if event['makerSide'] == "ask" : 
                             if lowerbound.compare( tradeprice ) == 1 : 
-                                infomessage = f'{lowerbound:,.2f} {pair[3:]} lower/ask price boundary breached: {infomessage}'
+                                infomessage = f'{lowerbound:,.2f} {pair[3:]} lower/ask price boundary breached. '
                                 logger.info( infomessage )
                                 sendmessage( infomessage )
                                 ws.close()
                         if event['makerSide'] == "bid" : 
                             if tradeprice.compare( upperbound ) == 1 : 
-                                infomessage = f'{upperbound:,.2f} {pair[3:]} upper/bid price boundary breached: {infomessage}'
+                                infomessage = f'{upperbound:,.2f} {pair[3:]} upper/bid price boundary breached. '
                                 logger.info( infomessage )
                                 sendmessage( infomessage )
                                 ws.close()
