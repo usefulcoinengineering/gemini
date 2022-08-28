@@ -15,7 +15,7 @@ if [ "$#" != "1" ]; then
     # step 2: ask about checking for existing detached processes
     read -p "Would you like to check for the presence of running bots? [yes]: " pingerprompt
     pingerprompt=${pingerprompt:-"yes"}
-    if [ $pingerprompt == "yes "]; then 
+    if [ $pingerprompt == "yes" ]; then 
         ps auwx | grep -e "bash [bf]" -e "python3 \." | grep -v "$0" && echo "there are active bots running. "
         if [ $? == "1" ]; then 
             echo "no active bots found... "
@@ -24,14 +24,14 @@ if [ "$#" != "1" ]; then
             # step 3: ask how to handle detached processes since they must exist
             read -p "Do you want to kill these running bots? [yes]: " killerprompt
             killerprompt=${killerprompt:-"yes"}
-            if [ $pingerprompt == "yes "]; then action="stop" ; fi        
+            if [ $pingerprompt == "yes" ]; then action="stop" ; fi        
         fi
     fi
 
     # step 4: ask whether to bootstrap the bot
     read -p "Do you want to start/boot up a bot? [yes]: " booterprompt
     booterprompt=${booterprompt:-"yes"}
-    if [ $pingerprompt == "yes "]; then action="start" ; fi   
+    if [ $pingerprompt == "yes" ]; then action="start" ; fi   
 else
     action=$1
 fi
