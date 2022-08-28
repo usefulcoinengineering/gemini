@@ -8,6 +8,7 @@
 
 echo "checking for active bots..."
 ps auwx | grep -e "bash [bf]" -e "python3 \." | grep -v "gemini-ensusd-trailer.bash" && echo "there are active bots running. "
+if [ $? == "0" ]; then echo "check complete." ; fi
 
 read -p "'start' or 'stop' trading bot [start]: " action
 action=${action:-start}
