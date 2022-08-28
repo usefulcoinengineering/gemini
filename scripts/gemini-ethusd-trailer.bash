@@ -24,14 +24,14 @@ if [ "$#" != "1" ]; then
             # step 3: ask how to handle detached processes since they must exist
             read -p "Do you want to kill these running bots? [yes]: " killerprompt
             killerprompt=${killerprompt:-"yes"}
-            if [ $pingerprompt == "yes "]; then action="stop" fi        
+            if [ $pingerprompt == "yes "]; then action="stop" ; fi        
         fi
     fi
 
     # step 4: ask whether to bootstrap the bot
     read -p "Do you want to start/boot up a bot? [yes]: " booterprompt
     booterprompt=${booterprompt:-"yes"}
-    if [ $pingerprompt == "yes "]; then action="start" fi   
+    if [ $pingerprompt == "yes "]; then action="start" ; fi   
 else
     action=$1
 fi
