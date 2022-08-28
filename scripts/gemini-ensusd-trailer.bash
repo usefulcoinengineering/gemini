@@ -8,9 +8,9 @@
 
 echo "checking for active bots... "
 ps auwx | grep -e "bash [bf]" -e "python3 \." | grep -v "gemini-ensusd-trailer.bash" && echo "there are active bots running. "
-if [ $? == "1" ]; then echo "check complete. no active bots found... " ; fi
+if [ $? == "1" ]; then echo "no active bots found... " ; fi
 
-read -p "'start' or 'stop' trading bot [start]: " action
+read -p "start/stop trading bot [start]: " action
 action=${action:-start}
 
 if [ $action == "stop" ]; then kill -s KILL $(ps auwx | grep -E 'bash [bf]|python3 \.' | awk '{print $2}') ; fi
