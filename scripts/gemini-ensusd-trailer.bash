@@ -6,9 +6,9 @@
 # script purpose: start or stop a Gemini ENSUSD trailer bot from [~/bots]
 # script argument: the action desired [start/stop]
 
-echo "checking for active bots..."
+echo "checking for active bots... "
 ps auwx | grep -e "bash [bf]" -e "python3 \." | grep -v "gemini-ensusd-trailer.bash" && echo "there are active bots running. "
-if [ $? == "0" ]; then echo "check complete." ; fi
+if [ $? == "1" ]; then echo "check complete. no active bots found... " ; fi
 
 read -p "'start' or 'stop' trading bot [start]: " action
 action=${action:-start}
