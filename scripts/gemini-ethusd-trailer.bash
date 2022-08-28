@@ -16,9 +16,9 @@ if [ "$#" != "1" ]; then
     read -p "Would you like to check for the presence of running bots? [yes]: " pingerprompt
     pingerprompt=${pingerprompt:-"yes"}
     if [ $pingerprompt == "yes" ]; then 
-        ps auwx | grep -e "bash [bf]" -e "python3 \." | grep -v "$0" && echo "there are active bots running. "
+        ps auwx | grep -e "bash [bf]" -e "python3 \." | grep -v "$0" && echo "There are active bots running. "
         if [ $? == "1" ]; then 
-            echo "no active bots found... "
+            echo "No active bots found... "
         else
 
             # step 3: ask how to handle detached processes since they must exist
