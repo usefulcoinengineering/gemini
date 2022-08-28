@@ -283,28 +283,30 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
         time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
 
         try:
-            cancellationstatus = cancelorder( jsonresponse["order_id"] ).json() # Post REST API call to cancel previous order.
+            jsonresponse = cancelorder( jsonresponse["order_id"] ).json() # Post REST API call to cancel previous order.
         except Exception as e:
             logger.info ( f'Unable to cancel order. Error: {e}' )
             continue # Keep trying to get information on the order's status infinitely.
         try:
-            if cancellationstatus['is_live'] : 
-                logger.info( f'Stop limit order {cancellationstatus["order_id"]} is live on the Gemini orderbook. ' )
+            if jsonresponse['is_live'] : 
+                logger.info( f'Stop limit order {jsonresponse["order_id"]} is live on the Gemini orderbook. ' )
                 continue # Keep tring to cancel the order infinitely.
             else : 
-                logger.info( f'Stop limit order {cancellationstatus["order_id"]} is NOT live on the Gemini orderbook. ' )
+                logger.info( f'Stop limit order {jsonresponse["order_id"]} is NOT live on the Gemini orderbook. ' )
                 break # Break out of the while loop because the subroutine ran successfully.
         except KeyError as e:
             warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
             logger.warning ( f'{warningmessage} Something went wrong.. Checking for an error message...' )
             try:    
-                if cancellationstatus["result"] : 
-                    logger.warning ( f'\"{cancellationstatus["reason"]}\" {cancellationstatus["result"]}: {cancellationstatus["message"]}' )
+                if jsonresponse["result"] : 
+                    logger.warning ( f'\"{jsonresponse["reason"]}\" {jsonresponse["result"]}: {jsonresponse["message"]}' )
                     continue
             except Exception as e:
                 criticalmessage = f'Exception: {e} '
                 logger.critical ( f'Unexpecter error. {criticalmessage}' ) ; sendmessage ( f'Unexpecter error. {criticalmessage}' )
                 continue
+    
+    logger.info = f'Cancelled {jsonresponse["price"]} {pair[3:]} stop sell order {jsonresponse["order_id"]}. '
 
     # Loop.
     while True : # Block until a new stop limit order is submitted. 
@@ -327,7 +329,6 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
         if highestbid.compare( exitprice ) == 1:
 
             # Post updated stop-limit order.
-            logger.info = f'Cancelled {jsonresponse["price"]} {pair[3:]} stop sell order {jsonresponse["order_id"]}. '
             logger.info = f'Submitting stop-limit (ask) order with a {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell. '
             logger.info = f'There will be an unrealized (i.e. "ratio gain") {ratiogain:,.2f}% profit/loss of {quotegain:,.2f} {pair[3:]} '
             sendmessage ( f'Submitting {stopprice:,.2f} {pair[3:]} stop {sellprice:,.2f} {pair[3:]} sell limit order. ' )
@@ -340,7 +341,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
                 continue # Keep trying to post stop limit order infinitely.
             try:
                 if jsonresponse['is_live'] : 
-                    logger.info( f'Updated stop limit order is live on the Gemini orderbook. ' )
+                    logger.info( f'Updated stop limit order {jsonresponse["price"]} is live on the Gemini orderbook. ' )
                     break # Break out of the while loop because the stop order was executed and we now want to block until prices rise.
                 else : 
                     logger.info( f'Updated stop limit order is NOT live on the Gemini orderbook. ' )
