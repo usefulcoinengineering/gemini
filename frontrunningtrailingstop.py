@@ -363,13 +363,14 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
                 time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
                 continue # Keep trying to post stop limit order infinitely.
             try:
-                order = jsonresponse['order_id']
-                price = jsonresponse['price']
+                
                 if jsonresponse['is_live'] : 
-                    logger.info ( f'Updated {price} stop limit order {order} is live on the Gemini orderbook. ' )
+                    order = jsonresponse['order_id']
+                    price = jsonresponse['price']
+                    logger.info ( 'Updated stop limit order is live on the Gemini orderbook. ' )
                     break # Break out of the while loop because the stop order was executed and we now want to block until prices rise.
                 else : 
-                    logger.info ( f'Updated {price} stop limit order {order} is NOT live on the Gemini orderbook. ' )
+                    logger.info ( 'An error occurred. Unable to submit a stop limit order. ' )
                     continue # Keep trying to post stop limit order infinitely.
             except KeyError as e:
                 warningmessage = f'KeyError: {e} was not present in the response from the REST API server. '
