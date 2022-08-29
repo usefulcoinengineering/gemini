@@ -335,12 +335,36 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
             sendmessage ( f'That would realize {quotegain:,.2f} {pair[3:]} [i.e. return {ratiogain:,.2f}%]. ' )
             try:
                 jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
+                """
+                    Response format expected:
+                        {
+                            "order_id": "7419662",
+                            "id": "7419662",
+                            "symbol": "btcusd",
+                            "exchange": "gemini",
+                            "avg_execution_price": "0.00",
+                            "side": "buy",
+                            "type": "stop-limit",
+                            "timestamp": "1572378649",
+                            "timestampms": 1572378649018,
+                            "is_live": True,
+                            "is_cancelled": False,
+                            "is_hidden": False,
+                            "was_forced": False,
+                            "executed_amount": "0",
+                            "options": [],
+                            "stop_price": "10400.00",
+                            "price": "10500.00",
+                            "original_amount": "0.01"
+                        }
+                """
             except Exception as e:
                 logger.debug ( f'Unable to get information on the stop-limit order cancellation request. Error: {e}' )
                 time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
                 continue # Keep trying to post stop limit order infinitely.
             try:
                 if jsonresponse['is_live'] : 
+                    logger.info( jsonresponse["price"] )
                     logger.info( f'Updated stop limit order {jsonresponse["price"]} is live on the Gemini orderbook. ' )
                     break # Break out of the while loop because the stop order was executed and we now want to block until prices rise.
                 else : 
