@@ -363,6 +363,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
                 time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
                 continue # Keep trying to post stop limit order infinitely.
             try:
+                logger.info ( jsonresponse )
                 if jsonresponse['is_live'] : 
                     logger.info( f'Updated stop limit order is live on the Gemini orderbook. ' )
                     break # Break out of the while loop because the stop order was executed and we now want to block until prices rise.
