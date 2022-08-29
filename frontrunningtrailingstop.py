@@ -365,10 +365,6 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
             try:
                 
                 if jsonresponse['is_live'] : 
-                    order = jsonresponse['order_id']
-                    price = jsonresponse['price']
-                    infomessage = f'Updated {price} stop limit order {order} is live on the Gemini orderbook. '
-                    logger.info ( infomessage )
                     break # Break out of the while loop because the stop order was executed and we now want to block until prices rise.
                 else : 
                     logger.info ( 'An error occurred. Unable to submit a stop limit order. ' )
