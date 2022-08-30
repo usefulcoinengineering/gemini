@@ -39,7 +39,7 @@ fi
 # step 5: verify
 ps auwx | grep -e "bash [bf]" -e "python3 \." | \
 grep -v "$0" && echo "There are active bots running. " && \
-read "Proceed? [no]" verifyprompt && verifyprompt=${verifyprompt-"no"} && \
+read -p "Proceed? [no]" verifyprompt && verifyprompt=${verifyprompt-"no"} && \
 if [ $verifyprompt == "no" ]; then exit 1 ; fi
 
 # step 6: start or stop bot
