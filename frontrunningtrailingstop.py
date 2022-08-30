@@ -234,12 +234,8 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
     # Lower the exit ratio to lock gains faster.
     exitratio = Decimal( 1 + stop + geminiapifee )
 
-    # Calculate new exit and resultant sell/stop prices.
+    # Calculate new exit price (block until exitprice exceeded).
     exitprice = Decimal( exitprice * exitratio ).quantize( tick )
-    stopprice = Decimal( exitprice * stopratio ).quantize( tick )
-    sellprice = Decimal( exitprice * sellratio ).quantize( tick )
-    # Note: "costprice" is no longer the basis of the new exit price (and thus stop and sell prices).
-    # Note: The last transaction price exceeds the previous exit price and creates the new exit price.
 
     # Recalculate quote gain.
     quotegain = Decimal( sellprice * size - costprice * size ).quantize( tick )
@@ -251,13 +247,18 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
         try: 
             # Open websocket connection. 
             # Block until out of bid price bounds (work backwards to get previous stop order's sell price).
-            blockpricerange ( pair, exitprice, Decimal( sellratio * exitprice / exitratio ).quantize( tick ) )
+            blockpricerange ( pair, exitprice, sellprice )
         except Exception as e:
             # Report exception.
             notification = f'The websocket connection blocking on {pair} price bounds probably failed. '
             logger.debug ( f'{notification} Let\'s reestablish the connection and try again!' )
             time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
             continue # Restart while loop logic.
+        # Calculate new sell/stop prices.
+        stopprice = Decimal( exitprice * stopratio ).quantize( tick )
+        sellprice = Decimal( exitprice * sellratio ).quantize( tick )
+        # Note: "costprice" is no longer the basis of the new exit price (and thus stop and sell prices).
+        # Note: The last transaction price exceeds the previous exit price and creates the new exit price.
         break # Break out of the while loop because the subroutine ran successfully.
 
     while True: # Block until the latest price information is attained. 
