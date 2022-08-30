@@ -169,6 +169,7 @@ while True : # Block until the price sellers are willing to take exceeds the exi
         # Report exception.
         notification = f'The websocket connection monitoring {pair} prices probably failed. '
         logger.debug ( '{notification} Let\'s reestablish the connection and try again!' )
+        time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
         continue # Restart while loop logic.
     break # Break out of the while loop because the subroutine ran successfully.
 
@@ -185,6 +186,7 @@ while True : # Block until achieving the successful submission of an initial sto
         jsonresponse = askstoplimit( str(pair), str(size), str(stopprice), str(sellprice) ).json()
     except Exception as e:
         logger.info ( f'Unable to get information on ask stop limit order. Error: {e}' )
+        time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
         continue # Keep trying to submit ask stop limit order.
     logger.debug ( json.dumps( jsonresponse, sort_keys=True, indent=4, separators=(',', ': ') ) )
     time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
@@ -199,6 +201,7 @@ while True : # Block until order status has been determined.
         orderstatus = islive( jsonresponse["order_id"] ).json() # Post REST API call to determine order's status.
     except Exception as e:
         logger.info ( f'Unable to retrieve stop limit order status. Error: {e}' )
+        time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
         continue # Keep trying to get information on the order's status infinitely.
     try:
         if orderstatus['is_live'] : 
@@ -219,6 +222,7 @@ while True : # Block until order status has been determined.
         except Exception as e:
             criticalmessage = f'Exception: {e} '
             logger.critical ( f'Unexpecter error. {criticalmessage}' ) ; sendmessage ( f'Unexpecter error. {criticalmessage}' )
+            time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
             continue
 
 # Loop.
@@ -252,6 +256,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
             # Report exception.
             notification = f'The websocket connection blocking on {pair} price bounds probably failed. '
             logger.debug ( f'{notification} Let\'s reestablish the connection and try again!' )
+            time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
             continue # Restart while loop logic.
         break # Break out of the while loop because the subroutine ran successfully.
 
@@ -286,6 +291,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
             jsonresponse = cancelorder( jsonresponse["order_id"] ).json() # Post REST API call to cancel previous order.
         except Exception as e:
             logger.info ( f'Unable to cancel order. Error: {e}' )
+            time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
             continue # Keep trying to get information on the order's status infinitely.
         try:
             if jsonresponse['is_live'] : 
@@ -304,6 +310,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
             except Exception as e:
                 criticalmessage = f'Exception: {e} '
                 logger.critical ( f'Unexpecter error. {criticalmessage}' ) ; sendmessage ( f'Unexpecter error. {criticalmessage}' )
+                time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
                 continue
     
     logger.info = f'Cancelled {jsonresponse["price"]} {pair[3:]} stop sell order {jsonresponse["order_id"]}. '
@@ -365,6 +372,10 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
             try:
                 
                 if jsonresponse['is_live'] : 
+                    order = jsonresponse['order_id']
+                    price = jsonresponse['price']
+                    infomessage = f'Updated {price} stop limit order {order} is live on the Gemini orderbook. '
+                    # logger.info ( infomessage )
                     break # Break out of the while loop because the stop order was executed and we now want to block until prices rise.
                 else : 
                     logger.info ( 'An error occurred. Unable to submit a stop limit order. ' )
@@ -379,6 +390,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
                 except Exception as e:
                     criticalmessage = f'Exception: {e} '
                     logger.critical ( f'Unexpecter error. {criticalmessage} ' ) ; sendmessage ( f'Unexpecter error. {criticalmessage} ' )
+                    time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
                     continue # Keep trying to post stop limit order infinitely.
 
 # Recalculate quote gain.
