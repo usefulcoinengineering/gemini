@@ -26,4 +26,4 @@ upperbound=${upperbound:-1500}
 lowerbound=${lowerbound:-1400}
 
 cd ..
-python3 libraries/trademonitor.py $marketpair $upperbound $lowerbound
+python3 trademonitor.py $marketpair $upperbound $lowerbound
