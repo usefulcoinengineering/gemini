@@ -36,11 +36,15 @@ else :
     logger.warning ( f'lowerbound: {lowerbound}' )
 
 # Enter price monitor loop.
-asyncio.get_event_loop().run_until_complete( blockpricerange ( 
-    marketpair, 
-    upperbound, 
-    lowerbound 
-    ) 
-)
+try:
+    asyncio.run(
+        blockpricerange(
+            marketpair, 
+            upperbound, 
+            lowerbound 
+        )
+    )
+except KeyboardInterrupt:
+    pass
 
 sys.exit(0)
