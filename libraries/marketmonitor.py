@@ -362,16 +362,12 @@ def blockpricerange(
                                 logger.info( infomessage )
                                 sendmessage( infomessage )
                                 ws.close()
-                                ws.keep_running = False
-                                logger.info(f'Websocket should be closed now. ')
                         if event['makerSide'] == "bid" : 
                             if tradeprice.compare( upperbound ) == 1 : 
                                 infomessage = f'{upperbound:,.2f} {pair[3:]} upper/bid price boundary breached. '
                                 logger.info( infomessage )
                                 sendmessage( infomessage )
                                 ws.close()
-                                ws.keep_running = False
-                                logger.info(f'Websocket should be closed now. ')
             
     # Establish websocket connection.
     # Connection is public. Public connection require neither headers nor authentication.
