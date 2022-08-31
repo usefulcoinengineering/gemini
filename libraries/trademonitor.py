@@ -5,7 +5,7 @@
 # library created: 20220831
 # library purpose: continually monitor trade prices via Gemini's Websockets API until the exit threshold is breached.
 
-
+import os
 import sys
 import json
 import asyncio
@@ -82,7 +82,8 @@ async def blockpricerange(
                                     keeplooping = False
 
 if __name__ == "__main__":
-    
+
+    os.chdir('..')
     # Set default trading pair and loop exit price in case a BASH wrapper has not been used.
     marketpair = "ETHUSD"
     upperbound = "1500"
