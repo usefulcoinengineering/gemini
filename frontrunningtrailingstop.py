@@ -21,6 +21,7 @@
 import sys
 import json
 import time
+import asyncio
 
 from decimal import Decimal
 
@@ -32,7 +33,7 @@ from libraries.stopper import askstoplimit
 from libraries.marketmonitor import bidrise
 from libraries.ordermanager import cancelorder
 from libraries.volumizer import notionalvolume
-from libraries.marketmonitor import blockpricerange
+from libraries.trademonitor import blockpricerange
 from libraries.definer import ticksizes as ticksizes
 from libraries.closevalidator import confirmexecution
 from libraries.messenger import sendmessage as sendmessage
@@ -231,6 +232,10 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
     # Break out of loop if order "closed".
     if not jsonresponse["is_live"] : break
 
+    # Explain upcoming actions.
+    logger.debug ( f'Changing exitratio from {exitratio} to {Decimal( 1 + stop + geminiapifee )}. ')
+    logger.debug ( f'Changing exitprice from {exitprice} to {Decimal( exitprice * exitratio ).quantize( tick )}. ')
+
     # Lower the exit ratio to lock gains faster.
     exitratio = Decimal( 1 + stop + geminiapifee )
 
@@ -244,18 +249,27 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
     # Loop.
     while True : # Block until prices rise (or fall to stop limit order's sell price).
 
-        logger.debug ( f'exitprice: {exitprice}')
-        logger.debug ( f'sellprice: {sellprice}')
         try: 
             # Open websocket connection. 
             # Block until out of bid price bounds (work backwards to get previous stop order's sell price).
-            blockpricerange ( pair, exitprice, sellprice )
+            asyncio.run(
+                blockpricerange (
+                    pair, 
+                    exitprice, 
+                    sellprice 
+                )
+            )
         except Exception as e:
             # Report exception.
             notification = f'The websocket connection blocking on {pair} price bounds probably failed. '
             logger.debug ( f'{notification} Let\'s reestablish the connection and try again!' )
             time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
             continue # Restart while loop logic.
+
+        # Explain upcoming actions.
+        logger.debug ( f'Changing stopprice from {stopprice} to {Decimal( exitprice * stopratio ).quantize( tick )}. ')
+        logger.debug ( f'Changing sellprice from {sellprice} to {Decimal( exitprice * sellratio ).quantize( tick )}. ')
+
         # Calculate new sell/stop prices.
         stopprice = Decimal( exitprice * stopratio ).quantize( tick )
         sellprice = Decimal( exitprice * sellratio ).quantize( tick )
