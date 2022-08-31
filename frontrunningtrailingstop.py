@@ -244,8 +244,8 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
     # Loop.
     while True : # Block until prices rise (or fall to stop limit order's sell price).
 
-        logger.debug ( exitprice )
-        logger.debug ( sellprice )
+        logger.debug ( f'exitprice: {exitprice}')
+        logger.debug ( f'sellprice: {sellprice}')
         try: 
             # Open websocket connection. 
             # Block until out of bid price bounds (work backwards to get previous stop order's sell price).
