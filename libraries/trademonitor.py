@@ -13,8 +13,8 @@ import websockets
 
 from decimal import Decimal
 
-from logger import logger as logger
-from messenger import sendmessage as sendmessage
+from libraries.logger import logger as logger
+from libraries.messenger import sendmessage as sendmessage
 
 async def blockpricerange(
         pair: str,
