@@ -6,7 +6,7 @@
 # script purpose: use websockets to continually monitor a trading pair for a decrease in price levels.
 
 # Detailed Description:
-#  1. Use the takermonitor library to request the required information.
+#  1. Use the marketmonitor library to request the required information.
 #  2. Print the results using the logger library.
 #  3. Send an alert to a Discord channel using the messenger library's webhook.
 #

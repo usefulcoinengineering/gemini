@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# library name: takermonitor.py
+# library name: marketmonitor.py
 # library author: munair simpson
 # library created: 20220817
 # library purpose: continually monitor trade prices via Gemini's Websockets API until the exit threshold is breached.
@@ -358,13 +358,13 @@ def blockpricerange(
                         logger.info ( f'{infomessage}' )
                         if event['makerSide'] == "ask" : 
                             if lowerbound.compare( tradeprice ) == 1 : 
-                                infomessage = f'{lowerbound:,.2f} {pair[3:]} lower/ask price boundary breached. '
+                                infomessage = f'{lowerbound:,.2f} {pair[3:]} lower/ask price bound breached. '
                                 logger.info( infomessage )
                                 sendmessage( infomessage )
                                 ws.close()
                         if event['makerSide'] == "bid" : 
                             if tradeprice.compare( upperbound ) == 1 : 
-                                infomessage = f'{upperbound:,.2f} {pair[3:]} upper/bid price boundary breached. '
+                                infomessage = f'{upperbound:,.2f} {pair[3:]} upper/bid price bound breached. '
                                 logger.info( infomessage )
                                 sendmessage( infomessage )
                                 ws.close()
