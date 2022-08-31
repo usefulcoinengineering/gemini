@@ -22,7 +22,7 @@ read -p "type upper price bound or press enter to continue with default [$upperb
 read -p "type lower price bound or press enter to continue with default [$lowerbound]: " lowerbound
 
 marketpair=${marketpair:-ETHUSD}
-upperbound=${upperbound:-2400}
-lowerbound=${lowerbound:-2400}
+upperbound=${upperbound:-1500}
+lowerbound=${lowerbound:-1400}
 
 python3 ../trademonitor.py $marketpair $upperbound $lowerbound
