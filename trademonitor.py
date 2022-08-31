@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 #
-# script name: marketmonitor.py
+# script name: trademonitor.py
 # script author: munair simpson
 # script created: 20220831
 # script purpose: use websockets to continually monitor the trading range of a trading pair.
 
 # Detailed Description:
-#  1. Use the takermonitor library to request the required information.
+#  1. Use the marketmonitor library to request the required information.
 #  2. Print the results using the logger library.
 #  3. Send an alert to a Discord channel using the messenger library's webhook.
 #
@@ -17,7 +17,7 @@ import sys
 import asyncio
 
 from libraries.logger import logger
-from libraries.asyncmarketmonitor import blockpricerange
+from libraries.trademonitor import blockpricerange
 
 # Set default trading pair and loop exit price in case a BASH wrapper has not been used.
 marketpair = "ETHUSD"
