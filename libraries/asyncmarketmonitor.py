@@ -34,8 +34,10 @@ async def blockpricerange(
     # Introduce function.
     logger.info(f'Looping while {pair[:3]} prices are between {lowerbound:,.2f} {pair[3:]} and {upperbound:,.2f} {pair[3:]}')
 
+    count = 0
+
     async with websockets.connect(connection) as websocket:
-        while True:
+        while count < 1 :
             message = await websocket.recv()
             # Remove comment to debug with: logger.debug( message )
             # Load update into a dictionary.
@@ -68,14 +70,14 @@ async def blockpricerange(
                             logger.info ( f'{infomessage}' )
                             if event['makerSide'] == "ask" : 
                                 if lowerbound.compare( tradeprice ) == 1 : 
-                                    infomessage = f'{lowerbound:,.2f} {pair[3:]} lower/ask price boundary breached. '
+                                    infomessage = f'{lowerbound:,.2f} {pair[3:]} lower/ask price bound breached. '
                                     logger.info( infomessage )
                                     sendmessage( infomessage )
-                                    break
+                                    count = 1
                             if event['makerSide'] == "bid" : 
                                 if tradeprice.compare( upperbound ) == 1 : 
-                                    infomessage = f'{upperbound:,.2f} {pair[3:]} upper/bid price boundary breached. '
+                                    infomessage = f'{upperbound:,.2f} {pair[3:]} upper/bid price bound breached. '
                                     logger.info( infomessage )
                                     sendmessage( infomessage )
-                                    break
+                                    count = 1
 
