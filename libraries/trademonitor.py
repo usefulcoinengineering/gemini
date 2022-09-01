@@ -78,7 +78,7 @@ async def blockpricerange(
                                     keeplooping = False
         logger.info ( infomessage )
         sendmessage ( infomessage )
-        return json.dumps ( event )
+        return event
 
 if __name__ == "__main__":
 
