@@ -20,7 +20,7 @@ async def blockpricerange(
         pair: str,
         upperbound: str,
         lowerbound: str
-    ) -> str:
+    ) -> str : # Annotate that the return value of this function is of the JSON (i.e. string) type.
     
     # Cast as decimals.
     upperbound = Decimal( upperbound )
@@ -76,8 +76,9 @@ async def blockpricerange(
                                 if tradeprice.compare( upperbound ) == 1 : 
                                     infomessage = f'{upperbound:,.2f} {pair[3:]} upper/bid price bound breached. '
                                     keeplooping = False
-        logger.info( infomessage )
-        sendmessage( infomessage )
+        logger.info ( infomessage )
+        sendmessage ( infomessage )
+        return message.json()
 
 if __name__ == "__main__":
 
