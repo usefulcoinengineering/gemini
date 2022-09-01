@@ -43,7 +43,7 @@ try : # Enter price monitor loop.
             marketpair, 
             upperbound, 
             lowerbound 
-        ).json()
+        )
     )
 except KeyboardInterrupt :
     pass
