@@ -54,7 +54,7 @@ async def blockpricerange(
                 else:
                     # Verify the array of events is a list.
                     # Iterate through each event in the update.
-                    if isinstance(events, list):
+                    if isinstance ( events, list ):
                         for event in events:
                             tradeprice = Decimal( event[ 'price' ] )
                             tradevalue = Decimal( event[ 'amount' ] )
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     lowerbound = "1400"
 
     # Override defaults with command line parameters from BASH wrapper.
-    if len( sys.argv ) == 4 :
+    if len ( sys.argv ) == 4 :
         marketpair = sys.argv[1]
         upperbound = sys.argv[2]
         lowerbound = sys.argv[3]
@@ -98,12 +98,14 @@ if __name__ == "__main__":
         logger.warning ( f'upperbound: {upperbound}' )
         logger.warning ( f'lowerbound: {lowerbound}' )
 
-    try:
-        asyncio.run(
-            blockpricerange(
+    try: # Enter price monitor loop.
+        messageresponse = asyncio.run (
+            blockpricerange (
                 marketpair, 
                 upperbound, 
                 lowerbound 
             )
         )
     except KeyboardInterrupt: pass
+
+    logger.info ( f'{messageresponse["price"]} is out of bounds. ') # Report status.
