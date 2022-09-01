@@ -13,6 +13,7 @@
 # Execution:
 #   - Use the wrapper BASH script in the "tests" directory.
 
+import json
 import sys
 import asyncio
 
@@ -37,8 +38,8 @@ else :
 
 
 try : # Enter price monitor loop.
-    asyncio.run (
-        blockpricerange(
+    messageresponse = asyncio.run (
+    blockpricerange (
             marketpair, 
             upperbound, 
             lowerbound 
@@ -47,6 +48,6 @@ try : # Enter price monitor loop.
 except KeyboardInterrupt :
     pass
 
-logger.info ( f'The {marketpair} price is out of bounds. ') # Report status.
+logger.info ( f'{messageresponse["price"]} is out of bounds. ') # Report status.
 
 sys.exit ( 0 )
