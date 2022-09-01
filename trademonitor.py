@@ -35,16 +35,19 @@ else :
     logger.warning ( f'upperbound: {upperbound}' )
     logger.warning ( f'lowerbound: {lowerbound}' )
 
-# Enter price monitor loop.
-try:
-    asyncio.run(
-        blockpricerange(
-            marketpair, 
-            upperbound, 
-            lowerbound 
+count = 5
+while count < 1 :
+    # Enter price monitor loop.
+    try:
+        asyncio.run(
+            blockpricerange(
+                marketpair, 
+                upperbound, 
+                lowerbound 
+            )
         )
-    )
-except KeyboardInterrupt:
-    pass
+    except KeyboardInterrupt:
+        pass
+    count = count - 1
 
 sys.exit(0)
