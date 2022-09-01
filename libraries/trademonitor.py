@@ -71,15 +71,13 @@ async def blockpricerange(
                             if event['makerSide'] == "ask" : 
                                 if lowerbound.compare( tradeprice ) == 1 : 
                                     infomessage = f'{lowerbound:,.2f} {pair[3:]} lower/ask price bound breached. '
-                                    logger.info( infomessage )
-                                    sendmessage( infomessage )
                                     keeplooping = False
                             if event['makerSide'] == "bid" : 
                                 if tradeprice.compare( upperbound ) == 1 : 
                                     infomessage = f'{upperbound:,.2f} {pair[3:]} upper/bid price bound breached. '
-                                    logger.info( infomessage )
-                                    sendmessage( infomessage )
                                     keeplooping = False
+        logger.info( infomessage )
+        sendmessage( infomessage )
 
 if __name__ == "__main__":
 

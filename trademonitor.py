@@ -25,7 +25,7 @@ upperbound = "1500"
 lowerbound = "1400"
 
 # Override defaults with command line parameters from BASH wrapper.
-if len( sys.argv ) == 4 :
+if len ( sys.argv ) == 4 :
     marketpair = sys.argv[1]
     upperbound = sys.argv[2]
     lowerbound = sys.argv[3]
@@ -35,24 +35,18 @@ else :
     logger.warning ( f'upperbound: {upperbound}' )
     logger.warning ( f'lowerbound: {lowerbound}' )
 
-count = 5
-while count > 0 :
-    # Enter price monitor loop.
-    try:
-        asyncio.run(
-            blockpricerange(
-                marketpair, 
-                upperbound, 
-                lowerbound 
-            )
-        )
-    except KeyboardInterrupt:
-        pass
-    except Exception as e:
-        # Report exception.
-        notification = f'The websocket connection blocking on {marketpair} price bounds probably failed. '
-        logger.debug ( f'{notification}Let\'s reestablish the connection and try again! ' )
-        count = count - 1
-        continue # Restart while loop logic.
 
-sys.exit(0)
+try : # Enter price monitor loop.
+    asyncio.run (
+        blockpricerange(
+            marketpair, 
+            upperbound, 
+            lowerbound 
+        )
+    )
+except KeyboardInterrupt :
+    pass
+
+logger.info ( f'The {marketpair} price is out of bounds. ') # Report status.
+
+sys.exit ( 0 )
