@@ -36,7 +36,7 @@ else :
     logger.warning ( f'lowerbound: {lowerbound}' )
 
 count = 5
-while count < 1 :
+while count > 0 :
     # Enter price monitor loop.
     try:
         asyncio.run(
