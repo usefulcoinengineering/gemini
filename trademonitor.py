@@ -48,6 +48,11 @@ while count > 0 :
         )
     except KeyboardInterrupt:
         pass
-    count = count - 1
+    except Exception as e:
+        # Report exception.
+        notification = f'The websocket connection blocking on {marketpair} price bounds probably failed. '
+        logger.debug ( f'{notification}Let\'s reestablish the connection and try again! ' )
+        count = count - 1
+        continue # Restart while loop logic.
 
 sys.exit(0)
