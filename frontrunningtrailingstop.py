@@ -252,50 +252,38 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
         try: 
             # Open websocket connection. 
             # Block until out of bid price bounds (work backwards to get previous stop order's sell price).
-            asyncio.run(
+            messageresponse = asyncio.run (
                 blockpricerange (
                     pair, 
                     exitprice, 
                     sellprice 
                 )
             )
+            logger.info ( f'{messageresponse["price"]} is out of bounds. ') # Report status.
+            break # Break out of the while loop because the subroutine ran successfully.
         except Exception as e:
             # Report exception.
             notification = f'The websocket connection blocking on {pair} price bounds probably failed. '
-            logger.debug ( f'{notification} Let\'s reestablish the connection and try again!' )
+            logger.debug ( f'{notification}Let\'s reestablish the connection and try again! ' )
             time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
             continue # Restart while loop logic.
 
-        # Explain upcoming actions.
-        logger.debug ( f'Changing stopprice from {stopprice} to {Decimal( exitprice * stopratio ).quantize( tick )}. ')
-        logger.debug ( f'Changing sellprice from {sellprice} to {Decimal( exitprice * sellratio ).quantize( tick )}. ')
-
-        # Calculate new sell/stop prices.
-        stopprice = Decimal( exitprice * stopratio ).quantize( tick )
-        sellprice = Decimal( exitprice * sellratio ).quantize( tick )
-        # Note: "costprice" is no longer the basis of the new exit price (and thus stop and sell prices).
-        # Note: The last transaction price exceeds the previous exit price and creates the new exit price.
-        break # Break out of the while loop because the subroutine ran successfully.
-
-    while True: # Block until the latest price information is attained. 
-        try:
-            # Get prices in JSON.
-            tickerjson = ticker( pair )
-        except Exception as e:
-            logger.debug ( f'An exception occured when trying to retrieve the price ticker. Error: {e}' )
-            time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
-            continue
-        break
-
     # Check if lower bound breached.
     # If so, the stop order will "close".
-    lowestask = Decimal( tickerjson["ask"] )
-    if exitprice.compare( lowestask ) == 1: 
-        # Set the sell price to that of the stop order last submitted.
-        sellprice = Decimal( sellratio * exitprice / exitratio ).quantize( tick ) 
+    if exitprice.compare( Decimal( messageresponse["price"] ) ) == 1: 
         logger.debug ( f'Ask prices have fallen below the ask price of the stop limit order {jsonresponse["order_id"]}. ' )
         logger.debug ( f'The stop order at {sellprice} {pair[3:]} should have been completely filled and now "closed". ' )
         break # The stop limit order should have been executed.
+
+    # Explain upcoming actions.
+    logger.debug ( f'Changing stopprice from {stopprice} to {Decimal( exitprice * stopratio ).quantize( tick )}. ')
+    logger.debug ( f'Changing sellprice from {sellprice} to {Decimal( exitprice * sellratio ).quantize( tick )}. ')
+
+    # Calculate new sell/stop prices.
+    stopprice = Decimal( exitprice * stopratio ).quantize( tick )
+    sellprice = Decimal( exitprice * sellratio ).quantize( tick )
+    # Note: "costprice" is no longer the basis of the new exit price (and thus stop and sell prices).
+    # Note: The last transaction price exceeds the previous exit price and creates the new exit price.
 
     # Loop.
     while True : # Block until existing stop order is cancelled. 
