@@ -48,7 +48,10 @@ try : # Enter price monitor loop.
 except KeyboardInterrupt :
     pass
 
-logger.debug ( messageresponse.json() )
+
+logger.debug ( messageresponse["price"] )
+logger.info ( messageresponse["price"] )
+
 logger.info ( f'{messageresponse.json()} is out of bounds. ') # Report status.
 logger.debug ( messageresponse["price"] )
 logger.info ( f'{messageresponse["price"]} is out of bounds. ') # Report status.
