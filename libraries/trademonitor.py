@@ -20,7 +20,7 @@ async def blockpricerange(
         pair: str,
         upperbound: str,
         lowerbound: str
-    ) -> str : # Annotate that the return value of this function is of the JSON (i.e. string) type.
+    ) -> str : # Annotate that the return value of this function a dictionary (i.e. string type).
     
     # Cast as decimals.
     upperbound = Decimal( upperbound )
@@ -78,7 +78,7 @@ async def blockpricerange(
                                     keeplooping = False
         logger.info ( infomessage )
         sendmessage ( infomessage )
-        return event
+        return event # Dictionary.
 
 if __name__ == "__main__":
 
