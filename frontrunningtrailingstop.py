@@ -269,7 +269,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
         except Exception as e:
             # Report exception.
             notification = f'The websocket connection blocking on {pair} price bounds probably failed. '
-            logger.debug ( f'{notification}Let\'s reestablish the connection and try again! ' )
+            logger.debug ( f'{e}: {notification}Let\'s reestablish the connection and try again! ' )
             time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
             continue # Restart while loop logic.
         logger.info ( f'{Decimal( messageresponse["price"] ).quantize( tick ):,.2f} is out of bounds. ') # Report status.
