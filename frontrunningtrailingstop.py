@@ -30,7 +30,6 @@ from libraries.pricegetter import ticker
 from libraries.ordermanager import islive
 from libraries.frontrunner import bidorder
 from libraries.stopper import askstoplimit
-from libraries.marketmonitor import bidrise
 from libraries.ordermanager import cancelorder
 from libraries.volumizer import notionalvolume
 from libraries.trademonitor import blockpricerange
