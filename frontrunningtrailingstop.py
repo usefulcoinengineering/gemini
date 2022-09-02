@@ -165,11 +165,17 @@ while True : # Block until the price sellers are willing to take exceeds the exi
 
     try: 
         # Open websocket connection. 
-        bidrise( pair, exitprice ) # Wait for the price sellers take to rise to the exit price.
+        messageresponse = asyncio.run (
+                blockpricerange (
+                    pair, 
+                    exitprice, 
+                    '0' 
+                )
+            ) # Wait for the price sellers take to rise to the exit price.
     except Exception as e:
         # Report exception.
         notification = f'The websocket connection monitoring {pair} prices probably failed. '
-        logger.debug ( '{notification} Let\'s reestablish the connection and try again!' )
+        logger.debug ( '{notification}Let\'s reestablish the connection and try again! ' )
         time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
         continue # Restart while loop logic.
     break # Break out of the while loop because the subroutine ran successfully.
