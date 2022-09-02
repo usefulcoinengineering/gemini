@@ -168,9 +168,9 @@ while True : # Block until the price sellers are willing to take exceeds the exi
         # Block until out of bid price bounds (work backwards to get previous stop order's sell price).
         messageresponse = asyncio.run (
             blockpricerange (
-                pair, 
-                exitprice, 
-                "0" 
+                 pair, 
+                 exitprice, 
+                -exitprice 
             )
         )
     except Exception as e:
