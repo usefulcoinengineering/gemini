@@ -165,13 +165,7 @@ while True : # Block until the price sellers are willing to take exceeds the exi
 
     try: 
         # Open websocket connection. 
-        messageresponse = asyncio.run (
-                blockpricerange (
-                    pair, 
-                    exitprice, 
-                    '0' 
-                )
-            ) # Wait for the price sellers take to rise to the exit price.
+        bidrise( pair, exitprice ) # Wait for the price sellers take to rise to the exit price.
     except Exception as e:
         # Report exception.
         notification = f'The websocket connection monitoring {pair} prices probably failed. '
