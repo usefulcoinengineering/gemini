@@ -261,9 +261,9 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
             # Block until out of bid price bounds (work backwards to get previous stop order's sell price).
             messageresponse = asyncio.run (
                 blockpricerange (
-                    pair, 
-                    exitprice, 
-                    sellprice 
+                    str(pair), 
+                    str(exitprice), 
+                    str(sellprice) 
                 )
             )
         except Exception as e:
