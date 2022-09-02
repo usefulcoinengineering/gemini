@@ -44,8 +44,8 @@ from libraries.messenger import sendmessage as sendmessage
 # Specify the percentage discount off the market price that determines the stop price desired in decimal terms (for example 100 basis points).
 # Specify the percentage discount off the market price that determines the sell price desired in decimal terms (for example 200 basis points).
 # Makes sure both price deltas, exceed the Gemini API fee if you want this to execute profitably. For example, 20 basis points (or '0.002').
-pair = 'BTCUSD'
-size = '0.00001'
+pair = 'ETHUSD'
+size = '0.0001'
 stop = '0.0100'
 sell = '0.0200'
 
@@ -259,14 +259,14 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
                     sellprice 
                 )
             )
-            logger.info ( f'{messageresponse["price"]} is out of bounds. ') # Report status.
-            break # Break out of the while loop because the subroutine ran successfully.
         except Exception as e:
             # Report exception.
             notification = f'The websocket connection blocking on {pair} price bounds probably failed. '
             logger.debug ( f'{notification}Let\'s reestablish the connection and try again! ' )
             time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
             continue # Restart while loop logic.
+        logger.info ( f'{messageresponse["price"]} is out of bounds. ') # Report status.
+        break # Break out of the while loop because the subroutine ran successfully.
 
     # Check if lower bound breached.
     # If so, the stop order will "close".
