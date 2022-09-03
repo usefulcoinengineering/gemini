@@ -171,10 +171,10 @@ while True : # Block until the price sellers are willing to take exceeds the exi
                 upperbound = exitprice, 
                 lowerbound = -exitprice
             )
-        ).json()
+        )
     except Exception as e:
         # Report exception.
-        notification = f'Error {e} '
+        notification = f'Error : {e} '
         logger.debug ( f'{notification}Let\'s reestablish the connection and try again! ' )
         time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
         continue # Restart while loop logic.
@@ -265,7 +265,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
                     upperbound = exitprice, 
                     lowerbound = sellprice 
                 )
-            ).json()
+            )
         except Exception as e:
             # Report exception.
             notification = f'The websocket connection failed. '
