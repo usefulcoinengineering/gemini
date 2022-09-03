@@ -165,11 +165,11 @@ while True : # Block until the price sellers are willing to take exceeds the exi
     try: 
         # Open websocket connection. 
         # Block until out of bid price bounds (work backwards to get previous stop order's sell price).
-        messageresponse: str = asyncio.run (
+        messageresponse : str = asyncio.run (
             blockpricerange (
-                 pair, 
-                 exitprice, 
-                -exitprice 
+                marketpair = pair, 
+                upperbound = exitprice, 
+                lowerbound = -exitprice
             )
         )
     except Exception as e:
@@ -259,11 +259,11 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
         try: 
             # Open websocket connection. 
             # Block until out of bid price bounds (work backwards to get previous stop order's sell price).
-            messageresponse: str = asyncio.run (
+            messageresponse : str = asyncio.run (
                 blockpricerange (
-                    pair, 
-                    exitprice, 
-                    sellprice 
+                    marketpair = pair, 
+                    upperbound = exitprice, 
+                    lowerbound = sellprice 
                 )
             )
         except Exception as e:
@@ -281,6 +281,8 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
         logger.debug ( f'Ask prices have fallen below the ask price of the stop limit order {jsonresponse["order_id"]}. ' )
         logger.debug ( f'The stop order at {sellprice} {pair[3:]} should have been completely filled and now "closed". ' )
         break # The stop limit order should have been executed.
+    else:
+        exitprice = Decimal( messageresponse["price"] ) # Set the exit price to the messageresponse price and continue.
 
     # Explain upcoming actions.
     logger.debug ( f'Changing stopprice from {stopprice} to {Decimal( exitprice * stopratio ).quantize( tick )}. ')
