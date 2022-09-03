@@ -58,9 +58,9 @@ else:
     logger.warning ( f'Incorrect number of command line arguments. Using default values for {pair} trailing...' )
 
 # Cast decimals.
-size = Decimal(size)
-stop = Decimal(stop)
-sell = Decimal(sell)
+size = Decimal( size )
+stop = Decimal( stop )
+sell = Decimal( sell )
 
 # Make sure "sell" is more than "stop".
 # Gemini requires this for stop ask orders:
@@ -74,7 +74,7 @@ if stop.compare( sell ) == 1:
 item = [ item['tick'] for item in ticksizes if item['currency'] == pair[:3] ]
 tick = Decimal( item[0] )
 
-# Determine Gemini API transaction fee.
+# Determine Gemini API transaction fee. Conversion from basis points required.
 geminiapifee = Decimal( 0.0001 ) * Decimal ( notionalvolume().json()["api_maker_fee_bps"] )
 
 # Submit limit bid order, report response, and verify submission.
@@ -85,7 +85,7 @@ try :
 except Exception as e :
     # Report exception.
     notification = f'While trying to submit a frontrunning limit bid order the follow error occurred: {e} '
-    logger.debug ( '{notification} Let\'s exit. Please try rerunning the code!' )
+    logger.debug ( f'{notification}Let\'s exit. Please try rerunning the code!' )
     sys.exit(1) # Exit. Continue no further.
 
 # To debug remove comment character below:
@@ -171,7 +171,7 @@ while True : # Block until the price sellers are willing to take exceeds the exi
                 upperbound = exitprice, 
                 lowerbound = -exitprice
             )
-        )
+        ).json()
     except Exception as e:
         # Report exception.
         notification = f'The websocket connection blocking on {pair} price bounds probably failed. '
@@ -265,7 +265,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
                     upperbound = exitprice, 
                     lowerbound = sellprice 
                 )
-            )
+            ).json()
         except Exception as e:
             # Report exception.
             notification = f'The websocket connection failed. '
