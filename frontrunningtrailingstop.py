@@ -165,7 +165,7 @@ while True : # Block until the price sellers are willing to take exceeds the exi
     try: 
         # Open websocket connection. 
         # Block until out of bid price bounds (work backwards to get previous stop order's sell price).
-        messageresponse : str = asyncio.run (
+        websocketoutput : str = asyncio.run (
             blockpricerange (
                 marketpair = pair, 
                 upperbound = exitprice, 
@@ -178,7 +178,7 @@ while True : # Block until the price sellers are willing to take exceeds the exi
         logger.debug ( f'{notification}Let\'s reestablish the connection and try again! ' )
         time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
         continue # Restart while loop logic.
-    logger.info ( f'{Decimal( messageresponse["price"] ).quantize( tick ):,.2f} is out of bounds. ') # Report status.
+    logger.info ( f'{Decimal( websocketoutput["price"] ).quantize( tick ):,.2f} is out of bounds. ') # Report status.
     break # Break out of the while loop because the subroutine ran successfully.
 
 # Loop.
@@ -259,7 +259,7 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
         try: 
             # Open websocket connection. 
             # Block until out of bid price bounds (work backwards to get previous stop order's sell price).
-            messageresponse : str = asyncio.run (
+            websocketoutput : str = asyncio.run (
                 blockpricerange (
                     marketpair = str(pair), 
                     upperbound = str(exitprice), 
@@ -272,17 +272,17 @@ while True : # Block until prices rise (then cancel and resubmit stop limit orde
             logger.debug ( f'{e}: {notification}Let\'s reestablish the connection and try again! ' )
             time.sleep(3) # Sleep for 3 seconds since we are interfacing with a rate limited Gemini REST API.
             continue # Restart while loop logic.
-        logger.info ( f'{Decimal( messageresponse["price"] ).quantize( tick ):,.2f} is out of bounds. ') # Report status.
+        logger.info ( f'{Decimal( websocketoutput["price"] ).quantize( tick ):,.2f} is out of bounds. ') # Report status.
         break # Break out of the while loop because the subroutine ran successfully.
 
     # Check if lower bound breached.
     # If so, the stop order will "close".
-    if exitprice.compare( Decimal( messageresponse["price"] ) ) == 1: 
+    if exitprice.compare( Decimal( websocketoutput["price"] ) ) == 1: 
         logger.debug ( f'Ask prices have fallen below the ask price of the stop limit order {jsonresponse["order_id"]}. ' )
         logger.debug ( f'The stop order at {sellprice} {pair[3:]} should have been completely filled and now "closed". ' )
         break # The stop limit order should have been executed.
     else:
-        exitprice = Decimal( messageresponse["price"] ) # Set the exit price to the messageresponse price and continue.
+        exitprice = Decimal( websocketoutput["price"] ) # Set the exit price to the websocketoutput price and continue.
 
     # Explain upcoming actions.
     logger.debug ( f'Changing stopprice from {stopprice} to {Decimal( exitprice * stopratio ).quantize( tick )}. ')
